@@ -29,6 +29,10 @@ public:
 	//the next page on the queue
 	Page * pop();
 
+	//Retrieves the number of items on queue
+	//@ret int - number of items on quue
+	int getSize();
+
 private:
 	//The linked list that holds the list
 	//of pages that need to be indexed

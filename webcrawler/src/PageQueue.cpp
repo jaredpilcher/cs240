@@ -26,4 +26,10 @@ Page * PageQueue::pop(){
 	return queue.Pop();
 }
 
+//Retrieves the number of items on queue
+//@ret int - number of items on quue
+int PageQueue::getSize(){
+	return queue.GetSize();
+}
+
 

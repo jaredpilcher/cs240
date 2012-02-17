@@ -1,5 +1,6 @@
 BIN_FILE = bin/webcrawler
-OBJ_FILES = obj/main.o obj/WebPage.o obj/PageQueue.o
+MAIN_OBJ = obj/main.o
+OBJ_FILES = obj/Page.o obj/PageQueue.o obj/PageHistory.o
 TEST_BIN_FILE = bin/testProject1
 TEST_OBJ_FILES = $(OBJ_FILES) obj/testProject1.o
 LIBRARY = lib/libcs240utils.a
@@ -29,9 +30,9 @@ $(TEST_BIN_FILE): $(TEST_OBJ_FILES) $(LIBRARY)
 	g++ -o $(TEST_BIN_FILE) $(TEST_OBJ_FILES) $(LIBRARY)
 	chmod ugo+x $(TEST_BIN_FILE)
 	
-#Create test executable
-$(BIN_FILE): $(OBJ_FILES) $(LIBRARY)
-	g++ -o $(BIN_FILE) $(OBJ_FILES)	$(LIBRARY)
+#Create executable
+$(BIN_FILE): $(OBJ_FILES) $(MAIN_OBJ) $(LIBRARY)
+	g++ -o $(BIN_FILE) $(OBJ_FILES) $(MAIN_OBJ) $(LIBRARY)
 	chmod ugo+x $(BIN_FILE)
 
 #Create CS240 library
@@ -45,11 +46,14 @@ $(LIBRARY): $(LIBRARY_OBJ_FILES)
 obj/main.o: src/main.cpp $(LIBRARY_OBJ_FILES)
 	g++ -c -Wall -o obj/main.o -I inc/ -I utils/inc/ src/main.cpp
 
-obj/WebPage.o: src/WebPage.cpp inc/WebPage.h
-	g++ -c -Wall -o obj/WebPage.o -I inc/ -I utils/inc/ src/WebPage.cpp
+obj/Page.o: src/Page.cpp inc/Page.h
+	g++ -c -Wall -o obj/Page.o -I inc/ -I utils/inc/ src/Page.cpp
 
-obj/PageQueue.o: src/PageQueue.cpp inc/PageQueue.h
+obj/PageQueue.o: src/PageQueue.cpp inc/PageQueue.h inc/LinkedList.h
 	g++ -c -Wall -o obj/PageQueue.o -I inc/ -I utils/inc/ src/PageQueue.cpp
+
+obj/PageHistory.o: src/PageHistory.cpp inc/PageHistory.h inc/BST.h
+	g++ -c -Wall -o obj/PageHistory.o -I inc/ -I utils/inc/ src/PageHistory.cpp
 
 
 

@@ -53,15 +53,8 @@ bool pageQueueTest(ostream & os, bool success){
 	Page* page = new Page(url);
 	queue.push(page);
 
-	//One item on queue
-	TEST(1==queue.getSize());
-
 	//Page is retrieved properly
 	TEST(page == queue.pop());
-
-	//No items on queue
-	TEST(0==queue.getSize());
-
 
 	return success;
 }

@@ -26,9 +26,7 @@ public:
 	void push(Page * page);
 	
 	//Remove the page that matches the argument
-		//from the BST
-	//Each time you pop from history, you must 
-		//delete the page afterward
+	//from the BST
 	//@par page - page to be removed
 	void pop(Page * page);
 

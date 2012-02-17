@@ -4,7 +4,7 @@
  *  Created on: Feb 10, 2012
  *      Author: jared
  */
-using namespace std;
+#include "PageQueue.h"
 
 //Default Constructor
 PageQueue::PageQueue(){}
@@ -14,15 +14,22 @@ PageQueue::~PageQueue(){}
 
 //Pushes a page on the the queue
 //@par page - the page to be inserted onto the queue
-void PageQueue::push(Page page){
-	queue.Insert(page, GetLast());
+void PageQueue::push(Page * page){
+	queue.Insert(page, queue.GetLast());
 }
 
-//Removes and returns a copy of 
+//Removes and returns a pointer to 
 //the next page on the queue
-//@ret Page - returns the next node in the queue or NULL if there isn't any
-Page PageQueue::pop(){
+//@ret Page - returns a pointer to the next page in the queue 
+	//or NULL if there isn't any page in the queue
+Page * PageQueue::pop(){
 	return queue.Pop();
+}
+
+//Retrieves the number of items on queue
+//@ret int - number of items on quue
+int PageQueue::getSize(){
+	return queue.GetSize();
 }
 
 
