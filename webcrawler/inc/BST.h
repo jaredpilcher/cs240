@@ -37,8 +37,17 @@ class BSTNode
 		}
 
 
-		BSTNode<Type> * GetRight()const{
+		void GetRight()const{
 		  return right;
+		}
+
+		void SetLeft(BSTNode<Type> * node){
+		  left = node ;
+		}
+
+
+		BSTNode<Type> * SetRight(BSTNode<Type> * node){
+		  right = node;
 		}
 
 		//! Assignment operator 
@@ -63,11 +72,52 @@ class BSTNode
 			cout << ">>>>right: " << right << endl;
 			cout << ">>>>addr: " << this << endl;
 		}
+
+		BSTNode<Type>* Remove(Type search_value, BSTNode<Type> *parent) {
+			if(search_value < value){
+				if(left != NULL){
+					return left->Remove(search_value, this);
+				}
+				else{
+					return NULL;
+				}
+			}
+			else if(search_value > this->value){
+				if(right != NULL){
+					return right->Remove(search_value, this);
+				}
+				else{
+					return NULL;
+				}
+			}
+			else{
+				if(right != NULL && left != NULL){
+					value = right->MinValue();
+					return right->Remove(value, this);
+				}
+				if(parent->left == this){
+					parent->left = (left != NULL) ? left : right;
+					return this;
+				}
+				if(parent->right == this){
+					parent->right = (left != NULL) ? left : right;
+					return this;
+				}
+			}
+		}
+
+		Type MinValue(){
+			if(left==NULL) return value;
+			return left->MinValue();
+		}
+		 
+		
 	
 	private:
 		Type value;  //!< value stored in the node
 		BSTNode<Type> * left;     //!< pointer to the node's left child
 		BSTNode<Type> * right;    //!< pointer to the node's right child
+
 };
 
 //!  BST<Type> implements a binary search tree
@@ -173,7 +223,45 @@ class BST
 		//!
 		//!  @return true if v was removed from the tree, or false if v was not in the tree
 		bool Remove(const Type & v){
-			removeNode(top, v);
+			if(top==NULL) return false;
+			if(top->GetValue()==v){
+				BSTNode<Type> aux_top(0);
+				aux_top.SetLeft(top);
+				BSTNode<Type> * removed_node = top->Remove(v,&aux_top);
+				top=aux_top.GetLeft();
+				if(removed_node != NULL){
+					delete removed_node;
+					--size;
+					return true;
+				}
+				else{
+					return false;
+				}		
+			}
+			else{
+				BSTNode<Type> * removed_node = top->Remove(v,NULL);
+				if(removed_node != NULL){
+					delete removed_node;
+					--size;
+					return true;
+				}
+				else{
+					return false;
+				}
+		
+			}
+
+		}
+
+		//!  Pops next value from the tree
+		//!
+		//!  @return pointer to next Type on tree
+		//!  returns NULL if nothing on tree
+		Type Pop(){
+			if(top==NULL) return NULL;
+			Type min_value = top->MinValue();
+			Remove(min_value);
+			return min_value;
 		}
 
 	
@@ -241,65 +329,7 @@ class BST
 			return Node;	
 		}
 		
-//finish later
-		void removeNode(BSTNode<Type> * node, const type & v){
-			/*bool BinarySearchTree::remove(int value) {
-  if (root == NULL)
-    return false;
-  else {
-    if (root->getValue() == value) {
-      BSTNode auxRoot(0);
-      auxRoot.setLeftChild(root);
-      BSTNode* removedNode = root->remove(value, &auxRoot);
-      root = auxRoot.getLeft();
-      if (removedNode != NULL) {
-        delete removedNode;
-        return true;
-      } else
-        return false;
-    } else {
-      BSTNode* removedNode = root->remove(value, NULL);
-      if (removedNode != NULL) {
-        delete removedNode;
-        return true;
-      } else
-        return false;
-    }
-  }
-}
  
-BSTNode* BSTNode::remove(int value, BSTNode *parent) {
-  if (value < this->value) {
-    if (left != NULL)
-      return left->remove(value, this);
-    else
-      return NULL;
-  } else if (value > this->value) {
-    if (right != NULL)
-      return right->remove(value, this);
-    else
-      return NULL;
-  } else {
-    if (left != NULL && right != NULL) {
-      this->value = right->minValue();
-      return right->remove(this->value, this);
-    } else if (parent->left == this) {
-      parent->left = (left != NULL) ? left : right;
-      return this;
-    } else if (parent->right == this) {
-      parent->right = (left != NULL) ? left : right;
-      return this;
-    }
-  }
-}
- 
-int BSTNode::minValue() {
-  if (left == NULL)
-    return value;
-  else
-    return left->minValue();
-}*/
-		}
 
 };
 

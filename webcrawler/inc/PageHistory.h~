@@ -26,9 +26,13 @@ public:
 	void push(Page * page);
 	
 	//Remove the page that matches the argument
-	//from the BST
+		//from the BST
+	//Each time you pop from history, you must 
+		//delete the page afterward
 	//@par page - page to be removed
 	void pop(Page * page);
+
+	int getSize();
 
 private:
 	//The BST to hold the history of pages

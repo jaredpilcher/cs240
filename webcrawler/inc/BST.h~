@@ -37,8 +37,17 @@ class BSTNode
 		}
 
 
-		BSTNode<Type> * GetRight()const{
+		void GetRight()const{
 		  return right;
+		}
+
+		void SetLeft(BSTNode<Type> * node)const{
+		  left = node ;
+		}
+
+
+		BSTNode<Type> * SetRight(BSTNode<Type> * node)const{
+		  right = node;
 		}
 
 		//! Assignment operator 
@@ -63,11 +72,52 @@ class BSTNode
 			cout << ">>>>right: " << right << endl;
 			cout << ">>>>addr: " << this << endl;
 		}
+
+		BSTNode<Type>* Remove(Type search_value, BSTNode<Type> *parent) {
+			if(search_value < value){
+				if(left != NULL){
+					return left->Remove(search_value, this);
+				}
+				else{
+					return NULL;
+				}
+			}
+			else if(search_value > this->value){
+				if(right != NULL){
+					return right->Remove(search_value, this);
+				}
+				else{
+					return NULL;
+				}
+			}
+			else{
+				if(right != NULL && left != NULL){
+					value = right->MinValue();
+					return right->Remove(value, this);
+				}
+				if(parent->left == this){
+					parent->left = (left != NULL) ? left : right;
+					return this;
+				}
+				if(parent->right == this){
+					parent->right = (left != NULL) ? left : right;
+					return this;
+				}
+			}
+		}
+
+		Type MinValue(){
+			if(left==NULL) return value;
+			return left->MinValue();
+		}
+		 
+		
 	
 	private:
 		Type value;  //!< value stored in the node
 		BSTNode<Type> * left;     //!< pointer to the node's left child
 		BSTNode<Type> * right;    //!< pointer to the node's right child
+
 };
 
 //!  BST<Type> implements a binary search tree
@@ -173,7 +223,45 @@ class BST
 		//!
 		//!  @return true if v was removed from the tree, or false if v was not in the tree
 		bool Remove(const Type & v){
-			removeNode(top, v);
+			if(top==NULL) return false;
+			if(top->GetValue()==v){
+				BSTNode<Type> aux_top(0);
+				aux_top.SetLeft(top);
+				BSTNode<Type> * removed_node = top->Remove(v,&aux_top);
+				top=aux_top.GetLeft();
+				if(removed_node != NULL){
+					delete removed_node;
+					--size;
+					return true;
+				}
+				else{
+					return false;
+				}		
+			}
+			else{
+				BSTNode<Type> * removed_node = top->Remove(v,NULL);
+				if(removed_node != NULL){
+					delete removed_node;
+					--size;
+					return true;
+				}
+				else{
+					return false;
+				}
+		
+			}
+
+		}
+
+		//!  Pops next value from the tree
+		//!
+		//!  @return pointer to next Type on tree
+		//!  returns NULL if nothing on tree
+		Type Pop(){
+			if(top==NULL) return NULL;
+			Type min_value = top->MinValue();
+			Remove(min_value);
+			return min_value;
 		}
 
 	
@@ -241,30 +329,7 @@ class BST
 			return Node;	
 		}
 		
-		void removeNode(BSTNode<Type> * node, const type & v){
-			
-def binary_tree_delete(self, key):
-    if key < self.key:
-        self.left_child.binary_tree_delete(key)
-    elif key > self.key:
-        self.right_child.binary_tree_delete(key)
-    else: # delete the key here
-        if self.left_child and self.right_child: # if both children are present
-            # get the smallest node that's bigger than *self*
-            successor = self.right_child.findMin()
-            self.key = successor.key
-            # if *successor* has a child, replace it with that
-            # at this point, it can only have a *right_child*
-            # if it has no children, *right_child* will be "None"
-            successor.replace_node_in_parent(successor.right_child)
-        elif self.left_child or self.right_child:   # if the node has only one child
-            if self.left_child:
-                self.replace_node_in_parent(self.left_child)
-            else:
-                self.replace_node_in_parent(self.right_child)
-        else: # this node has no children
-            self.replace_node_in_parent(None)
-		}
+ 
 
 };
 

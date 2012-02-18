@@ -42,7 +42,7 @@ void WebCrawler::CrawlWeb(){
 
 		//Determine if this is a valid page
 		if(!parser.isHTML()){
-			history.pop(page);
+			history.remove(page);
 			delete page;
 			continue;
 		}

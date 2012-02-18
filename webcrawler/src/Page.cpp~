@@ -10,12 +10,16 @@
 Page::Page(string arg_url=""):url(arg_url), description(""){
 }
 
+//Copy Constructor
+Page::Page(Page arg_page):url(arg_page.url), description(arg_page.description){
+}
+
 //Default Deconstructor
 Page::~Page(){
 }
 
 //Retrieves the url of the page
-string Page::GetURl(){
+string Page::getURL(){
 	return url;
 }
 

@@ -30,7 +30,13 @@ public:
 	//Each time you pop from history, you must 
 		//delete the page afterward
 	//@par page - page to be removed
-	void pop(Page * page);
+	void remove(Page * page);
+	
+	//Pop the next lowest Page (pointer value) from the tree
+	//@ret Page * - next page with lowest address
+	Page * pop();
+
+	int getSize();
 
 private:
 	//The BST to hold the history of pages

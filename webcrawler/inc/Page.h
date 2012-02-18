@@ -21,6 +21,9 @@ public:
 	//Default Constructor
 	Page(string arg_url);
 
+	//Copy Constructor
+	Page(Page & arg_page);
+
 	//Default Deconstructor
 	~Page();
 	

@@ -21,11 +21,14 @@ public:
 	//Default Constructor
 	Page(string arg_url);
 
+	//Copy Constructor
+	Page(Page arg_page);
+
 	//Default Deconstructor
 	~Page();
 	
 	//Retrieves the url of the page
-	string GetURl();
+	string getURL();
 
 	//Retrieves the description of the page
 	string getDescription();
