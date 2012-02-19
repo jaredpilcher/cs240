@@ -6,10 +6,14 @@ using namespace std;
 #include "Page.h"
 #include "PageQueue.h"
 #include "PageHistory.h"
+#include "PageDownloader.h"
+
+//static const unsigned int npos = -1;
 
 bool pageTest(ostream&, bool);
 bool pageQueueTest(ostream & os, bool success);
 bool pageHistoryTest(ostream & os, bool success);
+bool pageDownloaderTest(ostream & os, bool success);
 
 int main(int argc, char* argv[]){
 	bool success=true;
@@ -21,6 +25,9 @@ int main(int argc, char* argv[]){
 
 	//PageHistory Test
 	success = pageHistoryTest(cout, success);
+
+	//PageDownloader Test
+	success = pageDownloaderTest(cout, success);
 
 	if(success){
 		cout << "Success!" << endl;
@@ -80,6 +87,7 @@ bool pageHistoryTest(ostream & os, bool success){
 
 	//create new page and place in history
 	Page * page = new Page(url);
+	page->setDescription(description);
 	history.push(page);
 
 	//One item in history
@@ -87,6 +95,7 @@ bool pageHistoryTest(ostream & os, bool success){
 
 	//Second item in history
 	Page * page2 = new Page(url2);
+	page2->setDescription(description2);
 	history.push(page2);
 	TEST(2==history.getSize());
 
@@ -120,4 +129,12 @@ bool pageHistoryTest(ostream & os, bool success){
 	delete page;
 	return success;
 
+}
+
+bool pageDownloaderTest(ostream & os, bool success){
+	PageDownloader downloader;
+	string url = "http://www.google.com";
+	Page page(url);
+	TEST(downloader.download(url).find("<title>Google</title>") != npos);
+	return success;
 }

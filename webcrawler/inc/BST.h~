@@ -41,12 +41,12 @@ class BSTNode
 		  return right;
 		}
 
-		void SetLeft(BSTNode<Type> * node)const{
+		void SetLeft(BSTNode<Type> * node){
 		  left = node ;
 		}
 
 
-		BSTNode<Type> * SetRight(BSTNode<Type> * node)const{
+		BSTNode<Type> * SetRight(BSTNode<Type> * node){
 		  right = node;
 		}
 

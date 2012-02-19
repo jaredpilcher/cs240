@@ -19,12 +19,12 @@ Page::~Page(){
 }
 
 //Retrieves the url of the page
-string Page::getURL(){
+string Page::getURL()const{
 	return url;
 }
 
 //Retrieves the description of the page
-string Page::getDescription(){
+string Page::getDescription()const{
 	return description;
 }
 

@@ -9,7 +9,6 @@
 #define PAGEDOWNLOADER_H_
 
 #include "URLInputStream.h"
-#include "Page.h"
 using namespace std;
 
 //Used to download html from webpages

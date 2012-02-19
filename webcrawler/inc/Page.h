@@ -28,10 +28,10 @@ public:
 	~Page();
 	
 	//Retrieves the url of the page
-	string getURL();
+	string getURL()const;
 
 	//Retrieves the description of the page
-	string getDescription();
+	string getDescription()const;
 
 	//Sets the url of the page
 	//@par url - the url of the page

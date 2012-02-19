@@ -104,6 +104,7 @@ class BSTNode
 					return this;
 				}
 			}
+			return NULL;
 		}
 
 		Type MinValue(){

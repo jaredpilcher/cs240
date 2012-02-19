@@ -10,7 +10,7 @@
 string PageDownloader::download(const Page & page){
 	string page_text;
 	getText(page.getURL(), page_text);
-	return page_text;
+	page_text;
 }
 
 void PageDownloader::getText(const string url, string & page_text){
