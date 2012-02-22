@@ -3,7 +3,7 @@
 using namespace std;
 
 //Removes the file name from the base string that is passed in through the shell.
-char * getBaseString(char * base_url){
+void getBaseURL(char * base_url, char * final_url){
     int slash_location = 0;
     for(int i = 0; base_url[i] != 0; i++){
         if(base_url[i]=='/'){
@@ -12,38 +12,34 @@ char * getBaseString(char * base_url){
     }
 	int base_length = strlen(base_url);
 	if(base_url[base_length-4] != '.'){
-	    base_url[slash_location + 1] = 0; 
+	    strncpy(final_url,base_url,slash_location+1);
 	}
-    return base_url;
+	else{
+		strcpy(final_url,base_url);
+	}
 }
 
 //Smartly concatenates two URL c-strings.
 //If the base does not end in a slash, a slash is appended.
 //If the url starts with a slash, it is removed
 //Both the base and url pointers and values are changed
-char * joinURL(char * base, char * url){
-	int base_length = strlen(base);
-	if(base[base_length-1]!='/' && url[0]!='/' && &base[base_length+1] == url){
-		base[base_length] = '/';
-		return base;
-	} 
-	if((base[base_length-1]!='/' && url[0]=='/') || (base[base_length-1]=='/' && url[0]!='/')){
-		strncat(base,url,strlen(url));
-		return base;
+void joinURL(char * final_url, char * url){
+	int base_length = strlen(final_url);
+	if(url[0]!='/' && final_url[base_length-1]!='/'){
+		strcat(final_url, "/");
+		strcat(final_url,url);
 	}
-	if(url[0]=='/'){
-		strncat(base,url+1,strlen(url));
+	else if(url[0]=='/' && final_url[base_length-1]=='/'){
+		strcat(final_url,url+1);
 	}
 	else{
-			strcat(base, "/");
-			strncat(base,url,strlen(url));
+		strcat(final_url,url);
 	}
-	return base;
 }
 
 //Collects only the top portion of the URL for resolveRoot function
 //Changes the base pointer and value
-char * getWebBase(char * base){
+void getWebBase(char * base){
     int slash_count = 0;
     int i = 0;
     for(; base[i]!=0; i++){
@@ -55,28 +51,18 @@ char * getWebBase(char * base){
         }
     }
     base[i] = 0;
-    return base;
 }
 
 //Resolve URLs that start with '/' symbols.
 //Both the base and url pointers and values are changed
-char * resolveRoot(char * base, char * url){
-    if(base[0] == 'h'){
-        base = getWebBase(base);
-        url = joinURL(base, url);
+void resolveRoot(char * final_url, char * url){
+    if(final_url[0] == 'h'){
+        getWebBase(final_url);
+        joinURL(final_url, url);
     }
     else{
-		url = joinURL(base,url);
+		joinURL(final_url,url);
     }
-	
-    return url;
-}
-
-//Resolve URLs that include internal links with # symbols
-//Both the base and url pointers and values are changed
-char * resolveInternal(char * base, char * url){
-	strncat(base, url, strlen(url));
-    return base;
 }
 
 //Count the number of parent directories we are moving up
@@ -93,19 +79,18 @@ int countRelative(char * url){
 
 //Remove all of the './' and '../' items in the relative URL
 //Return the url pointer
-char * cleanRelative(char * url){
+void cleanRelative(char * url){
 	for(int i = 0; url[i+1] != 0; i++){
 		if(url[i] >= 'A'){
 			url = &url[i];
 			break;
 		}
 	}
-	return url;
 }
 
 //Go through the base and remove the number of parents specified by relative_count
 //Return the base c-string
-char * removeParents(char * base, int relative_count){
+void removeParents(char * base, int relative_count){
 	for(int i = strlen(base) - 2; i >= 0; i--){
 		if(relative_count == 0) break;
 		if(base[i] == '/'){
@@ -116,41 +101,15 @@ char * removeParents(char * base, int relative_count){
 	return base;
 }
 
-//Count the number of parents that the base url contains. Return result
-int countParents(char * base){
-	int parent_count = 0;
-	for(int i = strlen(base) - 3; i> 0; i--){
-		if(base[i] == '/'){
-			if(base[0]=='h'){
-				if(base[i-1] == '/' || base[i+1] == '/') break;
-			}
-			parent_count++;
-			if(base[0]=='f'){
-				if(base[i-1] == '/' || base[i+1] == '/') break;
-			}
-			
-		}
-	}	
-	return parent_count;
-}
-
-char * resolveFileBase(char * base){
-	
-}
 
 //Resolve URL that include relative file symbols.
 //These are symbols that include './' and '../'
 //Both the base and url pointers and values are changed
-char * resolveRelative(char * base, char * url){
+void resolveRelative(char * final_url, char * url){
 	int relative_count = countRelative(url);
-	int parent_count = countParents(base);
-	if(parent_count < relative_count){
-		relative_count = parent_count;
-	}
-	url = cleanRelative(url);
-	base = removeParents(base, relative_count);
-	base = joinURL(base,url);
-    return base;
+	cleanRelative(url);
+	removeParents(final_url, relative_count);
+	joinURL(final_url,url);
 }
 
 //Resolve URL concatenation
@@ -161,40 +120,41 @@ int main(int argc, char * argv[]){
     }
     
     //Set up original url variables
-	char * base_url = 0;
-	char base_url_file[9] = "file:///";
 	char * url = argv[2];
-	if(url[0] != '#'){
-		base_url = getBaseString(argv[1]);
-	}
-	else{
-		base_url = argv[1];
-	}
+	char * base_url = argv[1];
+	char final_url[2048];
+	memset(final_url,0,2048);
+
     //Perform actions on url variables
     switch(url[0]){
         case '/':
 			if(base_url[0]=='f'){
-				url = resolveRoot(base_url_file, url);
+				strcpy(final_url,"file:///");
+				resolveRoot(final_url, url);
 			}
 			else{
-	            url = resolveRoot(base_url, url);
+				getBaseURL(base_url, final_url);
+	            resolveRoot(final_url, url);
 			}
             break;
         case '#':
-            url = resolveInternal(base_url, url);
+			strcpy(final_url,base_url);
+            strcat(final_url, url);
             break;
         default:
-			if(countParents(base_url)==0 && base_url[0]=='f'){
-				url = resolveRelative(base_url_file, url);
+			if(!strcmp(base_url,"file:///") || !strcmp(base_url,"file://")){
+				strcpy(final_url,"file:///");
+				resolveRelative(final_url, url);
 			}
 			else{
-				url = resolveRelative(base_url, url);
+				getBaseURL(base_url, final_url);
+				resolveRelative(final_url, url);
 			}
             break;
     }
     
     //Print out result
-	cout << url << endl;
+	cout << final_url << endl;
     return 0;
 
 }
