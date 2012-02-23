@@ -79,7 +79,7 @@ int countRelative(char * url){
 
 //Remove all of the './' and '../' items in the relative URL
 //Return the url pointer
-void cleanRelative(char * url){
+void cleanRelative(char * &url){
 	for(int i = 0; url[i+1] != 0; i++){
 		if(url[i] >= 'A'){
 			url = &url[i];
