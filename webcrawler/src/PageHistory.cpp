@@ -17,8 +17,8 @@ PageHistory::~PageHistory(){
 
 //Push the page onto the history BST
 //@par page - page to be inserted
-void PageHistory::push(Page * page){
-	history.Insert(page);
+bool PageHistory::push(Page * page){
+	return history.Insert(page) != NULL;
 }
 
 //Return the next page in the BST

@@ -7,13 +7,15 @@ using namespace std;
 #include "PageQueue.h"
 #include "PageHistory.h"
 #include "PageDownloader.h"
+#include "URL.h"
 
-//static const unsigned int npos = -1;
+static const unsigned int npos = -1;
 
 bool pageTest(ostream&, bool);
 bool pageQueueTest(ostream & os, bool success);
 bool pageHistoryTest(ostream & os, bool success);
 bool pageDownloaderTest(ostream & os, bool success);
+bool URLTest(ostream & os, bool success);
 
 int main(int argc, char* argv[]){
 	bool success=true;
@@ -28,6 +30,9 @@ int main(int argc, char* argv[]){
 
 	//PageDownloader Test
 	success = pageDownloaderTest(cout, success);
+
+	//URL Test
+	success = URLTest(cout, success);
 
 	if(success){
 		cout << "Success!" << endl;
@@ -137,4 +142,8 @@ bool pageDownloaderTest(ostream & os, bool success){
 	Page page(url);
 	TEST(downloader.download(url).find("<title>Google</title>") != npos);
 	return success;
+}
+
+bool URLTest(ostream & os, bool success){
+	
 }

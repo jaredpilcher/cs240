@@ -23,7 +23,8 @@ public:
 	
 	//Push the page onto the history BST
 	//@par page - page to be inserted
-	void push(Page * page);
+	//@ret bool - True if successfully inserted in tree
+	bool push(Page * page);
 	
 	//Remove the page that matches the argument
 		//from the BST

@@ -17,7 +17,7 @@ PageHistory::~PageHistory(){
 
 //Push the page onto the history BST
 //@par page - page to be inserted
-void PageHistory::push(Page * page){
+bool PageHistory::push(Page * page){
 	history.Insert(page);
 }
 
@@ -35,6 +35,6 @@ void PageHistory::remove(Page * page){
 	history.Remove(page);
 }
 
-int getSize(){
+int PageHistory::getSize(){
 	return history.GetSize();
 }

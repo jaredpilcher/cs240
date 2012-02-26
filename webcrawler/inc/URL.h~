@@ -29,8 +29,8 @@ public:
 
 	//Removes the file name at the end of the url
 	//@par url - url to manipulate
-	//@ret string - returns a copy of the manipulated string
-	string removeFileName(string url);
+	//@ret string - returns the manipulated string
+	string removeFileName(string & url);
 
 private:
 	char url[URL_SIZE];

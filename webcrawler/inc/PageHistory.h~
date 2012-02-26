@@ -23,14 +23,18 @@ public:
 	
 	//Push the page onto the history BST
 	//@par page - page to be inserted
-	void push(Page * page);
+	bool push(Page * page);
 	
 	//Remove the page that matches the argument
 		//from the BST
 	//Each time you pop from history, you must 
 		//delete the page afterward
 	//@par page - page to be removed
-	void pop(Page * page);
+	void remove(Page * page);
+	
+	//Pop the next lowest Page (pointer value) from the tree
+	//@ret Page * - next page with lowest address
+	Page * pop();
 
 	int getSize();
 

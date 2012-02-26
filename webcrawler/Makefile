@@ -1,6 +1,6 @@
 BIN_FILE = bin/webcrawler
 MAIN_OBJ = obj/main.o
-OBJ_FILES = obj/Page.o obj/PageQueue.o obj/PageHistory.o obj/PageDownloader.o
+OBJ_FILES = obj/Page.o obj/PageQueue.o obj/PageHistory.o obj/PageDownloader.o obj/URL.o
 TEST_BIN_FILE = bin/testProject1
 TEST_OBJ_FILES = $(OBJ_FILES) obj/testProject1.o
 LIBRARY = lib/libcs240utils.a
@@ -58,7 +58,8 @@ obj/PageHistory.o: src/PageHistory.cpp inc/PageHistory.h inc/BST.h
 obj/PageDownloader.o: src/PageDownloader.cpp inc/PageDownloader.h utils/inc/URLInputStream.h
 	@g++ -c -Wall -o obj/PageDownloader.o -I inc/ -I utils/inc/ src/PageDownloader.cpp
 
-
+obj/URL.o: src/URL.cpp inc/URL.h
+	@g++ -c -Wall -o obj/URL.o -I inc/ -I utils/inc/ src/URL.cpp
 
 
 
