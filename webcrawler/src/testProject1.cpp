@@ -145,5 +145,40 @@ bool pageDownloaderTest(ostream & os, bool success){
 }
 
 bool URLTest(ostream & os, bool success){
-	URL url("http://hello.com");
+	//File Root URL Tests
+	URL url("/jared.txt");
+	url.addBase("file://");
+	TEST(url.getURL()=="file:///jared.txt");
+
+	url.setURL("/jared.txt");
+	url.addBase("file:///query?test=something");
+	TEST(url.getURL()=="file:///jared.txt");
+
+	url.setURL("/jared.txt");
+	url.addBase("file:///jared/pilcher");
+	TEST(url.getURL()=="file:///jared.txt");
+
+	url.setURL("/jared.txt");
+	url.addBase("file:///jared/pilcher/");
+	TEST(url.getURL()=="file:///jared.txt");
+
+	//Web Root URL Test
+	url.setURL("/jared.txt");
+	url.addBase("http://www.google.com");
+	TEST(url.getURL()=="http://www.google.com/jared.txt");
+
+	url.setURL("/jared.txt");
+	url.addBase("http://www.google.com/");
+	TEST(url.getURL()=="http://www.google.com/jared.txt");
+
+	url.setURL("/jared.txt");
+	url.addBase("http://www.google.com/jared");
+	TEST(url.getURL()=="http://www.google.com/jared.txt");
+
+	url.setURL("/jared.txt");
+	url.addBase("http://www.google.com/jared/");
+	TEST(url.getURL()=="http://www.google.com/jared.txt");
+
+
+	return success;
 }
