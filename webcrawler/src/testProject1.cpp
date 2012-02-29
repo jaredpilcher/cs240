@@ -179,6 +179,127 @@ bool URLTest(ostream & os, bool success){
 	url.addBase("http://www.google.com/jared/");
 	TEST(url.getURL()=="http://www.google.com/jared.txt");
 
+	//File Relative Tests
+	url.setURL("./jared");
+	url.addBase("file://");
+	TEST(url.getURL()=="file:///jared");
+
+	url.setURL("./jared");
+	url.addBase("file:///query?test=something");
+	TEST(url.getURL()=="file:///jared");
+
+	url.setURL("./jared");
+	url.addBase("file:///jared/pilcher");
+	TEST(url.getURL()=="file:///jared/jared");
+
+	url.setURL("./jared");
+	url.addBase("file:///jared/pilcher/");
+	TEST(url.getURL()=="file:///jared/pilcher/jared");
+
+	url.setURL("../jared");
+	url.addBase("file:///jared/pilcher");
+	TEST(url.getURL()=="file:///jared");
+
+	url.setURL("../jared");
+	url.addBase("file:///jared/pilcher/");
+	TEST(url.getURL()=="file:///jared/jared");
+
+	url.setURL("./.././jared");
+	url.addBase("file:///jared/pilcher");
+	TEST(url.getURL()=="file:///jared");
+
+	url.setURL("./.././jared");
+	url.addBase("file:///jared/pilcher/");
+	TEST(url.getURL()=="file:///jared/jared");
+
+	url.setURL("jared");
+	url.addBase("file://");
+	TEST(url.getURL()=="file:///jared");
+
+	url.setURL("jared");
+	url.addBase("file:///query?test=something");
+	TEST(url.getURL()=="file:///jared");
+
+	url.setURL("jared");
+	url.addBase("file:///jared/pilcher");
+	TEST(url.getURL()=="file:///jared/jared");
+
+	url.setURL("jared");
+	url.addBase("file:///jared/pilcher/");
+	TEST(url.getURL()=="file:///jared/pilcher/jared");
+
+	//Web Relative Tests
+	url.setURL("./jared");
+	url.addBase("http://www.website.com");
+	TEST(url.getURL()=="http://www.website.com/jared");
+
+	url.setURL("./jared");
+	url.addBase("http://www.website.com/");
+	TEST(url.getURL()=="http://www.website.com/jared");
+
+	url.setURL("./jared");
+	url.addBase("http://www.website.com/jared");
+	TEST(url.getURL()=="http://www.website.com/jared");
+
+	url.setURL("./jared");
+	url.addBase("http://www.website.com/jared/");
+	TEST(url.getURL()=="http://www.website.com/jared/jared");
+
+	url.setURL("../jared");
+	url.addBase("http://www.website.com/jared/");
+	TEST(url.getURL()=="http://www.website.com/jared");
+
+	url.setURL("../jared");
+	url.addBase("http://www.website.com/jared/pilcher/");
+	TEST(url.getURL()=="http://www.website.com/jared/jared");
+
+	url.setURL("../jared");
+	url.addBase("http://www.website.com/jared/pilcher");
+	TEST(url.getURL()=="http://www.website.com/jared");
+
+	url.setURL("./.././jared");
+	url.addBase("http://www.website.com/jared/");
+	TEST(url.getURL()=="http://www.website.com/jared");
+
+	url.setURL("./.././jared");
+	url.addBase("http://www.website.com/jared/pilcher/");
+	TEST(url.getURL()=="http://www.website.com/jared/jared");
+
+	url.setURL("./.././jared");
+	url.addBase("http://www.website.com/jared/pilcher");
+	TEST(url.getURL()=="http://www.website.com/jared");
+
+	url.setURL("jared");
+	url.addBase("http://www.website.com");
+	TEST(url.getURL()=="http://www.website.com/jared");
+
+	url.setURL("jared");
+	url.addBase("http://www.website.com/");
+	TEST(url.getURL()=="http://www.website.com/jared");
+
+	url.setURL("jared");
+	url.addBase("http://www.website.com/jared");
+	TEST(url.getURL()=="http://www.website.com/jared");
+
+	url.setURL("jared");
+	url.addBase("http://www.website.com/jared/");
+	TEST(url.getURL()=="http://www.website.com/jared/jared");
+
+	//File Internal Relative Tests
+	url.setURL("#something");
+	url.addBase("file:///query?test=something");
+	TEST(url.getURL()=="file:///query?test=something#something");
+
+	url.setURL("#something");
+	url.addBase("file:///jared/pilcher");
+	TEST(url.getURL()=="file:///jared/pilcher#something");
+
+
+	//Web Internal Relative Tests
+	url.setURL("#something");
+	url.addBase("http://www.website.com/jared");
+	TEST(url.getURL()=="http://www.website.com/jared#something");
+
 
 	return success;
 }

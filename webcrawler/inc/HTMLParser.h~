@@ -29,7 +29,8 @@ class HTMLPARSER{
 	bool html_page;
 public:
 	//Default Constructor
-	HTMLPARSER(string arg_start_url);
+	HTMLPARSER(string arg_start_url): start_url(arg_start_url){
+	}
 
 	//Default Deconstructor
 	~HTMLPARSER(){

@@ -28,7 +28,7 @@ void HTMLParser::findWords(const string page_text){
 			   token.GetValue()=="<HTML>"  ||
 			   token.GetValue()=="<A>"     ||
 			   token.GetValue()=="<BODY>"  ||
-		       	   token.GetValue()=="<H1>"    ||
+		       token.GetValue()=="<H1>"    ||
 			   token.GetValue()=="<H2>"    ||
 			   token.GetValue()=="<H3>"    ||){
 	

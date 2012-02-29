@@ -35,13 +35,6 @@ void URL::setURL(string url){
 	strcpy(stored_url,url.data());
 }
 
-//Removes the file name at the end of the url
-//@par url - url to manipulate
-//@ret string - returns a copy of the manipulated string
-string URL::removeFileName(string url){
-	return url;
-}
-
 void URL::resolveURL(char * base, char * url){
     
     //Set stored url to all zeros
