@@ -18,7 +18,7 @@
 void WebCrawler::CrawlWeb(){
 	PageDownloader downloader;
 	WordIndex index;
-	HTMLParser parser(start_url);
+	HTMLParser parser();
 	StopWords stop_words;
 	PageHistory history;
 	PageQueue queue;
@@ -41,7 +41,7 @@ void WebCrawler::CrawlWeb(){
 		parser.setNewPageString(downloader.download(page));
 
 		//Determine if this is a valid page
-		if(!parser.isHTML()){
+		if(!isHTML(page.getURL()))){
 			history.remove(page);
 			delete page;
 			continue;
@@ -71,5 +71,11 @@ void WebCrawler::CrawlWeb(){
 	}
 
 	generator.writeFile();
+
+}
+
+
+//Determines if the page is HTML
+bool WebCrawler::isHTML(string url){
 
 }

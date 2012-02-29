@@ -11,6 +11,7 @@
 #include "HTMLTokenizer.h"
 #include "HTMLToken.h"
 #include "URL.h"
+#include <string.h>
 
 //Provides tools to parse HTML text strings
 class HTMLPARSER{
@@ -24,26 +25,22 @@ class HTMLPARSER{
 	//The description of the current
 	string start_url, description;
 
-	//Holds the boolean determining if the current
-	//page is html
-	bool html_page;
+	//page
+	string page_text;
 public:
 	//Default Constructor
-	HTMLPARSER(string arg_start_url): start_url(arg_start_url){
+	HTMLParser(){
 	}
 
 	//Default Deconstructor
-	~HTMLPARSER(){
+	~HTMLParser(){
 	}
 
 	//Clears the words, and links
 	//Sets the new value for html_page
 	//Finds all words and links found in page_text
 	//@par page_text - the html text of the new page
-	void setNewPageString(const string page_text);
-
-	//Determines if the page is HTML
-	bool isHTML();
+	void setNewPageString(const string & page_text);
 
 	//Retrieves the description of the page
 	string getDescription();
@@ -60,6 +57,11 @@ public:
 	//Retrieves the next link
 	string getLink();
 
+	//Begin parsing the page string
+	void parsePage();
+
+	string firstHundredChar(HTMLTokenizer tokenizer);
+
 private:
 	
 	//Finds all the necessary words in the string
@@ -69,15 +71,14 @@ private:
 	//Places all words in the token into the list of words
 	//@par token - token containing the words to be places in the words list
 	void insertWords(HTMLToken token);
-	
-	//Determines if the current page is html
-	//@par page_text - the html string of the current page
-	void determineIfHTML(const string page_text);
 
 	//Retrieves the description from the html text on the page
 	//@par page_text - the html string of the current page
 	//@ret string - the description found on the page
 	string findDescription(const string page_text);
+
+	//Grabs the next word in the sentence
+	string HTMLParser::getNextWord(char * sentence);
 };
 
 #endif /* HTMLPARSER_H_ */
