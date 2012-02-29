@@ -288,17 +288,17 @@ bool URLTest(ostream & os, bool success){
 	//File Internal Relative Tests
 	url.setURL("#something");
 	url.addBase("file:///query?test=something");
-	TEST(url.getURL()=="file:///query?test=something#something");
+	TEST(url.getURL()=="file:///query?test=something");
 
 	url.setURL("#something");
 	url.addBase("file:///jared/pilcher");
-	TEST(url.getURL()=="file:///jared/pilcher#something");
+	TEST(url.getURL()=="file:///jared/pilcher");
 
 
 	//Web Internal Relative Tests
 	url.setURL("#something");
 	url.addBase("http://www.website.com/jared");
-	TEST(url.getURL()=="http://www.website.com/jared#something");
+	TEST(url.getURL()=="http://www.website.com/jared");
 
 
 	return success;

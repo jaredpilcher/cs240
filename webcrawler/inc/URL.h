@@ -61,6 +61,9 @@ private:
 
 	//Go through the base and remove the number of parents specified by relative_count
 	void removeParents(char * base, int relative_count);	
+
+	//Strips the '#something' from the url
+	string stripInternalRelative(string url);
 };
 
 #endif /* URL_H_ */

@@ -47,6 +47,8 @@ void WebCrawler::CrawlWeb(){
 			continue;
 		}
 
+		parser.parsePage();
+
 		//Grab the description and set to page
 		page->setDescription(parser.getDescription());
 

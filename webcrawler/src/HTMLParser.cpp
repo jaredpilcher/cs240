@@ -10,33 +10,33 @@
 void HTMLParser::HTMLParser(string arg_start_url): start_url(arg_start_url){
 }
 
-void HTMLParser::setNewPageString(const string page_text){
+void HTMLParser::setNewPageString(const string arg_page_text){
 	words.Clear();
 	links.Clear();
-	findWords(page_text);
-	html_page= determineIfHTML(page_text);
+	page_text = arg_page_text;
+	html_page= determineIfHTML(arg_page_text);
+}
+
+void HTMLParser::parsePage(){
+	findWords();
 	description = findDescription(page_text);
 }
 
-void HTMLParser::findWords(const string page_text){
-	HTMLTokenizer tokenizer;
-	HTMLToken token, next_ token;
+//START HERE. MAKE SURE TO ADD IGNORING COMMENTS
+void HTMLParser::findWords(){
+	HTMLTokenizer tokenizer(page_text);
+	HTMLToken token;
+	bool can_parse = false;
 	while(tokenizer.HasNextToken()){
-		token = tokenizer.GetNextToken()
-		if(token.GetType()==TAG_START){
-			if(token.GetValue()=="<TITLE>" ||
-			   token.GetValue()=="<HTML>"  ||
-			   token.GetValue()=="<A>"     ||
-			   token.GetValue()=="<BODY>"  ||
-		       	   token.GetValue()=="<H1>"    ||
-			   token.GetValue()=="<H2>"    ||
-			   token.GetValue()=="<H3>"    ||){
-	
-				next_token = tokenizer.GetNextToken();
-				if(next_token.GetType()==TEXT){
-					insertWords(next_token);
-				}
-			}
+		token = tokenizer.GetNextToken();
+		if(startsWith(token.GetValue(),"<TITLE") || startsWith(token.GetValue(),"<BODY")){
+			can_parse = true;
+		}else if(startsWith(token.GetValue(),"</TITLE") || startsWith(token.GetValue(),"</BODY")){
+			can_parse = false;
+		}
+
+		if(token.GetType()==TEXT){
+			insertWords(token);
 		}
 	}
 }
@@ -45,7 +45,7 @@ void HTMLParser::insertWords(HTMLToken token){
 	string value = token.GetValue();
 	while(value != ""){
 		word = getNextWord(value);
+		words.Insert(word);
 	}
-	words.Insert(word);
 }
 

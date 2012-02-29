@@ -8,7 +8,15 @@
 
 //Default Constructor
 URL::URL(string arg_url){
+	arg_url = stripInternalRelative(arg_url);
 	strcpy(stored_url,arg_url.data());
+}
+
+string URL::stripInternalRelative(string url){
+	for(unsigned int i=0; i<url.size(); ++i){
+		if(url[i]=='#') url[i] = 0;
+	}
+	return url;
 }
 
 //Default Deconstructor
@@ -32,14 +40,8 @@ void URL::addBase(string base){
 
 
 void URL::setURL(string url){
+	url = stripInternalRelative(url);
 	strcpy(stored_url,url.data());
-}
-
-//Removes the file name at the end of the url
-//@par url - url to manipulate
-//@ret string - returns a copy of the manipulated string
-string URL::removeFileName(string url){
-	return url;
 }
 
 void URL::resolveURL(char * base, char * url){

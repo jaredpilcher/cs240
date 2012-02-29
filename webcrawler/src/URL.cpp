@@ -8,7 +8,15 @@
 
 //Default Constructor
 URL::URL(string arg_url){
+	arg_url = stripInternalRelative(arg_url);
 	strcpy(stored_url,arg_url.data());
+}
+
+string URL::stripInternalRelative(string url){
+	for(unsigned int i=0; i<url.size(); ++i){
+		if(url[i]=='#') url[i] = 0;
+	}
+	return url;
 }
 
 //Default Deconstructor
@@ -32,6 +40,7 @@ void URL::addBase(string base){
 
 
 void URL::setURL(string url){
+	url = stripInternalRelative(url);
 	strcpy(stored_url,url.data());
 }
 
@@ -52,12 +61,11 @@ void URL::resolveURL(char * base, char * url){
 	            resolveRoot(stored_url, url);
 			}
             break;
-        case '#':
-	    	strcpy(stored_url,base);
-            strcat(stored_url, url);
-            break;
         default:
-			if(!strcmp(base,"file:///") || !strcmp(base,"file://")){
+			if(strlen(url)==0){
+				strcpy(stored_url,base);
+			}
+			else if(!strcmp(base,"file:///") || !strcmp(base,"file://")){
 				strcpy(stored_url,"file:///");
 				resolveRelative(stored_url, url);
 			}

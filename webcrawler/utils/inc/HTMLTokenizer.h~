@@ -45,8 +45,6 @@ public:
 	 * Return whether the tokenizer has another token to return.
 	 */
 	bool HasNextToken() const;
-
-	string page_text;
 	
 private:
 	/**

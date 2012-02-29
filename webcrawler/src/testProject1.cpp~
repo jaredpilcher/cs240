@@ -285,7 +285,22 @@ bool URLTest(ostream & os, bool success){
 	url.addBase("http://www.website.com/jared/");
 	TEST(url.getURL()=="http://www.website.com/jared/jared");
 
-	//
+	//File Internal Relative Tests
+	url.setURL("#something");
+	url.addBase("file:///query?test=something");
+	TEST(url.getURL()=="file:///query?test=something");
+	cout << url.getURL() << endl;
+
+	url.setURL("#something");
+	url.addBase("file:///jared/pilcher");
+	TEST(url.getURL()=="file:///jared/pilcher");
+
+
+	//Web Internal Relative Tests
+	url.setURL("#something");
+	url.addBase("http://www.website.com/jared");
+	TEST(url.getURL()=="http://www.website.com/jared");
+
 
 	return success;
 }

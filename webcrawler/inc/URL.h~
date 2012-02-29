@@ -26,11 +26,6 @@ public:
 	//@par base - base to be placed on url
 	void addBase(string base);
 
-	//Removes the file name at the end of the url
-	//@par url - url to manipulate
-	//@ret string - returns a copy of the manipulated string
-	string removeFileName(string url);
-
 	string getURL();
 	void setURL(string url);
 
@@ -66,6 +61,9 @@ private:
 
 	//Go through the base and remove the number of parents specified by relative_count
 	void removeParents(char * base, int relative_count);	
+
+	//Strips the '#something' from the url
+	string URL::stripInternalRelative(string url);
 };
 
 #endif /* URL_H_ */
