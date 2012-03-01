@@ -38,7 +38,7 @@ void WebCrawler::CrawlWeb(){
 
 		//Download page
 		//Parse string returned from downloader
-		parser.setNewPageString(downloader.download(page));
+		parser.setNewPage(downloader.download(page), page.getURL());
 
 		//Determine if this is a valid page
 		if(!isHTML(page.getURL()))){

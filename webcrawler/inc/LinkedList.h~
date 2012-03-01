@@ -5,6 +5,9 @@
 #include <iostream>
 using namespace std;
 
+template<typename Type>
+class LinkedList;
+
 //! LLNode implements a doubly-linked list node
 template <typename Type>
 class LLNode 
@@ -13,28 +16,28 @@ class LLNode
 	public:
 	
 		//!  Constructor
-		LLNode(const Type & v, LLNode * p, LLNode * n) : value(v), prev(p), next(n){
+		LLNode(const Type & v, LLNode<Type> * p, LLNode<Type> * n) : value(v), prev(p), next(n){
 		}
 		
 		//! Copy Constructor 
-		LLNode(const LLNode & other): value(other.value),prev(other.prev),next(other.next){
+		LLNode(const LLNode<Type> & other): value(other.value),prev(other.prev),next(other.next){
 		}
 	
 		//!  Read-only public methods for use by clients of the LinkedList class
-		const Type & GetValue() const{
+		Type & GetValue(){
  			return value;
 		}
 	
-		LLNode * GetPrevious() const{
+		LLNode<Type> * GetPrevious() const{
 			return prev;
 		}
 	
-		LLNode * GetNext() const{
+		LLNode<Type> * GetNext() const{
 			return next;
 		}
 		
 		//! Assignment operator 
-		LLNode & operator=(const LLNode & other){
+		LLNode<Type> & operator=(const LLNode<Type> & other){
 			if(this!=&other){
 				value=other.value;
 				prev=other.prev;
@@ -44,7 +47,7 @@ class LLNode
 		}
 		
 		//print node in a nice fashion
-		static void print(LLNode * Node){
+		static void print(LLNode<Type> * Node){
 			if(Node!=NULL){
 				cout << "Node has: " << endl;
 				cout << ">>>>value: " << Node->value << endl;
@@ -60,8 +63,8 @@ class LLNode
 	
 	private:
 		Type value;        //!< value stored in the node
-		LLNode * prev;            //!< pointer to previous node in the list
-		LLNode * next;            //!< pointer to next node in the list
+		LLNode<Type> * prev;            //!< pointer to previous node in the list
+		LLNode<Type> * next;            //!< pointer to next node in the list
 };
 
 //! LinkedList implements a doubly-linked list
@@ -76,7 +79,7 @@ class LinkedList
 	
 	
 		//!  Copy constructor.  Makes a complete copy of its argument
-		LinkedList(const LinkedList & other){
+		LinkedList(const LinkedList<Type> & other){
 			copyList(other);
 		}
 	
@@ -91,7 +94,7 @@ class LinkedList
 	
 		//! Assignment operator.  Makes a complete copy of its argument
 		//! @return A reference to oneself
-		LinkedList& operator =(const LinkedList & other){
+		LinkedList<Type> & operator =(const LinkedList<Type> & other){
 			if(this==&other) return *this;
 			removeNodes(top);
 			top=NULL;
@@ -124,22 +127,29 @@ class LinkedList
 	
 	
 		//!  @return a pointer to the first node in the list, or NULL if the list is empty
-		LLNode * GetFirst()const{
+		LLNode<Type> * GetFirst()const{
 			return top;
 		}
 
 		//! @returns the first node in the list, or NULL if the list is empty
-		LLNode Pop(){
-			LLNode temp;
-			temp = *GetFirst();
-			Remove(temp)
-			return 
+		//! used for pointers stored in the values of the nodes
+		Type PopPtr(){
+			if(top==NULL) return NULL;
+			return Pop();
+		}
+
+		//! @returns the first node in the list
+		//! WARNING: Does not check to see that top is not NULL, must check first!!!
+		Type Pop(){
+			Type temp;
+			temp = top->value;
+			Remove(top);
+			return temp;
 		}
 	
 	
-	
 		//!  @returns a pointer to the last node in the list, or NULL if the list is empty
-		LLNode * GetLast()const{
+		LLNode<Type> * GetLast()const{
 			return bottom;
 		}
 	
@@ -152,8 +162,8 @@ class LinkedList
 		//!      If n is NULL, the new node should be inserted at the beginning of the list.
 		//!
 		//!  @return a pointer to the newly inserted node
-		LLNode * Insert(const Type & v, LLNode * n){
-			LLNode * newNode;
+		LLNode<Type> * Insert(const Type & v, LLNode<Type> * n){
+			LLNode<Type> * newNode;
 			if(n==NULL){
 				newNode = new LLNode<Type>(v, NULL, top);
 				if(top==NULL) bottom = newNode;
@@ -184,8 +194,8 @@ class LinkedList
 		//!      If n is NULL, the list should be searched from the beginning.
 		//!
 		//!  @return a pointer to the node containing v, or NULL if v is not found
-		LLNode * Find(const Type & v, LLNode * n) const{
-			LLNode * returnNode=top;
+		LLNode<Type> * Find(const Type & v, LLNode<Type> * n) const{
+			LLNode<Type> * returnNode=top;
 			if(n!=NULL){
 				returnNode = n->next;
 			}	
@@ -202,7 +212,7 @@ class LinkedList
 		//!  Removes node n from the list
 		//!  
 		//!  @param n The node being removed from the list
-		void Remove(LLNode * n){
+		void Remove(LLNode<Type> * n){
 			if(n==NULL) return;
 			if(n->prev!=NULL){
 				n->prev->next = n->next;
@@ -221,14 +231,14 @@ class LinkedList
 		}
 		
 		//print entire list in a nice fashion
-		static void printList(const LinkedList & List){
+		void printList(){
 			int i=0;
-			LLNode * Node;
-			Node = List.top;
+			LLNode<Type> * Node;
+			Node = top;
 			cout << "\t\n" << endl;
-			cout << "List top: " << List.top << endl;
-			cout << "List bottom: " << List.bottom << endl;
-			cout << "List size: " << List.size << endl;
+			cout << "List top: " << top << endl;
+			cout << "List bottom: " << bottom << endl;
+			cout << "List size: " << size << endl;
 			while(Node!=NULL){
 				cout << "Node " << i << " has:" << endl;
 				cout << ">>>>value: " << Node->value << endl;
@@ -240,16 +250,29 @@ class LinkedList
 			}
 			if(i==0) cout << "Nothing in List" << endl;
 		}
+
+		//print entire list in a nice fashion
+		void printValues(){
+			int i=0;
+			LLNode<Type> * Node;
+			Node = top;
+			while(Node!=NULL){
+				cout << Node->value << endl;
+				Node=Node->next;
+				i++;
+			}
+			if(i==0) cout << "Nothing in List" << endl;
+		}
 	
 	private:
-	LLNode * top;
-	LLNode * bottom;
+	LLNode<Type> * top;
+	LLNode<Type> * bottom;
 	int size;
 
 	//Remove all nodes after and including this node
-	void removeNodes(LLNode * Node){
+	void removeNodes(LLNode<Type> * Node){
 		if(Node==NULL) return;
-			LLNode * next = Node->next;
+			LLNode<Type> * next = Node->next;
 			delete Node;
 			if(next!=NULL){
 				removeNodes(next);
@@ -257,10 +280,10 @@ class LinkedList
 	}
 
 	//Copy all nodes starting from the top and place in this linked list
-	void LinkedList::copyList(const LinkedList & other){
-		LLNode * hisCurNode=other.top;
-		LLNode * myCurNode = NULL;
-		LLNode * myPrevNode = NULL;
+	void copyList(const LinkedList<Type> & other){
+		LLNode<Type> * hisCurNode=other.top;
+		LLNode<Type> * myCurNode = NULL;
+		LLNode<Type> * myPrevNode = NULL;
 		while(hisCurNode != NULL){
 			myCurNode = new LLNode<Type>(hisCurNode->value, myPrevNode, NULL);
 		

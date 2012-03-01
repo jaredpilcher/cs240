@@ -12,9 +12,10 @@
 #include "HTMLToken.h"
 #include "URL.h"
 #include <string.h>
+#define MAX_CHAR_IN_LINE 32000
 
 //Provides tools to parse HTML text strings
-class HTMLPARSER{
+class HTMLParser{
 	//The list of words on the current page
 	LinkedList<string> words;
 
@@ -23,7 +24,7 @@ class HTMLPARSER{
 
 	//The start_url passed in from the user.
 	//The description of the current
-	string start_url, description;
+	string base_url, description;
 
 	//page
 	string page_text;
@@ -40,7 +41,8 @@ public:
 	//Sets the new value for html_page
 	//Finds all words and links found in page_text
 	//@par page_text - the html text of the new page
-	void setNewPageString(const string & page_text);
+	//@par arg_url - url of the page being crawled
+	void setNewPage(const string & page_text, const string arg_url);
 
 	//Retrieves the description of the page
 	string getDescription();
@@ -55,18 +57,20 @@ public:
 	bool hasNextLink();
 
 	//Retrieves the next link
+	//WARNING: Does not check that the link list is not empty. Must check first!
 	string getLink();
 
 	//Begin parsing the page string
 	void parsePage();
 
-	string firstHundredChar(HTMLTokenizer tokenizer);
+	//Print all words (for testing)
+	void printWords();
 
 private:
 	
 	//Finds all the necessary words in the string
 	//@par page_text - the html text of the page to be searched
-	void findWords(string page_text);
+	void findWords();
 
 	//Places all words in the token into the list of words
 	//@par token - token containing the words to be places in the words list
@@ -75,10 +79,26 @@ private:
 	//Retrieves the description from the html text on the page
 	//@par page_text - the html string of the current page
 	//@ret string - the description found on the page
-	string findDescription(const string page_text);
+	string findDescription();
 
 	//Grabs the next word in the sentence
-	string HTMLParser::getNextWord(char * sentence);
+	string getNextWord(char * sentence);
+	
+	//Grab the first 100 characters (excluding whitespace) of the tokenizer
+	string firstHundredChar(HTMLTokenizer tokenizer);
+
+	//Determines if substring is in line
+	bool startsWith(string line,string substring);
+
+	//Convert all lower case values to uppercase in string
+	//WARNING: modifies string
+	void toCapital(string & line);
+
+	//Determines if the string contains whitespace
+	bool isWhiteSpace(string word);
+
+	//Find all links between <html> tags on page and store in links (class variable)
+	void findLinks();
 };
 
 #endif /* HTMLPARSER_H_ */

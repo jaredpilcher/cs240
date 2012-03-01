@@ -23,7 +23,7 @@ void PageQueue::push(Page * page){
 //@ret Page - returns a pointer to the next page in the queue 
 	//or NULL if there isn't any page in the queue
 Page * PageQueue::pop(){
-	return queue.Pop();
+	return queue.PopPtr();
 }
 
 //Retrieves the number of items on queue

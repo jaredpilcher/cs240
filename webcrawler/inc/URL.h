@@ -19,6 +19,9 @@ public:
 	//Default Constructor
 	URL(string url);
 
+	//Blank Constructor
+	URL();
+
 	//Default Deconstructor
 	~URL();
 
@@ -28,6 +31,8 @@ public:
 
 	string getURL();
 	void setURL(string url);
+
+	URL& operator=(const URL& other);
 
 private:
 	char stored_url[URL_SIZE];

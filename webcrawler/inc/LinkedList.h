@@ -132,14 +132,20 @@ class LinkedList
 		}
 
 		//! @returns the first node in the list, or NULL if the list is empty
-		Type Pop(){
+		//! used for pointers stored in the values of the nodes
+		Type PopPtr(){
 			if(top==NULL) return NULL;
+			return Pop();
+		}
+
+		//! @returns the first node in the list
+		//! WARNING: Does not check to see that top is not NULL, must check first!!!
+		Type Pop(){
 			Type temp;
 			temp = top->value;
 			Remove(top);
 			return temp;
 		}
-	
 	
 	
 		//!  @returns a pointer to the last node in the list, or NULL if the list is empty
@@ -225,20 +231,33 @@ class LinkedList
 		}
 		
 		//print entire list in a nice fashion
-		static void printList(const LinkedList<Type> & List){
+		void printList(){
 			int i=0;
 			LLNode<Type> * Node;
-			Node = List.top;
+			Node = top;
 			cout << "\t\n" << endl;
-			cout << "List top: " << List.top << endl;
-			cout << "List bottom: " << List.bottom << endl;
-			cout << "List size: " << List.size << endl;
+			cout << "List top: " << top << endl;
+			cout << "List bottom: " << bottom << endl;
+			cout << "List size: " << size << endl;
 			while(Node!=NULL){
 				cout << "Node " << i << " has:" << endl;
 				cout << ">>>>value: " << Node->value << endl;
 				cout << ">>>>next: " << Node->next << endl;
 				cout << ">>>>prev: " << Node->prev << endl;
 				cout << ">>>>addr: " << Node << endl;
+				Node=Node->next;
+				i++;
+			}
+			if(i==0) cout << "Nothing in List" << endl;
+		}
+
+		//print entire list in a nice fashion
+		void printValues(){
+			int i=0;
+			LLNode<Type> * Node;
+			Node = top;
+			while(Node!=NULL){
+				cout << Node->value << endl;
 				Node=Node->next;
 				i++;
 			}

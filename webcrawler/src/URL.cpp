@@ -19,12 +19,22 @@ string URL::stripInternalRelative(string url){
 	return url;
 }
 
+//Blank Constructor
+URL::URL(){
+	stored_url[0] = 0;
+}
+
 //Default Deconstructor
 URL::~URL(){
 }
 
 string URL::getURL(){
 	return string(stored_url);
+}
+
+URL& URL::operator=(const URL& other){
+	strcpy(stored_url,other.stored_url);
+	return *this;
 }
 
 //Adds a base to the stored URL

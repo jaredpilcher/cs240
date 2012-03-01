@@ -8,6 +8,7 @@ using namespace std;
 #include "PageHistory.h"
 #include "PageDownloader.h"
 #include "URL.h"
+#include "HTMLParser.h"
 
 static const unsigned int npos = -1;
 
@@ -16,6 +17,7 @@ bool pageQueueTest(ostream & os, bool success);
 bool pageHistoryTest(ostream & os, bool success);
 bool pageDownloaderTest(ostream & os, bool success);
 bool URLTest(ostream & os, bool success);
+bool HTMLParserTest(ostream & os, bool success);
 
 int main(int argc, char* argv[]){
 	bool success=true;
@@ -33,6 +35,9 @@ int main(int argc, char* argv[]){
 
 	//URL Test
 	success = URLTest(cout, success);
+
+	//HTMLParser Test
+	success = HTMLParserTest(cout, success);
 
 	if(success){
 		cout << "Success!" << endl;
@@ -139,7 +144,6 @@ bool pageHistoryTest(ostream & os, bool success){
 bool pageDownloaderTest(ostream & os, bool success){
 	PageDownloader downloader;
 	string url = "http://www.google.com";
-	Page page(url);
 	TEST(downloader.download(url).find("<title>Google</title>") != npos);
 	return success;
 }
@@ -289,7 +293,6 @@ bool URLTest(ostream & os, bool success){
 	url.setURL("#something");
 	url.addBase("file:///query?test=something");
 	TEST(url.getURL()=="file:///query?test=something");
-	cout << url.getURL() << endl;
 
 	url.setURL("#something");
 	url.addBase("file:///jared/pilcher");
@@ -302,5 +305,20 @@ bool URLTest(ostream & os, bool success){
 	TEST(url.getURL()=="http://www.website.com/jared");
 
 
+	return success;
+}
+
+bool HTMLParserTest(ostream & os, bool success){
+	PageDownloader downloader;
+	string url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/scale.php?sec=";
+	string page_text = downloader.download(url);
+	HTMLParser parser;
+	parser.setNewPage(page_text, url);
+	parser.parsePage();
+	parser.printWords();
+	while(!parser.isEmpty()){
+		cout << "the word I got was: " << parser.getWord() << endl;
+	}
+	//cout << parser.getDescription() << endl;
 	return success;
 }

@@ -19,12 +19,21 @@ string URL::stripInternalRelative(string url){
 	return url;
 }
 
+//Blank Constructor
+URL::URL(){
+	stored_url[0] = 0;
+}
+
 //Default Deconstructor
 URL::~URL(){
 }
 
 string URL::getURL(){
 	return string(stored_url);
+}
+
+URL& URL::operator=(const URL& other){
+	strcpy(stored_url,other.stored_url);
 }
 
 //Adds a base to the stored URL
@@ -61,12 +70,11 @@ void URL::resolveURL(char * base, char * url){
 	            resolveRoot(stored_url, url);
 			}
             break;
-        case '#':
-	    	strcpy(stored_url,base);
-            strcat(stored_url, url);
-            break;
         default:
-			if(!strcmp(base,"file:///") || !strcmp(base,"file://")){
+			if(strlen(url)==0){
+				strcpy(stored_url,base);
+			}
+			else if(!strcmp(base,"file:///") || !strcmp(base,"file://")){
 				strcpy(stored_url,"file:///");
 				resolveRelative(stored_url, url);
 			}
