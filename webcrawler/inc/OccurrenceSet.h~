@@ -20,6 +20,9 @@ public:
 	//Default Deconstructor
 	~OccurrenceSet();
 
+	//Copy Constructor
+	OccurrenceSet::OccurrenceSet(OccurrenceSet & other);
+
 	//Creates an occurrence, or increments the
 	//count of an occurrence on the class BST
 	//@par url - the url that the occurrence is on
@@ -31,9 +34,6 @@ public:
 
 	//Returns whether or not the occurrence set is empty
 	bool isEmpty();
-
-	//Returns the contents of the Occurrence
-	void getContents(int & arg_count, string & arg_url);
 
 private:
 	//The BST that holds the set of occurrences

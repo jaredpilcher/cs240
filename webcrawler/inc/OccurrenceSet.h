@@ -20,6 +20,9 @@ public:
 	//Default Deconstructor
 	~OccurrenceSet();
 
+	//Copy Constructor
+	OccurrenceSet(OccurrenceSet & other);
+
 	//Creates an occurrence, or increments the
 	//count of an occurrence on the class BST
 	//@par url - the url that the occurrence is on

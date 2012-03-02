@@ -15,6 +15,11 @@ OccurrenceSet::OccurrenceSet(){
 OccurrenceSet::~OccurrenceSet(){
 }
 
+//Copy Constructor
+OccurrenceSet::OccurrenceSet(OccurrenceSet & other){
+	occurrences = other.occurrences;
+}
+
 //Creates an occurrence, or increments the
 //count of an occurrence on the class BST
 //@par url - the url that the occurrence is on

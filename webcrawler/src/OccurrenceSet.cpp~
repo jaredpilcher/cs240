@@ -15,6 +15,11 @@ OccurrenceSet::OccurrenceSet(){
 OccurrenceSet::~OccurrenceSet(){
 }
 
+//Copy Constructor
+OccurrenceSet::OccurrenceSet(OccurrenceSet & other){
+	occurrences = other;
+}
+
 //Creates an occurrence, or increments the
 //count of an occurrence on the class BST
 //@par url - the url that the occurrence is on
@@ -41,10 +46,4 @@ Occurrence OccurrenceSet::pop(){
 //Returns whether or not the occurrence set is empty
 bool OccurrenceSet::isEmpty(){
 	return occurrences.IsEmpty();
-}
-
-//Returns the contents of the Occurrence
-void OccurrenceSet::getContents(int & arg_count, string & arg_url){
-	arg_count = count;
-	arg_url = url;
 }
