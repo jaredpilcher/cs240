@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 
 #include "UnitTest.h"
@@ -309,16 +310,74 @@ bool URLTest(ostream & os, bool success){
 }
 
 bool HTMLParserTest(ostream & os, bool success){
-	PageDownloader downloader;
-	string url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/scale.php?sec=";
-	string page_text = downloader.download(url);
-	HTMLParser parser;
-	parser.setNewPage(page_text, url);
-	parser.parsePage();
-	parser.printWords();
-	while(!parser.isEmpty()){
-		cout << "the word I got was: " << parser.getWord() << endl;
-	}
+
+	//Test 1
+		//Download page and parse it
+		PageDownloader downloader;
+		string url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/scale.php?sec=";
+		string page_text = downloader.download(url);
+		HTMLParser parser;
+		parser.setNewPage(page_text, url);
+		parser.parsePage();
+
+		//Test if words are correct
+			//Get words
+		fstream file("ParseTestFiles/test1.txt");
+		char temp[MAX_CHAR_IN_LINE];
+		LinkedList<string> words;
+		while(1){
+			file.getline(temp,MAX_CHAR_IN_LINE);
+			if(!file) break;
+			words.Insert(temp, words.GetLast());
+		}
+		file.close();
+			//Determine if word lists are equivalent
+		while(!words.IsEmpty()){
+			//If parser runs out of words before words in file, then fails
+			TEST(!parser.isEmpty());
+			if(parser.isEmpty()) break;
+			//Test if words are equivalent
+			TEST(parser.getWord() == words.Pop());
+		}
+
+		//Determine if description is correct
+		TEST(parser.getDescription()=="Scale test description");
+
+	//Test 2
+		//Download page and parse it
+		url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/testFour.htm";
+		page_text = downloader.download(url);
+		parser.setNewPage(page_text, url);
+		parser.parsePage();
+
+		//Test if words are correct
+			//Get words
+		file.open("ParseTestFiles/test2.txt");
+		words.Clear();
+		while(1){
+			file.getline(temp,MAX_CHAR_IN_LINE);
+			if(!file) break;
+			words.Insert(temp, words.GetLast());
+		}
+		file.close();
+			//Determine if word lists are equivalent
+		while(!words.IsEmpty()){
+			//If parser runs out of words before words in file, then fails
+			TEST(!parser.isEmpty());
+			if(parser.isEmpty()) break;
+			//Test if words are equivalent
+			TEST(parser.getWord() == words.Pop());
+		}
+
+		//Determine if description is correct
+		TEST(parser.getDescription()=="Description Test");
+	
+
+
+
 	//cout << parser.getDescription() << endl;
+	//while(parser.hasNextLink()){
+		//cout << parser.getLink() << endl;
+//	}
 	return success;
 }
