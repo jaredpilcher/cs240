@@ -11,6 +11,7 @@ using namespace std;
 #include "URL.h"
 #include "HTMLParser.h"
 #include "Occurrence.h"
+#include "OccurrenceSet.h"
 
 static const unsigned int npos = -1;
 
@@ -21,6 +22,7 @@ bool pageDownloaderTest(ostream & os, bool success);
 bool URLTest(ostream & os, bool success);
 bool HTMLParserTest(ostream & os, bool success);
 bool OccurrenceTest(ostream & os, bool success);
+bool OccurrenceSetTest(ostream & os, bool success);
 
 int main(int argc, char* argv[]){
 	bool success=true;
@@ -44,6 +46,9 @@ int main(int argc, char* argv[]){
 
 	//Occurrence Test
 	OccurrenceTest(cout, success);
+
+	//OccurrenceSet Test
+	OccurrenceSetTest(cout, success);
 
 	if(success){
 		cout << "Success!" << endl;
@@ -429,5 +434,47 @@ bool OccurrenceTest(ostream & os, bool success){
 	occurrence.addOccurrence();
 	TEST(occurrence.getCount()==1);
 	TEST(occurrence.getURL()=="http://www.google.com");
+	return success;
+}
+
+
+bool OccurrenceSetTest(ostream & os, bool success){
+	string url = "http://www.google.com";
+	string url2 = "http://www.yahoo.com";
+	string url3 = "http://www.amazon.com";
+	OccurrenceSet occurrences;
+
+	//Simple push/pop test
+	occurrences.push(url);
+	TEST(occurrences.pop().getCount()==1);
+	TEST(occurrences.isEmpty());
+
+	//Count test
+	occurrences.push(url);
+	occurrences.push(url);
+	TEST(occurrences.pop().getCount()==2);
+	TEST(occurrences.isEmpty());
+
+	//Multiple push test
+	occurrences.push(url);
+	occurrences.push(url2);
+	occurrences.push(url2);
+	int count;
+	string test_url;
+	occurrences.pop().getContents(count,test_url);
+	if(test_url==url){
+		TEST(count==1);
+	}else{
+		TEST(count==2);
+	}
+	TEST(!occurrences.isEmpty());
+		
+	occurrences.pop().getContents(count,test_url);
+	if(test_url==url){
+		TEST(count==1);
+	}else{
+		TEST(count==2);
+	}
+	TEST(occurrences.isEmpty());
 	return success;
 }

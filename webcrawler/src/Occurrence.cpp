@@ -13,6 +13,12 @@ Occurrence::Occurrence(string arg_url):count(0), url(arg_url){
 Occurrence::~Occurrence(){
 }
 
+//Copy Constructor
+Occurrence::Occurrence(Occurrence & other){
+	url = other.url;
+	count = other.count;
+}
+
 //Increments the number of occurrences on the page
 void Occurrence::addOccurrence(){
 	++count;
@@ -24,4 +30,10 @@ string Occurrence::getURL(){
 
 int Occurrence::getCount(){
 	return count;
+}
+
+//Returns the contents of the Occurrence
+void Occurrence::getContents(int & arg_count, string & arg_url){
+	arg_count = count;
+	arg_url = url;
 }

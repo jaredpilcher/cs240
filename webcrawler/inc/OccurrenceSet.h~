@@ -32,9 +32,14 @@ public:
 	//Returns whether or not the occurrence set is empty
 	bool isEmpty();
 
+	//Returns the contents of the Occurrence
+	void getContents(int & arg_count, string & arg_url);
+
 private:
 	//The BST that holds the set of occurrences
-	BST<Occurrence*> occurrences;
+	BST<string,Occurrence*> occurrences;
+
+	//The BST that holds the map between urls and the Occurrence
 };
 
 #endif /* OCCURRENCESET_H_ */

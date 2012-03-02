@@ -19,11 +19,17 @@ public:
 	//Default Deconstructor
 	~Occurrence();
 
+	//Copy Constructor
+	Occurrence(Occurrence & other);
+
 	//Increments the number of occurrences on the page
 	void addOccurrence();
 
 	string getURL();
 	int getCount();
+
+	//Returns the contents of the Occurrence
+	void getContents(int & arg_count, string & arg_url);
 	
 
 private:

@@ -34,7 +34,7 @@ public:
 
 private:
 	//The BST that holds the set of occurrences
-	BST<Occurrence*> occurrences;
+	BST<string,Occurrence*> occurrences;
 
 	//The BST that holds the map between urls and the Occurrence
 };

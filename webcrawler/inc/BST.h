@@ -19,6 +19,7 @@ class BSTNode
 		  key(k), value(v), left(NULL), right(NULL){
 		}
 
+
 		//! Copy Constructor (Type2 must have a deep copy constructor)
 		BSTNode(const BSTNode & other) : 
 		  key(other.key),value(other.value),left(other.left),right(other.right){
@@ -31,8 +32,8 @@ class BSTNode
 		}
 
 		//! Returns actual object to be changed
-		Type & GetRealKey(){
-			return key;
+		Type2 & GetValue(){
+			return value;
 		}
 
 
@@ -115,6 +116,11 @@ class BSTNode
 		Type MinKey(){
 			if(left==NULL) return key;
 			return left->MinKey();
+		}
+
+		Type2 MinValue(){
+			if(left==NULL) return value;
+			return left->MinValue();
 		}
 		 
 		
@@ -232,7 +238,7 @@ class BST
 		bool Remove(const Type & k){
 			if(top==NULL) return false;
 			if(top->GetKey()==k){
-				BSTNode<Type, Type2> aux_top(0,Type2());
+				BSTNode<Type, Type2> aux_top(top->GetKey(), top->GetValue());
 				aux_top.SetLeft(top);
 				BSTNode<Type, Type2> * removed_node = top->Remove(k,&aux_top);
 				top=aux_top.GetLeft();
@@ -262,17 +268,24 @@ class BST
 
 		//! @returns the smallest key in the tree
 		//! WARNING: Does not check to see that top is not NULL, must check first!!!
-		Type Pop(){
+		Type PopKey(){
 			Type min_key = top->MinKey();
 			Remove(min_key);
 			return min_key;
+		}
+
+		Type2 PopValue(){
+			Type min_key = top->MinKey();
+			Type2 min_value = top->MinValue();
+			Remove(min_key);
+			return min_value;
 		}
 
 		//! @returns the smallest key in the list, or NULL if the list is empty
 		//! used for pointers stored in the keys of the nodes
 		Type PopPtr(){
 			if(top==NULL) return NULL;
-			return Pop();
+			return PopKey();
 		}
 
 	
