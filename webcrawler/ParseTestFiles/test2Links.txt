@@ -1,0 +1,3 @@
+http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/title.html
+http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/header.html
+http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/hundredwords.html

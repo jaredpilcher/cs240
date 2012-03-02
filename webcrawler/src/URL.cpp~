@@ -34,6 +34,7 @@ string URL::getURL(){
 
 URL& URL::operator=(const URL& other){
 	strcpy(stored_url,other.stored_url);
+	return *this;
 }
 
 //Adds a base to the stored URL
@@ -136,15 +137,23 @@ void URL::getBaseURL(char * final_url, char * base){
         if(base[i]=='/'){
             slash_location = i;
         }
+		cout << "here4" << endl;
     }
-	int base_length = strlen(base);
-	//if ends in '.com' or '.net', etc then don't remove file name
-	if(base[base_length-4] != '.'){
+	//if ends in '.com' or '.net' or '.org', then don't remove file name
+	if(!endsWith(base,".com") && !endsWith(base,".net") && !endsWith(base,".org")){
 	    strncpy(final_url,base,slash_location+1);
 	}
 	else{
 		strcpy(final_url,base);
 	}
+}
+
+bool URL::endsWith(const char * base, const char * substring){
+	cout << "here5" << endl;
+	string string_sub = substring;
+	cout << "here3" << endl;
+	return (strcmp(&base[strlen(base)-4],substring)==0) || (strcmp(&base[strlen(base)-5],(string_sub + "/").data())==0);
+	//return (strcmp(strstr(base,substring),(string_sub + '/').data())==0) || (strcmp(strstr(base,substring),substring)==0);
 }
 
 //Resolves URLs that include relative file symbols.

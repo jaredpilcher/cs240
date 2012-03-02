@@ -138,14 +138,18 @@ void URL::getBaseURL(char * final_url, char * base){
             slash_location = i;
         }
     }
-	int base_length = strlen(base);
-	//if ends in '.com' or '.net', etc then don't remove file name
-	if(base[base_length-4] != '.'){
+	//if ends in '.com' or '.net' or '.org', then don't remove file name
+	if(!endsWith(base,".com") && !endsWith(base,".net") && !endsWith(base,".org")){
 	    strncpy(final_url,base,slash_location+1);
 	}
 	else{
 		strcpy(final_url,base);
 	}
+}
+
+bool URL::endsWith(const char * base, const char * substring){
+	string string_sub = substring;
+	return (strcmp(&base[strlen(base)-4],substring)==0) || (strcmp(&base[strlen(base)-5],(string_sub + "/").data())==0);
 }
 
 //Resolves URLs that include relative file symbols.

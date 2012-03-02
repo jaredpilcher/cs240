@@ -23,6 +23,7 @@ public:
 	
 	//Push the page onto the history BST
 	//@par page - page to be inserted
+	//@ret bool - True if successfully inserted in tree
 	bool push(Page * page);
 	
 	//Remove the page that matches the argument
@@ -40,7 +41,7 @@ public:
 
 private:
 	//The BST to hold the history of pages
-	BST<Page*> history;
+	BST<Page*, string> history;
 };
 
 #endif /* PAGEHISTORY_H_ */

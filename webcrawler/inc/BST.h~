@@ -4,35 +4,40 @@
 #include <iostream>
 using namespace std;
 
-template<typename Type>
+template<typename Type, typename Type2>
 class BST;
 
-//!  BSTNode<Type> implements a binary search tree node
-template <typename Type>
+//!  BSTNode<Type, Type2> implements a binary search tree node
+template <typename Type, typename Type2>
 class BSTNode 
 {
-		friend class BST<Type>;   //!< BST can access private members of BSTNode<Type>
+		friend class BST<Type, Type2>;   //!< BST can access private members of BSTNode<Type, Type2>
 	
 	public:
 		//!  Constructor
-		BSTNode(const Type & v) :
-		  value(v), left(NULL), right(NULL){
+		BSTNode(const Type & k, const Type2 & v) :
+		  key(k), value(v), left(NULL), right(NULL){
 		}
 
-		//! Copy Constructor
+		//! Copy Constructor (Type2 must have a deep copy constructor)
 		BSTNode(const BSTNode & other) : 
-		  value(other.value),left(other.left),right(other.right){
+		  key(other.key),value(other.value),left(other.left),right(other.right){
 		}
 
 
 		//!  Read-only public methods for use by clients of the BST class
-		const Type & GetValue() const{
-		  return value;
+		const Type & GetKey() const{
+		  return key;
+		}
+
+		//! Returns actual object to be changed
+		Type & GetRealKey(){
+			return key;
 		}
 
 
 
-		BSTNode<Type> * GetLeft()const{
+		BSTNode<Type, Type2> * GetLeft()const{
 		  return left;
 		}
 
@@ -41,19 +46,19 @@ class BSTNode
 		  return right;
 		}
 
-		void SetLeft(BSTNode<Type> * node){
+		void SetLeft(BSTNode<Type, Type2> * node){
 		  left = node ;
 		}
 
 
-		BSTNode<Type> * SetRight(BSTNode<Type> * node){
+		BSTNode<Type, Type2> * SetRight(BSTNode<Type, Type2> * node){
 		  right = node;
 		}
 
 		//! Assignment operator 
-		BSTNode<Type> & operator=(const BSTNode<Type> & other){
+		BSTNode<Type, Type2> & operator=(const BSTNode<Type, Type2> & other){
 			if(this!=&other){
-				value=other.value;
+				key=other.key;
 				left=other.left;
 				right=other.right;
 			}
@@ -67,24 +72,24 @@ class BSTNode
 				return;
 			}
 			cout << "Node has: " << endl;
-			cout << ">>>>value: " << value << endl;
+			cout << ">>>>key: " << key << endl;
 			cout << ">>>>left: " << left << endl;
 			cout << ">>>>right: " << right << endl;
 			cout << ">>>>addr: " << this << endl;
 		}
 
-		BSTNode<Type>* Remove(Type search_value, BSTNode<Type> *parent) {
-			if(search_value < value){
+		BSTNode<Type, Type2>* Remove(Type search_key, BSTNode<Type, Type2> *parent) {
+			if(search_key < key){
 				if(left != NULL){
-					return left->Remove(search_value, this);
+					return left->Remove(search_key, this);
 				}
 				else{
 					return NULL;
 				}
 			}
-			else if(search_value > this->value){
+			else if(search_key > this->key){
 				if(right != NULL){
-					return right->Remove(search_value, this);
+					return right->Remove(search_key, this);
 				}
 				else{
 					return NULL;
@@ -92,8 +97,8 @@ class BSTNode
 			}
 			else{
 				if(right != NULL && left != NULL){
-					value = right->MinValue();
-					return right->Remove(value, this);
+					key = right->MinKey();
+					return right->Remove(key, this);
 				}
 				if(parent->left == this){
 					parent->left = (left != NULL) ? left : right;
@@ -104,29 +109,31 @@ class BSTNode
 					return this;
 				}
 			}
+			return NULL;
 		}
 
-		Type MinValue(){
-			if(left==NULL) return value;
-			return left->MinValue();
+		Type MinKey(){
+			if(left==NULL) return key;
+			return left->MinKey();
 		}
 		 
 		
 	
 	private:
-		Type value;  //!< value stored in the node
-		BSTNode<Type> * left;     //!< pointer to the node's left child
-		BSTNode<Type> * right;    //!< pointer to the node's right child
+		Type key;  //!< key stored in the node
+		Type2 value;
+		BSTNode<Type, Type2> * left;     //!< pointer to the node's left child
+		BSTNode<Type, Type2> * right;    //!< pointer to the node's right child
 
 };
 
-//!  BST<Type> implements a binary search tree
-template <typename Type>
+//!  BSTNode<Type, Type2> implements a binary search tree
+template <typename Type, typename Type2>
 class BST 
 {
 	
 	public:
-		//!  No-arg constructor.  Initializes an empty BST<Type>
+		//!  No-arg constructor.  Initializes an empty BSTNode<Type, Type2>
 		BST(): top(NULL), size(0){
 		}
 
@@ -146,7 +153,7 @@ class BST
 
 		//!  Assignment operator.  Makes a complete copy of its argument
 		//!  @return Reference to oneself
-		BST<Type>& operator =(const BST<Type> & other){
+		BSTNode<Type, Type2>& operator =(const BSTNode<Type, Type2> & other){
 			if(this!=&other){
 				removeNodes(top);
 				top = copyTree(other.top);
@@ -157,19 +164,19 @@ class BST
 
 		
 		//!  @return a pointer to the root node of the tree, or NULL if the tree is empty.
-		//!  @note This is useful for BST<Type> clients that need to traverse the tree.)
-		BSTNode<Type> * GetRoot()const{
+		//!  @note This is useful for BSTNode<Type, Type2> clients that need to traverse the tree.)
+		BSTNode<Type, Type2> * GetRoot()const{
 			return top;
 		}
 
 
-		//!  @return true if the BST<Type> is empty, or false if the BST<Type> is not empty
+		//!  @return true if the BSTNode<Type, Type2> is empty, or false if the BSTNode<Type, Type2> is not empty
 		bool IsEmpty() const{
 			return top == NULL;
 		}
 
 
-		//!  Removes all values from the BST<Type>
+		//!  Removes all keys from the BSTNode<Type, Type2>
 		void Clear(){
 			removeNodes(top);
 			size = 0;
@@ -178,22 +185,22 @@ class BST
 
 		
 
-		//!  @return the number of values in the BST<Type>
+		//!  @return the number of keys in the BSTNode<Type, Type2>
 		int GetSize() const{
 			return size;
 		}
 
 
-		//!  Inserts value v into the BST<Type>
+		//!  Inserts key k into the BSTNode<Type, Type2>
 		//!  
-		//!  @param v The new value being inserted
+		//!  @param k The new key being inserted
 		//!
-		//!  @return a pointer to the newly inserted node, or NULL if v was already
+		//!  @return a pointer to the newly inserted node, or NULL if k was already
 		//!          in the tree (i.e., NULL is used to indicate a duplicate insertion)
-		BSTNode<Type> * Insert(const Type & v){	
-			if(Find(v)) return NULL;
-			BSTNode<Type> * Node;
-			Node = new BSTNode<Type>(v);
+		BSTNode<Type, Type2> * Insert(const Type & k, const Type2 & v){	
+			if(Find(k)) return NULL;
+			BSTNode<Type, Type2> * Node;
+			Node = new BSTNode<Type, Type2>(k,v);
 			insertNode(top,Node);
 			size++;
 			return Node;
@@ -202,13 +209,13 @@ class BST
 		
 
 
-		//!  Searches the tree for value v
+		//!  Searches the tree for key k
 		//!  
-		//!  @param v The new value being searched for
+		//!  @param k The new key being searched for
 		//!
-		//!  @return a pointer to the node containing v, or NULL if v is not in the tree
-		BSTNode<Type> * Find(const Type & v) const{
-			return findNode(top, v);
+		//!  @return a pointer to the node containing k, or NULL if k is not in the tree
+		BSTNode<Type, Type2> * Find(const Type & k) const{
+			return findNode(top, k);
 		}
 
 		
@@ -217,17 +224,17 @@ class BST
 			printTree(top);
 		}
 
-		//!  Removes value v from the tree
+		//!  Removes key k from the tree
 		//!  
-		//!  @param v The value being removed from the tree
+		//!  @param k The key being removed from the tree
 		//!
-		//!  @return true if v was removed from the tree, or false if v was not in the tree
-		bool Remove(const Type & v){
+		//!  @return true if k was removed from the tree, or false if k was not in the tree
+		bool Remove(const Type & k){
 			if(top==NULL) return false;
-			if(top->GetValue()==v){
-				BSTNode<Type> aux_top(0);
+			if(top->GetKey()==k){
+				BSTNode<Type, Type2> aux_top(0,0);
 				aux_top.SetLeft(top);
-				BSTNode<Type> * removed_node = top->Remove(v,&aux_top);
+				BSTNode<Type, Type2> * removed_node = top->Remove(k,&aux_top);
 				top=aux_top.GetLeft();
 				if(removed_node != NULL){
 					delete removed_node;
@@ -239,7 +246,7 @@ class BST
 				}		
 			}
 			else{
-				BSTNode<Type> * removed_node = top->Remove(v,NULL);
+				BSTNode<Type, Type2> * removed_node = top->Remove(k,NULL);
 				if(removed_node != NULL){
 					delete removed_node;
 					--size;
@@ -253,27 +260,31 @@ class BST
 
 		}
 
-		//!  Pops next value from the tree
-		//!
-		//!  @return pointer to next Type on tree
-		//!  returns NULL if nothing on tree
+		//! @returns the smallest key in the tree
+		//! WARNING: Does not check to see that top is not NULL, must check first!!!
 		Type Pop(){
+			Type min_key = top->MinKey();
+			Remove(min_key);
+			return min_key;
+		}
+
+		//! @returns the smallest key in the list, or NULL if the list is empty
+		//! used for pointers stored in the keys of the nodes
+		Type PopPtr(){
 			if(top==NULL) return NULL;
-			Type min_value = top->MinValue();
-			Remove(min_value);
-			return min_value;
+			return Pop();
 		}
 
 	
 	private:
-		BSTNode<Type> * top;
+		BSTNode<Type, Type2> * top;
 		int size;
 
-		void insertNode(BSTNode<Type>* &prevNode, BSTNode<Type> * inNode){
+		void insertNode(BSTNode<Type, Type2>* &prevNode, BSTNode<Type, Type2> * inNode){
 			if(prevNode==NULL){
 				prevNode=inNode;
 			}
-			else if(prevNode->value > inNode->value){
+			else if(prevNode->key > inNode->key){
 				insertNode(prevNode->left, inNode);
 			}
 			else{
@@ -281,7 +292,7 @@ class BST
 			}
 		}
 
-		void printTree(BSTNode<Type>* Node) const{
+		void printTree(BSTNode<Type, Type2>* Node) const{
 			if(Node==NULL){
 				cout << "Tree is Empty" << endl;
 				return;
@@ -295,15 +306,15 @@ class BST
 			}
 		}
 
-		BSTNode<Type> * findNode(BSTNode<Type> * Node, const Type & v) const{
+		BSTNode<Type, Type2> * findNode(BSTNode<Type, Type2> * Node, const Type & k) const{
 			if(Node==NULL){
 				return NULL;
 			}
-			else if(Node->value < v){
-				return findNode(Node->right,v);
+			else if(Node->key < k){
+				return findNode(Node->right,k);
 			}
-			else if(Node->value > v){
-				return findNode(Node->left,v);
+			else if(Node->key > k){
+				return findNode(Node->left,k);
 			}
 			else{
 				return Node;
@@ -312,18 +323,18 @@ class BST
 	
 		}
 
-		void removeNodes(BSTNode<Type> * Node){
+		void removeNodes(BSTNode<Type, Type2> * Node){
 			if(Node==NULL) return;
 			removeNodes(Node->left);
 			removeNodes(Node->right);
 			delete Node;
 		}
 
-		BSTNode<Type> * copyTree(BSTNode<Type>* otherNode){
+		BSTNode<Type, Type2> * copyTree(BSTNode<Type, Type2>* otherNode){
 			if(otherNode==NULL){
 				return NULL;
 			}
-			BSTNode<Type>* Node = new BSTNode<Type>(otherNode->value);
+			BSTNode<Type, Type2>* Node = new BSTNode<Type, Type2>(otherNode->key);
 			Node->left = copyTree(otherNode->left);
 			Node->right = copyTree(otherNode->right);
 			return Node;	

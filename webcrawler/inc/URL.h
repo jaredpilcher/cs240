@@ -69,6 +69,9 @@ private:
 
 	//Strips the '#something' from the url
 	string stripInternalRelative(string url);
+
+	//Determines if base ends with substring
+	bool endsWith(const char * base, const char * substring);
 };
 
 #endif /* URL_H_ */

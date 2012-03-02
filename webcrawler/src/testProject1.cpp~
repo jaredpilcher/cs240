@@ -10,6 +10,7 @@ using namespace std;
 #include "PageDownloader.h"
 #include "URL.h"
 #include "HTMLParser.h"
+#include "Occurrence.h"
 
 static const unsigned int npos = -1;
 
@@ -19,6 +20,7 @@ bool pageHistoryTest(ostream & os, bool success);
 bool pageDownloaderTest(ostream & os, bool success);
 bool URLTest(ostream & os, bool success);
 bool HTMLParserTest(ostream & os, bool success);
+bool OccurrenceTest(ostream & os, bool success);
 
 int main(int argc, char* argv[]){
 	bool success=true;
@@ -39,6 +41,9 @@ int main(int argc, char* argv[]){
 
 	//HTMLParser Test
 	success = HTMLParserTest(cout, success);
+
+	//Occurrence Test
+	OccurrenceTest(cout, success);
 
 	if(success){
 		cout << "Success!" << endl;
@@ -322,26 +327,47 @@ bool HTMLParserTest(ostream & os, bool success){
 
 		//Test if words are correct
 			//Get words
-		fstream file("ParseTestFiles/test1.txt");
-		char temp[MAX_CHAR_IN_LINE];
-		LinkedList<string> words;
-		while(1){
-			file.getline(temp,MAX_CHAR_IN_LINE);
-			if(!file) break;
-			words.Insert(temp, words.GetLast());
-		}
-		file.close();
-			//Determine if word lists are equivalent
-		while(!words.IsEmpty()){
-			//If parser runs out of words before words in file, then fails
-			TEST(!parser.isEmpty());
-			if(parser.isEmpty()) break;
-			//Test if words are equivalent
-			TEST(parser.getWord() == words.Pop());
-		}
+			fstream file("ParseTestFiles/test1.txt");
+			char temp[MAX_CHAR_IN_LINE];
+			LinkedList<string> words;
+			while(1){
+				file.getline(temp,MAX_CHAR_IN_LINE);
+				if(!file) break;
+				words.Insert(temp, words.GetLast());
+			}
+			file.close();
 
-		//Determine if description is correct
-		TEST(parser.getDescription()=="Scale test description");
+			//Determine if word lists are equivalent
+			while(!words.IsEmpty()){
+				//If parser runs out of words before words in file, then fails
+				TEST(!parser.isEmpty());
+				if(parser.isEmpty()) break;
+				//Test if words are equivalent
+				TEST(parser.getWord() == words.Pop());
+			}
+
+			//Determine if description is correct
+			TEST(parser.getDescription()=="Scale test description");
+
+		//Test if links are correct
+			//Get links
+				file.open("ParseTestFiles/test1Links.txt");
+				LinkedList<string> links;
+				while(1){
+					file.getline(temp,MAX_CHAR_IN_LINE);
+					if(!file) break;
+					links.Insert(temp, links.GetLast());
+				}
+				file.close();
+
+			//Determine if link lists are equivalent
+			while(!links.IsEmpty()){
+				//If parser runs out of links before links in file, then fails
+				TEST(parser.hasNextLink());
+				if(!parser.hasNextLink()) break;
+				//Test if words are equivalent
+				TEST(parser.getLink() == links.Pop());
+			}
 
 	//Test 2
 		//Download page and parse it
@@ -352,32 +378,56 @@ bool HTMLParserTest(ostream & os, bool success){
 
 		//Test if words are correct
 			//Get words
-		file.open("ParseTestFiles/test2.txt");
-		words.Clear();
-		while(1){
-			file.getline(temp,MAX_CHAR_IN_LINE);
-			if(!file) break;
-			words.Insert(temp, words.GetLast());
-		}
-		file.close();
+			file.open("ParseTestFiles/test2.txt");
+			words.Clear();
+			while(1){
+				file.getline(temp,MAX_CHAR_IN_LINE);
+				if(!file) break;
+				words.Insert(temp, words.GetLast());
+			}
+			file.close();
 			//Determine if word lists are equivalent
-		while(!words.IsEmpty()){
-			//If parser runs out of words before words in file, then fails
-			TEST(!parser.isEmpty());
-			if(parser.isEmpty()) break;
-			//Test if words are equivalent
-			TEST(parser.getWord() == words.Pop());
-		}
+			while(!words.IsEmpty()){
+				//If parser runs out of words before words in file, then fails
+				TEST(!parser.isEmpty());
+				if(parser.isEmpty()) break;
+				//Test if words are equivalent
+				TEST(parser.getWord() == words.Pop());
+			}
 
-		//Determine if description is correct
-		TEST(parser.getDescription()=="Description Test");
+			//Determine if description is correct
+			TEST(parser.getDescription()=="Description Test");
+
+		//Test if links are correct
+			//Get links
+				file.open("ParseTestFiles/test2Links.txt");
+				links.Clear();
+				while(1){
+					file.getline(temp,MAX_CHAR_IN_LINE);
+					if(!file) break;
+					links.Insert(temp, links.GetLast());
+				}
+				file.close();
+
+			//Determine if link lists are equivalent
+			while(!links.IsEmpty()){
+				//If parser runs out of links before links in file, then fails
+				TEST(parser.hasNextLink());
+				if(!parser.hasNextLink()) break;
+				//Test if words are equivalent
+				TEST(parser.getLink() == links.Pop());
+			}
 	
+	return success;
+}
 
 
-
-	//cout << parser.getDescription() << endl;
-	//while(parser.hasNextLink()){
-		//cout << parser.getLink() << endl;
-//	}
+bool OccurrenceTest(ostream & os, bool success){
+	string url = "http://www.google.com";
+	Occurrence occurrence(url);
+	TEST(occurrence.getCount()==0);
+	occurrence.addOccurrence();
+	TEST(occurrence.getCount()==1);
+	TEST(occurrence.getURL()=="http://www.google.com");
 	return success;
 }

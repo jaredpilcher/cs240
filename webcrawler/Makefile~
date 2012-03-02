@@ -1,6 +1,6 @@
 BIN_FILE = bin/webcrawler
 MAIN_OBJ = obj/main.o
-OBJ_FILES = obj/Page.o obj/PageQueue.o obj/PageHistory.o obj/PageDownloader.o obj/URL.o obj/HTMLParser.o
+OBJ_FILES = obj/Page.o obj/PageQueue.o obj/PageHistory.o obj/PageDownloader.o obj/URL.o obj/HTMLParser.o obj/Occurrence.o
 TEST_BIN_FILE = bin/testProject1
 TEST_OBJ_FILES = $(OBJ_FILES) obj/testProject1.o
 LIBRARY = lib/libcs240utils.a
@@ -63,6 +63,9 @@ obj/URL.o: src/URL.cpp inc/URL.h
 
 obj/HTMLParser.o: src/HTMLParser.cpp inc/HTMLParser.h inc/LinkedList.h
 	@g++ -c -Wall -o obj/HTMLParser.o -I inc/ -I utils/inc/ src/HTMLParser.cpp
+
+obj/Occurrence.o: src/Occurrence.cpp inc/Occurrence.h inc/BST.h
+	@g++ -c -Wall -o obj/Occurrence.o -I inc/ -I utils/inc/ src/Occurrence.cpp
 
 
 
