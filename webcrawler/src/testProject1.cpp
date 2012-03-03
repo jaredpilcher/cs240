@@ -12,6 +12,7 @@ using namespace std;
 #include "HTMLParser.h"
 #include "Occurrence.h"
 #include "OccurrenceSet.h"
+#include "WordIndex.h"
 
 static const unsigned int npos = -1;
 
@@ -23,32 +24,36 @@ bool URLTest(ostream & os, bool success);
 bool HTMLParserTest(ostream & os, bool success);
 bool OccurrenceTest(ostream & os, bool success);
 bool OccurrenceSetTest(ostream & os, bool success);
+bool WordIndexTest(ostream & os, bool success);
 
 int main(int argc, char* argv[]){
 	bool success=true;
 	//Page Test
-	success = pageTest(cout, success);
+	//success = pageTest(cout, success);
 
 	//PageQueue Test
-	success = pageQueueTest(cout, success);
+	//success = pageQueueTest(cout, success);
 
 	//PageHistory Test
-	success = pageHistoryTest(cout, success);
+	//success = pageHistoryTest(cout, success);
 
 	//PageDownloader Test
-	success = pageDownloaderTest(cout, success);
+	//success = pageDownloaderTest(cout, success);
 
 	//URL Test
-	success = URLTest(cout, success);
+	//success = URLTest(cout, success);
 
 	//HTMLParser Test
-	success = HTMLParserTest(cout, success);
+	//success = HTMLParserTest(cout, success);
 
 	//Occurrence Test
-	OccurrenceTest(cout, success);
+	//OccurrenceTest(cout, success);
 
 	//OccurrenceSet Test
-	OccurrenceSetTest(cout, success);
+	//OccurrenceSetTest(cout, success);
+
+	//WordIndex Test
+	WordIndexTest(cout, success);
 
 	if(success){
 		cout << "Success!" << endl;
@@ -443,6 +448,7 @@ bool OccurrenceSetTest(ostream & os, bool success){
 	string url2 = "http://www.yahoo.com";
 	string url3 = "http://www.amazon.com";
 	OccurrenceSet occurrences;
+	Occurrence occurrence;
 
 	//Simple push/pop test
 	occurrences.push(url);
@@ -456,6 +462,61 @@ bool OccurrenceSetTest(ostream & os, bool success){
 	TEST(occurrences.isEmpty());
 
 	//Multiple push test
+	occurrences.push(url);
+	occurrences.push(url2);
+	occurrences.push(url2);
+	occurrence = occurrences.pop();
+	if(occurrence.getURL()==url){
+		TEST(occurrence.getCount()==1);
+	}else{
+		TEST(occurrence.getCount()==2);
+	}
+	TEST(!occurrences.isEmpty());
+		
+	occurrence = occurrences.pop();
+	if(occurrence.getURL()==url){
+		TEST(occurrence.getCount()==1);
+	}else{
+		TEST(occurrence.getCount()==2);
+	}
+	TEST(occurrences.isEmpty());
+	return success;
+}
+
+bool WordIndexTest(ostream & os, bool success){
+	string word = "hello";
+	string word2 = "jared";
+	string word3 = "pilcher";
+	string url = "http://www.google.com";
+	string url2 = "http://www.yahoo.com";
+	string url3 = "http://www.amazon.com";
+	WordIndex index;
+	Occurrence occurrence;
+	OccurrenceSet * occurrences;
+
+	//Simple push/pop test
+	index.push(word,url);
+	occurrences = index.pop();
+	occurrence = occurrences->pop();
+	TEST(occurrence.getURL()==url);
+	TEST(occurrence.getCount()==1);
+	TEST(occurrences->isEmpty());
+	TEST(index.isEmpty());
+	delete occurrences;
+
+	//Count test
+	index.push(word,url);
+	index.push(word,url);
+	TEST(!index.isEmpty());
+	occurrences = index.pop();
+	TEST(index.isEmpty());
+	TEST(!occurrences->isEmpty());
+	occurrence = occurrences->pop();
+	TEST(occurrence.getCount()==2);
+	TEST(occurrence.getURL()==url);
+	delete occurrences;
+
+	/*//Multiple url push test
 	occurrences.push(url);
 	occurrences.push(url2);
 	occurrences.push(url2);
@@ -476,5 +537,8 @@ bool OccurrenceSetTest(ostream & os, bool success){
 		TEST(count==2);
 	}
 	TEST(occurrences.isEmpty());
+
+	//Multiple word push test*/
+
 	return success;
 }

@@ -30,12 +30,10 @@ void WordIndex::push(const string word, const string url){
 }
 
 //Get a unique OccurrenceSet.
+//WARNING: Must delete the object pointed to by return statement
 //@ret OccurenceSet - A unique occurrence set
-OccurrenceSet WordIndex::pop(){
-	OccurrenceSet * temp_ptr = word_map.PopValue();
-	OccurrenceSet temp(*temp_ptr);
-	delete temp_ptr;
-	return temp;
+OccurrenceSet * WordIndex::pop(){
+	return word_map.PopValue();
 }
 
 //Returns whether or not the occurrence set is empty

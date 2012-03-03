@@ -5,8 +5,8 @@ TEST_BIN_FILE = bin/testProject1
 TEST_OBJ_FILES = $(OBJ_FILES) obj/testProject1.o
 LIBRARY = lib/libcs240utils.a
 LIBRARY_OBJ_FILES = utils/obj/StringUtil.o utils/obj/URLInputStream.o utils/obj/FileInputStream.o \
-					utils/obj/HTTPInputStream.o utils/obj/CommandRunner.o utils/obj/FileSystem.o \
-					utils/obj/HTMLToken.o utils/obj/HTMLTokenizer.o
+utils/obj/HTTPInputStream.o utils/obj/CommandRunner.o utils/obj/FileSystem.o \
+utils/obj/HTMLToken.o utils/obj/HTMLTokenizer.o
 
 #Create Project 1 executable
 bin: $(BIN_FILE)
@@ -29,7 +29,7 @@ clean:
 $(TEST_BIN_FILE): $(TEST_OBJ_FILES) $(LIBRARY)
 	@g++ -o $(TEST_BIN_FILE) $(TEST_OBJ_FILES) $(LIBRARY)
 	@chmod ugo+x $(TEST_BIN_FILE)
-	
+
 #Create executable
 $(BIN_FILE): $(OBJ_FILES) $(MAIN_OBJ) $(LIBRARY)
 	@g++ -o $(BIN_FILE) $(OBJ_FILES) $(MAIN_OBJ) $(LIBRARY)
@@ -89,13 +89,13 @@ obj/testProject1.o: src/testProject1.cpp $(LIBRARY)
 
 utils/obj/StringUtil.o: utils/inc/StringUtil.h utils/src/StringUtil.cpp
 	@g++ -c -Wall -o utils/obj/StringUtil.o -I utils/inc/ utils/src/StringUtil.cpp
-	
+
 
 utils/obj/URLInputStream.o: utils/inc/URLInputStream.h utils/src/URLInputStream.cpp
 	@g++ -c -Wall -o utils/obj/URLInputStream.o -I utils/inc/ utils/src/URLInputStream.cpp
 
 utils/obj/FileInputStream.o: utils/inc/FileInputStream.h utils/src/FileInputStream.cpp
-	@g++ -c -Wall -o utils/obj/FileInputStream.o -I utils/inc/ utils/src/FileInputStream.cpp
+	@g++ -c -Wall -o utils/obj/FileInputStream.o -I utils/inc/ utils/src/FileInputStream.cpp	
 
 utils/obj/HTTPInputStream.o: utils/inc/HTTPInputStream.h utils/src/HTTPInputStream.cpp
 	@g++ -c -Wall -o utils/obj/HTTPInputStream.o -I utils/inc/ utils/src/HTTPInputStream.cpp
@@ -111,5 +111,3 @@ utils/obj/HTMLToken.o: utils/inc/HTMLToken.h utils/src/HTMLToken.cpp
 
 utils/obj/HTMLTokenizer.o: utils/inc/HTMLTokenizer.h utils/src/HTMLTokenizer.cpp
 	@g++ -c -Wall -o utils/obj/HTMLTokenizer.o -I utils/inc/ utils/src/HTMLTokenizer.cpp
-
-

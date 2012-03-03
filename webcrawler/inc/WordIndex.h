@@ -28,7 +28,7 @@ public:
 	//Get a unique OccurrenceSet. 
 	//WARNING: this only gives a different occurrence set once
 	//@ret OccurenceSet - A unique occurrence set
-	OccurrenceSet pop();
+	OccurrenceSet * pop();
 
 	//Returns whether or not the occurrence set is empty
 	bool isEmpty();

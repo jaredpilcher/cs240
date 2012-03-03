@@ -14,6 +14,9 @@
 class Occurrence{
 public:
 	//Default Constructor
+	Occurrence();
+
+	//Constructor
 	Occurrence(string arg_url);
 
 	//Default Deconstructor
@@ -27,10 +30,6 @@ public:
 
 	string getURL();
 	int getCount();
-
-	//Returns the contents of the Occurrence
-	void getContents(int & arg_count, string & arg_url);
-	
 
 private:
 	//The number of times the occurrence happens

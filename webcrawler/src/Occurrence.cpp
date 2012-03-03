@@ -9,6 +9,9 @@
 Occurrence::Occurrence(string arg_url):count(0), url(arg_url){
 }
 
+Occurrence::Occurrence():count(0), url(""){
+}
+
 //Default Deconstructor
 Occurrence::~Occurrence(){
 }
@@ -30,10 +33,4 @@ string Occurrence::getURL(){
 
 int Occurrence::getCount(){
 	return count;
-}
-
-//Returns the contents of the Occurrence
-void Occurrence::getContents(int & arg_count, string & arg_url){
-	arg_count = count;
-	arg_url = url;
 }
