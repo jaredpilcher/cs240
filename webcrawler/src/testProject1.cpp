@@ -29,31 +29,31 @@ bool WordIndexTest(ostream & os, bool success);
 int main(int argc, char* argv[]){
 	bool success=true;
 	//Page Test
-	//success = pageTest(cout, success);
+	success = pageTest(cout, success);
 
 	//PageQueue Test
-	//success = pageQueueTest(cout, success);
+	success = pageQueueTest(cout, success);
 
 	//PageHistory Test
-	//success = pageHistoryTest(cout, success);
+	success = pageHistoryTest(cout, success);
 
 	//PageDownloader Test
-	//success = pageDownloaderTest(cout, success);
+	success = pageDownloaderTest(cout, success);
 
 	//URL Test
-	//success = URLTest(cout, success);
+	success = URLTest(cout, success);
 
 	//HTMLParser Test
-	//success = HTMLParserTest(cout, success);
+	success = HTMLParserTest(cout, success);
 
 	//Occurrence Test
-	//OccurrenceTest(cout, success);
+	success = OccurrenceTest(cout, success);
 
 	//OccurrenceSet Test
-	//OccurrenceSetTest(cout, success);
+	success = OccurrenceSetTest(cout, success);
 
 	//WordIndex Test
-	WordIndexTest(cout, success);
+	success = WordIndexTest(cout, success);
 
 	if(success){
 		cout << "Success!" << endl;
@@ -516,29 +516,67 @@ bool WordIndexTest(ostream & os, bool success){
 	TEST(occurrence.getURL()==url);
 	delete occurrences;
 
-	/*//Multiple url push test
-	occurrences.push(url);
-	occurrences.push(url2);
-	occurrences.push(url2);
-	int count;
-	string test_url;
-	occurrences.pop().getContents(count,test_url);
-	if(test_url==url){
-		TEST(count==1);
-	}else{
-		TEST(count==2);
-	}
-	TEST(!occurrences.isEmpty());
-		
-	occurrences.pop().getContents(count,test_url);
-	if(test_url==url){
-		TEST(count==1);
-	}else{
-		TEST(count==2);
-	}
-	TEST(occurrences.isEmpty());
+	//Multiple url push test
+	index.push(word,url);
+	index.push(word,url2);
+	index.push(word,url3);
+	TEST(!index.isEmpty());
+	occurrences=index.pop();
+	TEST(index.isEmpty());
+	TEST(!occurrences->isEmpty());
+		//Test first occurrence
+		occurrence = occurrences->pop();
+		TEST(!occurrences->isEmpty());
+		TEST(occurrence.getCount()==1);
+		TEST(occurrence.getURL()==url || occurrence.getURL()==url2 || occurrence.getURL()==url3);
+
+		//Test second occurrence
+		occurrence = occurrences->pop();
+		TEST(!occurrences->isEmpty());
+		TEST(occurrence.getCount()==1);
+		TEST(occurrence.getURL()==url || occurrence.getURL()==url2 || occurrence.getURL()==url3);
+
+		//Test third occurrence
+		occurrence = occurrences->pop();
+		TEST(occurrences->isEmpty());
+		TEST(occurrence.getCount()==1);
+		TEST(occurrence.getURL()==url || occurrence.getURL()==url2 || occurrence.getURL()==url3);
+	delete occurrences;
 
 	//Multiple word push test*/
+	index.push(word,url);
+	index.push(word2,url);
+	index.push(word3,url);
+	TEST(!index.isEmpty());
+		//Test first word
+		occurrences=index.pop();
+		TEST(!index.isEmpty());
+		TEST(!occurrences->isEmpty());
+		occurrence = occurrences->pop();
+		TEST(occurrence.getCount()==1);
+		TEST(occurrence.getURL()==url);
+		TEST(occurrences->isEmpty());
+		delete occurrences;
+
+		//Test second word
+		occurrences=index.pop();
+		TEST(!index.isEmpty());
+		TEST(!occurrences->isEmpty());
+		occurrence = occurrences->pop();
+		TEST(occurrence.getCount()==1);
+		TEST(occurrence.getURL()==url);
+		TEST(occurrences->isEmpty());
+		delete occurrences;
+
+		//Test third word
+		occurrences=index.pop();
+		TEST(index.isEmpty());
+		TEST(!occurrences->isEmpty());
+		occurrence = occurrences->pop();
+		TEST(occurrence.getCount()==1);
+		TEST(occurrence.getURL()==url);
+		TEST(occurrences->isEmpty());
+		delete occurrences;
 
 	return success;
 }
