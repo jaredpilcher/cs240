@@ -276,9 +276,19 @@ class BST
 
 		Type2 PopValue(){
 			Type min_key = top->MinKey();
+			return Pop(min_key);
+		}
+
+		Type2 Pop(Type min_key){
 			Type2 min_value = top->MinValue();
 			Remove(min_key);
 			return min_value;
+		}
+
+		Type2 PopVandK(Type & key){
+			Type min_key = top->MinKey();
+			key = min_key;
+			return Pop(min_key);
 		}
 
 		//! @returns the smallest key in the list, or NULL if the list is empty

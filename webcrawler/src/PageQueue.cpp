@@ -32,4 +32,8 @@ int PageQueue::getSize(){
 	return queue.GetSize();
 }
 
+bool PageQueue::isEmpty(){
+	return queue.IsEmpty();
+}
+
 

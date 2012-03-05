@@ -33,10 +33,15 @@ public:
 	//@ret int - number of items on quue
 	int getSize();
 
+	//Returns whether or not queue is empty
+	bool isEmpty();
+
 private:
 	//The linked list that holds the list
 	//of pages that need to be indexed
 	LinkedList<Page*> queue;
+
+
 };
 
 #endif /* PAGEQUEUE_H_ */

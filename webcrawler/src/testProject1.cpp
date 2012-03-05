@@ -14,6 +14,7 @@ using namespace std;
 #include "OccurrenceSet.h"
 #include "WordIndex.h"
 #include "StopWords.h"
+#include "XMLGenerator.h"
 
 static const unsigned int npos = -1;
 
@@ -27,6 +28,7 @@ bool OccurrenceTest(ostream & os, bool success);
 bool OccurrenceSetTest(ostream & os, bool success);
 bool WordIndexTest(ostream & os, bool success);
 bool StopWordsTest(ostream & os, bool success);
+bool XMLGeneratorTest(ostream & os, bool success);
 
 int main(int argc, char* argv[]){
 	bool success=true;
@@ -59,6 +61,9 @@ int main(int argc, char* argv[]){
 
 	//StopWords Test
 	success = StopWordsTest(cout, success);
+
+	//XMLGenerator Test
+	success = XMLGeneratorTest(cout, success);
 
 	if(success){
 		cout << "Success!" << endl;
@@ -498,10 +503,11 @@ bool WordIndexTest(ostream & os, bool success){
 	WordIndex index;
 	Occurrence occurrence;
 	OccurrenceSet * occurrences;
+	string indexed_word;
 
 	//Simple push/pop test
 	index.push(word,url);
-	occurrences = index.pop();
+	occurrences = index.pop(indexed_word);
 	occurrence = occurrences->pop();
 	TEST(occurrence.getURL()==url);
 	TEST(occurrence.getCount()==1);
@@ -513,7 +519,7 @@ bool WordIndexTest(ostream & os, bool success){
 	index.push(word,url);
 	index.push(word,url);
 	TEST(!index.isEmpty());
-	occurrences = index.pop();
+	occurrences = index.pop(indexed_word);
 	TEST(index.isEmpty());
 	TEST(!occurrences->isEmpty());
 	occurrence = occurrences->pop();
@@ -526,7 +532,7 @@ bool WordIndexTest(ostream & os, bool success){
 	index.push(word,url2);
 	index.push(word,url3);
 	TEST(!index.isEmpty());
-	occurrences=index.pop();
+	occurrences=index.pop(indexed_word);
 	TEST(index.isEmpty());
 	TEST(!occurrences->isEmpty());
 		//Test first occurrence
@@ -554,7 +560,7 @@ bool WordIndexTest(ostream & os, bool success){
 	index.push(word3,url);
 	TEST(!index.isEmpty());
 		//Test first word
-		occurrences=index.pop();
+		occurrences=index.pop(indexed_word);
 		TEST(!index.isEmpty());
 		TEST(!occurrences->isEmpty());
 		occurrence = occurrences->pop();
@@ -564,7 +570,7 @@ bool WordIndexTest(ostream & os, bool success){
 		delete occurrences;
 
 		//Test second word
-		occurrences=index.pop();
+		occurrences=index.pop(indexed_word);
 		TEST(!index.isEmpty());
 		TEST(!occurrences->isEmpty());
 		occurrence = occurrences->pop();
@@ -574,7 +580,7 @@ bool WordIndexTest(ostream & os, bool success){
 		delete occurrences;
 
 		//Test third word
-		occurrences=index.pop();
+		occurrences=index.pop(indexed_word);
 		TEST(index.isEmpty());
 		TEST(!occurrences->isEmpty());
 		occurrence = occurrences->pop();
@@ -603,6 +609,60 @@ bool StopWordsTest(ostream & os, bool success){
 	TEST(stop_words.isStopWord("but"));
 	TEST(stop_words.isStopWord("but"));
 	TEST(stop_words.getCount()==35);
+
+	return success;
+}
+
+bool XMLGeneratorTest(ostream & os, bool success){
+	string start_url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawlindex.html";
+	string stop_file = "StopWordsTestFiles/stopwords.txt";
+	PageDownloader downloader;
+	WordIndex index;
+	HTMLParser parser;
+	StopWords stop_words;
+	PageHistory history;
+	PageQueue queue;
+	XMLGenerator generator(&history, &index, start_url);
+	string word;
+
+	//create new page and place in queue and history
+	Page* page = new Page(start_url);
+	queue.push(page);
+	history.push(page);
+
+	page = new Page("http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/TestOne.html");
+	queue.push(page);
+	history.push(page);
+
+	page = new Page("http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/testFour.htm");
+	queue.push(page);
+	history.push(page);
+
+	stop_words.getWords(stop_file);
+	while(!queue.isEmpty()){
+		//pop page from queue
+		page = queue.pop();
+
+		//Download page
+		//Parse string returned from downloader
+		parser.setNewPage(downloader.download(*page), page->getURL());
+
+		parser.parsePage();
+
+		//Grab the description and set to page
+		page->setDescription(parser.getDescription());
+
+		//Go through the html document and index words
+		while(!parser.isEmpty()){
+			word =parser.getWord();
+			if(!stop_words.isStopWord(word)){
+				index.push(word, page->getURL());
+			}
+		}
+	}
+
+
+	generator.writeFile();
 
 	return success;
 }

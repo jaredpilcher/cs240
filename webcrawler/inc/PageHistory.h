@@ -38,6 +38,9 @@ public:
 	Page * pop();
 
 	int getSize();
+	
+	//Determines if the history is empty
+	bool isEmpty();
 
 private:
 	//The BST to hold the history of pages

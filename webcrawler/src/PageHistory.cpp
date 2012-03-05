@@ -38,3 +38,7 @@ void PageHistory::remove(Page * page){
 int PageHistory::getSize(){
 	return history.GetSize();
 }
+
+bool PageHistory::isEmpty(){
+	return history.IsEmpty();
+}
