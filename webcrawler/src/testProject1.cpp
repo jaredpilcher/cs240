@@ -13,6 +13,7 @@ using namespace std;
 #include "Occurrence.h"
 #include "OccurrenceSet.h"
 #include "WordIndex.h"
+#include "StopWords.h"
 
 static const unsigned int npos = -1;
 
@@ -25,6 +26,7 @@ bool HTMLParserTest(ostream & os, bool success);
 bool OccurrenceTest(ostream & os, bool success);
 bool OccurrenceSetTest(ostream & os, bool success);
 bool WordIndexTest(ostream & os, bool success);
+bool StopWordsTest(ostream & os, bool success);
 
 int main(int argc, char* argv[]){
 	bool success=true;
@@ -44,7 +46,7 @@ int main(int argc, char* argv[]){
 	success = URLTest(cout, success);
 
 	//HTMLParser Test
-	success = HTMLParserTest(cout, success);
+	//success = HTMLParserTest(cout, success);
 
 	//Occurrence Test
 	success = OccurrenceTest(cout, success);
@@ -54,6 +56,9 @@ int main(int argc, char* argv[]){
 
 	//WordIndex Test
 	success = WordIndexTest(cout, success);
+
+	//StopWords Test
+	success = StopWordsTest(cout, success);
 
 	if(success){
 		cout << "Success!" << endl;
@@ -578,5 +583,12 @@ bool WordIndexTest(ostream & os, bool success){
 		TEST(occurrences->isEmpty());
 		delete occurrences;
 
+	return success;
+}
+
+bool StopWordsTest(ostream & os, bool success){
+	StopWords stop_words;
+	stop_words.getWords("StopWordsTestFiles/stopwords.txt");
+	TEST(stop_words.getCount()==35);
 	return success;
 }

@@ -7,6 +7,9 @@
 
 #ifndef STOPWORDS_H_
 #define STOPWORDS_H_
+#include <string>
+#include <fstream>
+using namespace std;
 #define MAX_WORDS 64000
 #define MAX_CHAR_IN_LINE 32000
 
@@ -30,6 +33,9 @@ public:
 	//Determines if the given word is a stop word
 	//@par word - word to be found
 	bool isStopWord(string word);
+	
+	//Return number of stop words in object
+	unsigned int getCount();
 private:
 };
 

@@ -1,6 +1,6 @@
 BIN_FILE = bin/webcrawler
 MAIN_OBJ = obj/main.o
-OBJ_FILES = obj/Page.o obj/PageQueue.o obj/PageHistory.o obj/PageDownloader.o obj/URL.o obj/HTMLParser.o obj/Occurrence.o obj/OccurrenceSet.o obj/WordIndex.o
+OBJ_FILES = obj/Page.o obj/PageQueue.o obj/PageHistory.o obj/PageDownloader.o obj/URL.o obj/HTMLParser.o obj/Occurrence.o obj/OccurrenceSet.o obj/WordIndex.o obj/StopWords.o
 TEST_BIN_FILE = bin/testProject1
 TEST_OBJ_FILES = $(OBJ_FILES) obj/testProject1.o
 LIBRARY = lib/libcs240utils.a
@@ -72,6 +72,9 @@ obj/OccurrenceSet.o: src/OccurrenceSet.cpp inc/OccurrenceSet.h inc/BST.h
 
 obj/WordIndex.o: src/WordIndex.cpp inc/WordIndex.h inc/BST.h
 	@g++ -c -Wall -o obj/WordIndex.o -I inc/ -I utils/inc/ src/WordIndex.cpp
+
+obj/StopWords.o: src/StopWords.cpp inc/StopWords.h
+	@g++ -c -Wall -o obj/StopWords.o -I inc/ -I utils/inc/ src/StopWords.cpp
 
 
 
