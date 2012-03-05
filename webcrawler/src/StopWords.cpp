@@ -26,17 +26,22 @@ void StopWords::getWords(string stop_file){
 		file.getline(temp,MAX_CHAR_IN_LINE);
 		if(!file) break;
 		stop_words[count]=temp;
-		count++;
+		++count;
 	}
 	file.close();
+}
+
+int comparator(const void * key,const void * other){
+	return (*(string*)key).compare((*(string*)other));
 }
 
 //Determines if the given word is a stop word
 //@par word - word to be found
 bool StopWords::isStopWord(string word){
-	return true;
+	return bsearch(&word, stop_words, count, sizeof(stop_words[0]), comparator) != NULL;
 }
 
 unsigned int StopWords::getCount(){
 	return count;
 }
+

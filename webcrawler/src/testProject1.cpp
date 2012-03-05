@@ -46,7 +46,7 @@ int main(int argc, char* argv[]){
 	success = URLTest(cout, success);
 
 	//HTMLParser Test
-	//success = HTMLParserTest(cout, success);
+	success = HTMLParserTest(cout, success);
 
 	//Occurrence Test
 	success = OccurrenceTest(cout, success);
@@ -590,5 +590,19 @@ bool StopWordsTest(ostream & os, bool success){
 	StopWords stop_words;
 	stop_words.getWords("StopWordsTestFiles/stopwords.txt");
 	TEST(stop_words.getCount()==35);
+	TEST(stop_words.isStopWord("a"));
+	TEST(stop_words.isStopWord("an"));
+	TEST(stop_words.isStopWord("and"));
+	TEST(stop_words.isStopWord("are"));
+	TEST(stop_words.isStopWord("with"));
+	TEST(stop_words.isStopWord("such"));
+	TEST(stop_words.isStopWord("but"));
+	TEST(stop_words.isStopWord("will"));
+
+	//Testing multiple times to make sure not deleting array objects
+	TEST(stop_words.isStopWord("but"));
+	TEST(stop_words.isStopWord("but"));
+	TEST(stop_words.getCount()==35);
+
 	return success;
 }
