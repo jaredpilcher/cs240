@@ -15,6 +15,7 @@ using namespace std;
 #include "WordIndex.h"
 #include "StopWords.h"
 #include "XMLGenerator.h"
+#include "WebCrawler.h"
 
 static const unsigned int npos = -1;
 
@@ -29,6 +30,7 @@ bool OccurrenceSetTest(ostream & os, bool success);
 bool WordIndexTest(ostream & os, bool success);
 bool StopWordsTest(ostream & os, bool success);
 bool XMLGeneratorTest(ostream & os, bool success);
+bool WebCrawlerTest(ostream & os, bool success);
 
 int main(int argc, char* argv[]){
 	bool success=true;
@@ -64,6 +66,9 @@ int main(int argc, char* argv[]){
 
 	//XMLGenerator Test
 	success = XMLGeneratorTest(cout, success);
+
+	//WebCrawler Test
+	success = WebCrawlerTest(cout, success);
 
 	if(success){
 		cout << "Success!" << endl;
@@ -664,5 +669,13 @@ bool XMLGeneratorTest(ostream & os, bool success){
 
 	generator.writeFile();
 
+	return success;
+}
+
+bool WebCrawlerTest(ostream & os, bool success){
+	string start_url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawlindex.html";
+	string output_file = "output.xml";
+	string stop_words_file = "StopWordsTestFiles/stopwords.txt";
+	WebCrawler crawler(start_url, output_file, stop_words_file);
 	return success;
 }

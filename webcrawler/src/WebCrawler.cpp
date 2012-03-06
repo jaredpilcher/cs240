@@ -18,11 +18,11 @@
 void WebCrawler::CrawlWeb(){
 	PageDownloader downloader;
 	WordIndex index;
-	HTMLParser parser();
+	HTMLParser parser;
 	StopWords stop_words;
 	PageHistory history;
 	PageQueue queue;
-	XMLGenerator generator(history, index, start_url);
+	XMLGenerator generator(&history, &index, start_url);
 	string word;
 
 	//create new page and place in queue and history
@@ -32,16 +32,16 @@ void WebCrawler::CrawlWeb(){
 
 	stop_words.getWords(stop_file);
 
-	while(!queue.empty()){
+	while(!queue.isEmpty()){
 		//pop page from queue
 		page = queue.pop();
 
 		//Download page
 		//Parse string returned from downloader
-		parser.setNewPage(downloader.download(page), page.getURL());
+		parser.setNewPage(downloader.download(*page), page->getURL());
 
 		//Determine if this is a valid page
-		if(!isHTML(page.getURL()))){
+		if(!isHTML(page->getURL())){
 			history.remove(page);
 			delete page;
 			continue;
@@ -77,5 +77,5 @@ void WebCrawler::CrawlWeb(){
 
 //Determines if the page is HTML
 bool WebCrawler::isHTML(string url){
-
+	return true;
 }

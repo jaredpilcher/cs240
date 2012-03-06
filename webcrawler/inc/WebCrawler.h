@@ -32,7 +32,7 @@ class WebCrawler{
 		void CrawlWeb();
 
 		//Determines if the page is HTML
-		bool WebCrawler::isHTML();
+		bool isHTML(string url);
 
 	private:
 };
