@@ -71,7 +71,7 @@ private:
 	string stripInternalRelative(string url);
 
 	//Determines if base ends with substring
-	bool endsWith(const char * base, const char * substring)
+	bool endsWith(const char * base, const char * substring);
 };
 
 #endif /* URL_H_ */

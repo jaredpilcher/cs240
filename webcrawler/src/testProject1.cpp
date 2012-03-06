@@ -65,7 +65,7 @@ int main(int argc, char* argv[]){
 	success = StopWordsTest(cout, success);
 
 	//XMLGenerator Test
-	success = XMLGeneratorTest(cout, success);
+	//success = XMLGeneratorTest(cout, success);
 
 	//WebCrawler Test
 	success = WebCrawlerTest(cout, success);
@@ -674,8 +674,9 @@ bool XMLGeneratorTest(ostream & os, bool success){
 
 bool WebCrawlerTest(ostream & os, bool success){
 	string start_url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawlindex.html";
-	string output_file = "output.xml";
+	string output_file = "/home/jared/cs240/webcrawler/output.xml";
 	string stop_words_file = "StopWordsTestFiles/stopwords.txt";
 	WebCrawler crawler(start_url, output_file, stop_words_file);
+	crawler.CrawlWeb();
 	return success;
 }

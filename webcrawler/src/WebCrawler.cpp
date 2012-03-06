@@ -31,7 +31,7 @@ void WebCrawler::CrawlWeb(){
 	history.push(page);
 
 	stop_words.getWords(stop_file);
-
+	cout << "here" << endl;
 	while(!queue.isEmpty()){
 		//pop page from queue
 		page = queue.pop();
@@ -39,14 +39,6 @@ void WebCrawler::CrawlWeb(){
 		//Download page
 		//Parse string returned from downloader
 		parser.setNewPage(downloader.download(*page), page->getURL());
-
-		//Determine if this is a valid page
-		if(!isHTML(page->getURL())){
-			history.remove(page);
-			delete page;
-			continue;
-		}
-
 		parser.parsePage();
 
 		//Grab the description and set to page
@@ -62,7 +54,9 @@ void WebCrawler::CrawlWeb(){
 
 		//Get links from html, create new page and push on queue and history
 		while(parser.hasNextLink()){
-			page=new Page(parser.getLink());
+			string link = parser.getLink();
+			if(!isHTML(link)) continue;
+			page=new Page(link);
 			if(history.push(page)){
 				queue.push(page);
 			}
@@ -77,5 +71,25 @@ void WebCrawler::CrawlWeb(){
 
 //Determines if the page is HTML
 bool WebCrawler::isHTML(string url){
-	return true;
+	if(url[url.size()-1]=='/') return true;
+	if(hasNoExtension(url)) return true;
+	//if(hasCorrectExtension(url)) return true;
+	return false;
+}
+
+bool WebCrawler::hasNoExtension(string url){
+	string file_name = getFileName(url);
+	if(file_name.size()==0) return true;
+	for(int i=file_name.size()-1;i>=0;--i){
+		if(file_name[i]=='/') return false;
+		if(file_name[i]=='.') return true;
+	}
+	return false;
+}
+
+string WebCrawler::getFileName(string url){
+	if(url.size()==0) return url;
+	for(int i=url.size()-1;i>=0;--i){
+		if(url[i]=='/') return (&url[i]+1);
+	}
 }

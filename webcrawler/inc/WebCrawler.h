@@ -31,10 +31,17 @@ class WebCrawler{
 		//the start_url class variable
 		void CrawlWeb();
 
-		//Determines if the page is HTML
-		bool isHTML(string url);
+
 
 	private:
+		//Determines if the page is HTML
+		bool isHTML(string url);
+		
+		//Determines if url doesn't have an extension
+		bool hasNoExtension(string url);
+
+		//Gets the file name of the url
+		string getFileName(string url);
 };
 
 #endif /* WEBCRAWLER_H_ */

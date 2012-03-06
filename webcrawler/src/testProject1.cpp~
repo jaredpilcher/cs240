@@ -12,6 +12,10 @@ using namespace std;
 #include "HTMLParser.h"
 #include "Occurrence.h"
 #include "OccurrenceSet.h"
+#include "WordIndex.h"
+#include "StopWords.h"
+#include "XMLGenerator.h"
+#include "WebCrawler.h"
 
 static const unsigned int npos = -1;
 
@@ -23,6 +27,10 @@ bool URLTest(ostream & os, bool success);
 bool HTMLParserTest(ostream & os, bool success);
 bool OccurrenceTest(ostream & os, bool success);
 bool OccurrenceSetTest(ostream & os, bool success);
+bool WordIndexTest(ostream & os, bool success);
+bool StopWordsTest(ostream & os, bool success);
+bool XMLGeneratorTest(ostream & os, bool success);
+bool WebCrawlerTest(ostream & os, bool success);
 
 int main(int argc, char* argv[]){
 	bool success=true;
@@ -45,10 +53,22 @@ int main(int argc, char* argv[]){
 	success = HTMLParserTest(cout, success);
 
 	//Occurrence Test
-	OccurrenceTest(cout, success);
+	success = OccurrenceTest(cout, success);
 
 	//OccurrenceSet Test
-	OccurrenceSetTest(cout, success);
+	success = OccurrenceSetTest(cout, success);
+
+	//WordIndex Test
+	success = WordIndexTest(cout, success);
+
+	//StopWords Test
+	success = StopWordsTest(cout, success);
+
+	//XMLGenerator Test
+	//success = XMLGeneratorTest(cout, success);
+
+	//WebCrawler Test
+	success = WebCrawlerTest(cout, success);
 
 	if(success){
 		cout << "Success!" << endl;
@@ -443,6 +463,7 @@ bool OccurrenceSetTest(ostream & os, bool success){
 	string url2 = "http://www.yahoo.com";
 	string url3 = "http://www.amazon.com";
 	OccurrenceSet occurrences;
+	Occurrence occurrence;
 
 	//Simple push/pop test
 	occurrences.push(url);
@@ -459,22 +480,202 @@ bool OccurrenceSetTest(ostream & os, bool success){
 	occurrences.push(url);
 	occurrences.push(url2);
 	occurrences.push(url2);
-	int count;
-	string test_url;
-	occurrences.pop().getContents(count,test_url);
-	if(test_url==url){
-		TEST(count==1);
+	occurrence = occurrences.pop();
+	if(occurrence.getURL()==url){
+		TEST(occurrence.getCount()==1);
 	}else{
-		TEST(count==2);
+		TEST(occurrence.getCount()==2);
 	}
 	TEST(!occurrences.isEmpty());
 		
-	occurrences.pop().getContents(count,test_url);
-	if(test_url==url){
-		TEST(count==1);
+	occurrence = occurrences.pop();
+	if(occurrence.getURL()==url){
+		TEST(occurrence.getCount()==1);
 	}else{
-		TEST(count==2);
+		TEST(occurrence.getCount()==2);
 	}
 	TEST(occurrences.isEmpty());
+	return success;
+}
+
+bool WordIndexTest(ostream & os, bool success){
+	string word = "hello";
+	string word2 = "jared";
+	string word3 = "pilcher";
+	string url = "http://www.google.com";
+	string url2 = "http://www.yahoo.com";
+	string url3 = "http://www.amazon.com";
+	WordIndex index;
+	Occurrence occurrence;
+	OccurrenceSet * occurrences;
+	string indexed_word;
+
+	//Simple push/pop test
+	index.push(word,url);
+	occurrences = index.pop(indexed_word);
+	occurrence = occurrences->pop();
+	TEST(occurrence.getURL()==url);
+	TEST(occurrence.getCount()==1);
+	TEST(occurrences->isEmpty());
+	TEST(index.isEmpty());
+	delete occurrences;
+
+	//Count test
+	index.push(word,url);
+	index.push(word,url);
+	TEST(!index.isEmpty());
+	occurrences = index.pop(indexed_word);
+	TEST(index.isEmpty());
+	TEST(!occurrences->isEmpty());
+	occurrence = occurrences->pop();
+	TEST(occurrence.getCount()==2);
+	TEST(occurrence.getURL()==url);
+	delete occurrences;
+
+	//Multiple url push test
+	index.push(word,url);
+	index.push(word,url2);
+	index.push(word,url3);
+	TEST(!index.isEmpty());
+	occurrences=index.pop(indexed_word);
+	TEST(index.isEmpty());
+	TEST(!occurrences->isEmpty());
+		//Test first occurrence
+		occurrence = occurrences->pop();
+		TEST(!occurrences->isEmpty());
+		TEST(occurrence.getCount()==1);
+		TEST(occurrence.getURL()==url || occurrence.getURL()==url2 || occurrence.getURL()==url3);
+
+		//Test second occurrence
+		occurrence = occurrences->pop();
+		TEST(!occurrences->isEmpty());
+		TEST(occurrence.getCount()==1);
+		TEST(occurrence.getURL()==url || occurrence.getURL()==url2 || occurrence.getURL()==url3);
+
+		//Test third occurrence
+		occurrence = occurrences->pop();
+		TEST(occurrences->isEmpty());
+		TEST(occurrence.getCount()==1);
+		TEST(occurrence.getURL()==url || occurrence.getURL()==url2 || occurrence.getURL()==url3);
+	delete occurrences;
+
+	//Multiple word push test*/
+	index.push(word,url);
+	index.push(word2,url);
+	index.push(word3,url);
+	TEST(!index.isEmpty());
+		//Test first word
+		occurrences=index.pop(indexed_word);
+		TEST(!index.isEmpty());
+		TEST(!occurrences->isEmpty());
+		occurrence = occurrences->pop();
+		TEST(occurrence.getCount()==1);
+		TEST(occurrence.getURL()==url);
+		TEST(occurrences->isEmpty());
+		delete occurrences;
+
+		//Test second word
+		occurrences=index.pop(indexed_word);
+		TEST(!index.isEmpty());
+		TEST(!occurrences->isEmpty());
+		occurrence = occurrences->pop();
+		TEST(occurrence.getCount()==1);
+		TEST(occurrence.getURL()==url);
+		TEST(occurrences->isEmpty());
+		delete occurrences;
+
+		//Test third word
+		occurrences=index.pop(indexed_word);
+		TEST(index.isEmpty());
+		TEST(!occurrences->isEmpty());
+		occurrence = occurrences->pop();
+		TEST(occurrence.getCount()==1);
+		TEST(occurrence.getURL()==url);
+		TEST(occurrences->isEmpty());
+		delete occurrences;
+
+	return success;
+}
+
+bool StopWordsTest(ostream & os, bool success){
+	StopWords stop_words;
+	stop_words.getWords("StopWordsTestFiles/stopwords.txt");
+	TEST(stop_words.getCount()==35);
+	TEST(stop_words.isStopWord("a"));
+	TEST(stop_words.isStopWord("an"));
+	TEST(stop_words.isStopWord("and"));
+	TEST(stop_words.isStopWord("are"));
+	TEST(stop_words.isStopWord("with"));
+	TEST(stop_words.isStopWord("such"));
+	TEST(stop_words.isStopWord("but"));
+	TEST(stop_words.isStopWord("will"));
+
+	//Testing multiple times to make sure not deleting array objects
+	TEST(stop_words.isStopWord("but"));
+	TEST(stop_words.isStopWord("but"));
+	TEST(stop_words.getCount()==35);
+
+	return success;
+}
+
+bool XMLGeneratorTest(ostream & os, bool success){
+	string start_url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawlindex.html";
+	string stop_file = "StopWordsTestFiles/stopwords.txt";
+	PageDownloader downloader;
+	WordIndex index;
+	HTMLParser parser;
+	StopWords stop_words;
+	PageHistory history;
+	PageQueue queue;
+	XMLGenerator generator(&history, &index, start_url);
+	string word;
+
+	//create new page and place in queue and history
+	Page* page = new Page(start_url);
+	queue.push(page);
+	history.push(page);
+
+	page = new Page("http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/TestOne.html");
+	queue.push(page);
+	history.push(page);
+
+	page = new Page("http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/testFour.htm");
+	queue.push(page);
+	history.push(page);
+
+	stop_words.getWords(stop_file);
+	while(!queue.isEmpty()){
+		//pop page from queue
+		page = queue.pop();
+
+		//Download page
+		//Parse string returned from downloader
+		parser.setNewPage(downloader.download(*page), page->getURL());
+
+		parser.parsePage();
+
+		//Grab the description and set to page
+		page->setDescription(parser.getDescription());
+
+		//Go through the html document and index words
+		while(!parser.isEmpty()){
+			word =parser.getWord();
+			if(!stop_words.isStopWord(word)){
+				index.push(word, page->getURL());
+			}
+		}
+	}
+
+
+	generator.writeFile();
+
+	return success;
+}
+
+bool WebCrawlerTest(ostream & os, bool success){
+	string start_url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawlindex.html";
+	string output_file = "/home/jared/cs240/webcrawler/output.xml";
+	string stop_words_file = "StopWordsTestFiles/stopwords.txt";
+	WebCrawler crawler(start_url, output_file, stop_words_file);
 	return success;
 }
