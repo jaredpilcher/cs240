@@ -122,7 +122,7 @@ string HTMLParser::firstHundredChar(HTMLTokenizer tokenizer){
 			if(value[i]!=' ' && value[i]!='\t' && value[i]!='\n' && value[i]!='\r'){
 				++char_count;
 			}
-			if(char_count==99) return hundred_char;
+			if(char_count==100) return hundred_char;
 		}
 		
 	}
