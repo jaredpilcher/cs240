@@ -1,1 +1,1 @@
-http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/scale.php?sec=tortoise
+http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/scale.php

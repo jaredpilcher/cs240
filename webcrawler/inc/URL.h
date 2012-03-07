@@ -34,6 +34,9 @@ public:
 
 	URL& operator=(const URL& other);
 
+	//Sets the URL and removes the file name
+	void setURLBase(string url);
+
 private:
 	char stored_url[URL_SIZE];
 
@@ -72,6 +75,7 @@ private:
 
 	//Determines if base ends with substring
 	bool endsWith(const char * base, const char * substring);
+
 };
 
 #endif /* URL_H_ */

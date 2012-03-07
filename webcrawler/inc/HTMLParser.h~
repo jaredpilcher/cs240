@@ -22,15 +22,20 @@ class HTMLParser{
 	//The list of links on the current page
 	LinkedList<URL> links;
 
-	//The start_url passed in from the user.
+	//The current base_url of the web page
 	//The description of the current
 	string base_url, description;
+
+	//The start_url passed in from the user.
+	URL start_url;
 
 	//page
 	string page_text;
 public:
 	//Default Constructor
-	HTMLParser(){
+	HTMLParser(string arg_start){
+		start_url.setURLBase(arg_start);
+		cout << start_url.getURL() << endl;
 	}
 
 	//Default Deconstructor
@@ -42,7 +47,7 @@ public:
 	//Finds all words and links found in page_text
 	//@par page_text - the html text of the new page
 	//@par arg_url - url of the page being crawled
-	void setNewPage(const string & page_text, const string arg_url);
+	void setNewPage(const string & arg_page_text, const string arg_url);
 
 	//Retrieves the description of the page
 	string getDescription();
@@ -99,6 +104,9 @@ private:
 
 	//Find all links between <html> tags on page and store in links (class variable)
 	void findLinks();
+
+	//Determines if the given url is in scope
+	bool isInScope(URL url);
 };
 
 #endif /* HTMLPARSER_H_ */

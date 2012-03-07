@@ -121,7 +121,7 @@ bool pageQueueTest(ostream & os, bool success){
 
 bool pageHistoryTest(ostream & os, bool success){
 	string url = "http://hello.com";
-	string url2 = "http://hello.com";
+	string url2 = "http://hello.com/2";
 	string description = "description1";
 	string description2 = "description2";
 	PageHistory history;
@@ -154,7 +154,7 @@ bool pageHistoryTest(ostream & os, bool success){
 		TEST(testpage->getDescription() == description || testpage->getDescription() == description2);
 
 	//NULL returned if not pages on history
-	TEST(NULL==history.pop());
+	TEST(history.isEmpty());
 
 	//No items in history
 	TEST(0==history.getSize());
@@ -162,7 +162,7 @@ bool pageHistoryTest(ostream & os, bool success){
 	//Page is removed properly
 	history.push(page);
 	history.remove(page);
-	TEST(NULL==history.pop());
+	TEST(history.isEmpty());
 	
 	//No items in history
 	TEST(0==history.getSize());
@@ -346,7 +346,8 @@ bool HTMLParserTest(ostream & os, bool success){
 		PageDownloader downloader;
 		string url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/scale.php?sec=";
 		string page_text = downloader.download(url);
-		HTMLParser parser;
+		string start_url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawler/scale.php?sec=";
+		HTMLParser parser(start_url);
 		parser.setNewPage(page_text, url);
 		parser.parsePage();
 
@@ -384,7 +385,6 @@ bool HTMLParserTest(ostream & os, bool success){
 					links.Insert(temp, links.GetLast());
 				}
 				file.close();
-
 			//Determine if link lists are equivalent
 			while(!links.IsEmpty()){
 				//If parser runs out of links before links in file, then fails
@@ -433,7 +433,6 @@ bool HTMLParserTest(ostream & os, bool success){
 					links.Insert(temp, links.GetLast());
 				}
 				file.close();
-
 			//Determine if link lists are equivalent
 			while(!links.IsEmpty()){
 				//If parser runs out of links before links in file, then fails
@@ -623,7 +622,7 @@ bool XMLGeneratorTest(ostream & os, bool success){
 	string stop_file = "StopWordsTestFiles/stopwords.txt";
 	PageDownloader downloader;
 	WordIndex index;
-	HTMLParser parser;
+	HTMLParser parser(start_url);
 	StopWords stop_words;
 	PageHistory history;
 	PageQueue queue;

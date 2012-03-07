@@ -17,9 +17,16 @@ class Page{
 	string url;
 	//Contains the description found on the page
 	string description;
+
+	bool operator>(Page other);
+
+	bool operator<(Page other);
 public:
 	//Default Constructor
 	Page(string arg_url);
+
+	Page();
+
 
 	//Copy Constructor
 	Page(Page & arg_page);

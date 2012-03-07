@@ -36,11 +36,20 @@ void HTMLParser::findLinks(){
 		}
 		if(startsWith(token.GetValue(),"a ") && token.GetType()!=TAG_END && can_parse && token.GetType()!=COMMENT && !startsWith(token.GetValue(), "<!")){
 			URL temp_url = token.GetAttribute("href");
-			temp_url.addBase(base_url);
-			links.Insert(temp_url, links.GetLast());
+			if(isInScope(temp_url)){
+				temp_url.addBase(base_url);
+				links.Insert(temp_url, links.GetLast());
+			}
 		}
 		token = tokenizer.GetNextToken();
 	}
+}
+
+bool HTMLParser::isInScope(URL url){
+	if(startsWith(url.getURL(),"http")) return false;
+	url.addBase(base_url);
+	if(url.getURL().find(start_url.getURL())!=npos) return true;
+	return false;
 }
 
 void HTMLParser::findWords(){
@@ -134,7 +143,7 @@ bool HTMLParser::startsWith(string line,string substring){
 
 void HTMLParser::toCapital(string & line){
 	for(unsigned int i=0; i<line.size();++i){
-		if(line[i] > 'a' && line[i] < 'z'){
+		if(line[i] >= 'a' && line[i] <= 'z'){
 			line[i]=line[i]-' ';
 		}
 	}

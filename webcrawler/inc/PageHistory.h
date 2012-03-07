@@ -44,7 +44,7 @@ public:
 
 private:
 	//The BST to hold the history of pages
-	BST<Page*,string> history;
+	BST<string,Page*> history;
 };
 
 #endif /* PAGEHISTORY_H_ */

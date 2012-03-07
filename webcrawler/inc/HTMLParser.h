@@ -22,15 +22,19 @@ class HTMLParser{
 	//The list of links on the current page
 	LinkedList<URL> links;
 
-	//The start_url passed in from the user.
+	//The current base_url of the web page
 	//The description of the current
 	string base_url, description;
+
+	//The start_url passed in from the user.
+	URL start_url;
 
 	//page
 	string page_text;
 public:
 	//Default Constructor
-	HTMLParser(){
+	HTMLParser(string arg_start){
+		start_url.setURLBase(arg_start);
 	}
 
 	//Default Deconstructor
@@ -99,6 +103,9 @@ private:
 
 	//Find all links between <html> tags on page and store in links (class variable)
 	void findLinks();
+
+	//Determines if the given url is in scope
+	bool isInScope(URL url);
 };
 
 #endif /* HTMLPARSER_H_ */

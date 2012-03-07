@@ -38,10 +38,16 @@ class WebCrawler{
 		bool isHTML(string url);
 		
 		//Determines if url doesn't have an extension
-		bool hasNoExtension(string url);
+		bool hasExtension(string url);
 
 		//Gets the file name of the url
 		string getFileName(string url);
+
+		//Determines if the url has the correct extension to crawl
+		bool hasCorrectExtension(string url);
+
+		//Returns the extension of the filename
+		string getExtension(string url);
 };
 
 #endif /* WEBCRAWLER_H_ */

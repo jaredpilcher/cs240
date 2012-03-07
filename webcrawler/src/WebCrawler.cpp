@@ -18,12 +18,12 @@
 void WebCrawler::CrawlWeb(){
 	PageDownloader downloader;
 	WordIndex index;
-	HTMLParser parser;
+	HTMLParser parser(start_url);
 	StopWords stop_words;
 	PageHistory history;
 	PageQueue queue;
 	XMLGenerator generator(&history, &index, start_url);
-	string word;
+	string word, link;
 
 	//create new page and place in queue and history
 	Page* page = new Page(start_url);
@@ -31,14 +31,14 @@ void WebCrawler::CrawlWeb(){
 	history.push(page);
 
 	stop_words.getWords(stop_file);
-	cout << "here" << endl;
 	while(!queue.isEmpty()){
 		//pop page from queue
 		page = queue.pop();
 
 		//Download page
 		//Parse string returned from downloader
-		parser.setNewPage(downloader.download(*page), page->getURL());
+		string page_url = page->getURL();
+		parser.setNewPage(downloader.download(*page), page_url);
 		parser.parsePage();
 
 		//Grab the description and set to page
@@ -54,7 +54,7 @@ void WebCrawler::CrawlWeb(){
 
 		//Get links from html, create new page and push on queue and history
 		while(parser.hasNextLink()){
-			string link = parser.getLink();
+			link = parser.getLink();
 			if(!isHTML(link)) continue;
 			page=new Page(link);
 			if(history.push(page)){
@@ -72,12 +72,12 @@ void WebCrawler::CrawlWeb(){
 //Determines if the page is HTML
 bool WebCrawler::isHTML(string url){
 	if(url[url.size()-1]=='/') return true;
-	if(hasNoExtension(url)) return true;
-	//if(hasCorrectExtension(url)) return true;
-	return false;
+	if(!hasExtension(url)) return true;
+	if(hasCorrectExtension(url)) return true;
+	return true;
 }
 
-bool WebCrawler::hasNoExtension(string url){
+bool WebCrawler::hasExtension(string url){
 	string file_name = getFileName(url);
 	if(file_name.size()==0) return true;
 	for(int i=file_name.size()-1;i>=0;--i){
@@ -92,4 +92,24 @@ string WebCrawler::getFileName(string url){
 	for(int i=url.size()-1;i>=0;--i){
 		if(url[i]=='/') return (&url[i]+1);
 	}
+	return url;
+}
+
+bool WebCrawler::hasCorrectExtension(string url){
+	string extension = getExtension(url);
+	if(extension=="html" || extension=="htm" || extension=="shtml" || 
+		extension=="cgi" || extension=="jsp" || extension=="asp"   || 
+		extension=="aspx"|| extension=="php" || extension=="pl"    || extension=="cfm"){
+		
+		return true;
+	}
+	return false;
+}
+
+string WebCrawler::getExtension(string url){
+	if(url.size()==0) return url;
+	for(int i=url.size()-1;i>=0;--i){
+		if(url[i]=='.') return (&url[i]+1);
+	}
+	return "";
 }

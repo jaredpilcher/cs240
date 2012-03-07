@@ -6,6 +6,8 @@
  */
 #include "PageDownloader.h"
 #include "URLInputStream.h"
+#include <iostream>
+using namespace std;
 
 string PageDownloader::download(const Page & page){
 	string page_text;
@@ -14,8 +16,14 @@ string PageDownloader::download(const Page & page){
 }
 
 void PageDownloader::getText(const string url, string & page_text){
-	URLInputStream input_stream(url);
-	while(!input_stream.IsDone()){
-		page_text.append(1,input_stream.Read());
+	try{
+		URLInputStream input_stream(url);
+		while(!input_stream.IsDone()){
+			page_text.append(1,input_stream.Read());
+		}
 	}
+	catch(...){
+		page_text="";
+	}
+
 }

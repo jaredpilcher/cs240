@@ -18,21 +18,22 @@ PageHistory::~PageHistory(){
 //Push the page onto the history BST
 //@par page - page to be inserted
 bool PageHistory::push(Page * page){
-	return history.Insert(page,"") != NULL;
+	return history.Insert(page->getURL(),page) != NULL;
 }
 
 //Return the next page in the BST
 //@ret page - page pointer popped off
-//returns NULL if no pages in history
+//must verify that is empty before using this function
 Page * PageHistory::pop(){
-	return history.PopPtr();
+	Page * page = history.PopValue();
+	return page;
 }
 
 //Remove the page that matches the argument
 //from the BST
 //@par page - page to be removed
 void PageHistory::remove(Page * page){
-	history.Remove(page);
+	history.Remove(page->getURL());
 }
 
 int PageHistory::getSize(){

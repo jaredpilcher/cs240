@@ -14,7 +14,7 @@ URL::URL(string arg_url){
 
 string URL::stripInternalRelative(string url){
 	for(unsigned int i=0; i<url.size(); ++i){
-		if(url[i]=='#') url[i] = 0;
+		if(url[i]=='#' || url[i]=='?') url[i] = 0;
 	}
 	return url;
 }
@@ -52,6 +52,13 @@ void URL::addBase(string base){
 void URL::setURL(string url){
 	url = stripInternalRelative(url);
 	strcpy(stored_url,url.data());
+}
+
+void URL::setURLBase(string url){
+	url = stripInternalRelative(url);
+	char temp_url[URL_SIZE];
+	strcpy(temp_url,url.data());
+	getBaseURL(stored_url,temp_url);
 }
 
 void URL::resolveURL(char * base, char * url){
@@ -138,9 +145,10 @@ void URL::getBaseURL(char * final_url, char * base){
             slash_location = i;
         }
     }
-	//if ends in '.com' or '.net' or '.org', then don't remove file name
-	if(!endsWith(base,".com") && !endsWith(base,".net") && !endsWith(base,".org")){
+	//if ends in '.com' or '.net' or '.org' or '.edu', then don't remove file name
+	if(!endsWith(base,".com") && !endsWith(base,".net") && !endsWith(base,".org") && !endsWith(base,".edu")){
 	    strncpy(final_url,base,slash_location+1);
+		final_url[slash_location+1]=0;
 	}
 	else{
 		strcpy(final_url,base);

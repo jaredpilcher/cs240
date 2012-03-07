@@ -238,7 +238,7 @@ class BST
 		bool Remove(const Type & k){
 			if(top==NULL) return false;
 			if(top->GetKey()==k){
-				BSTNode<Type, Type2> aux_top(top->getKey(), top->getValue());
+				BSTNode<Type, Type2> aux_top(top->GetKey(), top->GetValue());
 				aux_top.SetLeft(top);
 				BSTNode<Type, Type2> * removed_node = top->Remove(k,&aux_top);
 				top=aux_top.GetLeft();
@@ -276,9 +276,19 @@ class BST
 
 		Type2 PopValue(){
 			Type min_key = top->MinKey();
+			return Pop(min_key);
+		}
+
+		Type2 Pop(Type min_key){
 			Type2 min_value = top->MinValue();
 			Remove(min_key);
 			return min_value;
+		}
+
+		Type2 PopVandK(Type & key){
+			Type min_key = top->MinKey();
+			key = min_key;
+			return Pop(min_key);
 		}
 
 		//! @returns the smallest key in the list, or NULL if the list is empty

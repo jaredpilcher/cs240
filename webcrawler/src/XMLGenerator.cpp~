@@ -24,7 +24,7 @@ void XMLGenerator::createTag(string value){
 }
 
 void XMLGenerator::addText(string text){
-	EncodeToXml(text);
+	//EncodeToXml(text);
 	xml.append(text);
 }
 
@@ -44,8 +44,9 @@ void XMLGenerator::pageTags(){
 		addText(page->getURL());
 		createTag("/url");
 		createTag("description");
-		addText(page->getDescription());
+		string description = page->getDescription();
 		delete page;
+		addText(description);
 		createTag("/description");
 		createTag("/page");
 	}

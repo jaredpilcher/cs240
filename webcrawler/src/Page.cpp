@@ -5,9 +5,15 @@
  *      Author: jared
  */
 #include "Page.h"
+#include <iostream>
+using namespace std;
 
 //Default Constructor
 Page::Page(string arg_url=""):url(arg_url), description(""){
+}
+
+//Default Constructor
+Page::Page():url(""), description(""){
 }
 
 //Copy Constructor
@@ -40,3 +46,11 @@ void Page::setDescription(string arg_description){
 	description=arg_description;
 }
 
+bool Page::operator>(Page other){
+	return (url.compare(other.url)>0);
+}
+
+
+bool Page::operator<(Page other){
+	return (url.compare(other.url)<0);
+}

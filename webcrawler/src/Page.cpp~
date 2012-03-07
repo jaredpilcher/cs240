@@ -5,9 +5,15 @@
  *      Author: jared
  */
 #include "Page.h"
+#include <iostream>
+using namespace std;
 
 //Default Constructor
 Page::Page(string arg_url=""):url(arg_url), description(""){
+}
+
+//Default Constructor
+Page::Page():url(""), description(""){
 }
 
 //Copy Constructor
@@ -19,12 +25,14 @@ Page::~Page(){
 }
 
 //Retrieves the url of the page
-string Page::getURL(){
+string Page::getURL()const{
 	return url;
 }
 
 //Retrieves the description of the page
-string Page::getDescription(){
+string Page::getDescription()const{
+	cout << "here4" << endl;
+	cout << url << endl;
 	return description;
 }
 
@@ -40,3 +48,11 @@ void Page::setDescription(string arg_description){
 	description=arg_description;
 }
 
+bool Page::operator>(Page other){
+	return (url.compare(other.url)>0);
+}
+
+
+bool Page::operator<(Page other){
+	return (url.compare(other.url)<0);
+}
