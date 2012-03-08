@@ -14,9 +14,15 @@ URL::URL(string arg_url){
 
 string URL::stripInternalRelative(string url){
 	for(unsigned int i=0; i<url.size(); ++i){
-		if(url[i]=='#' || url[i]=='?') url[i] = 0;
+		if(url[i]=='#') url[i] = 0;
 	}
 	return url;
+}
+
+void URL::stripQuery(string & url){
+	for(unsigned int i=0; i<url.size(); ++i){
+		if(url[i]=='?') url[i] = 0;
+	}
 }
 
 //Blank Constructor
@@ -57,6 +63,7 @@ void URL::setURL(string url){
 
 void URL::setURLBase(string url){
 	url = stripInternalRelative(url);
+	stripQuery(url);
 	char temp_url[URL_SIZE];
 	strcpy(temp_url,url.data());
 	getBaseURL(stored_url,temp_url);

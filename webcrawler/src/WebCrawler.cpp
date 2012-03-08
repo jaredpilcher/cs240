@@ -44,7 +44,6 @@ void WebCrawler::CrawlWeb(){
 		//Download page
 		//Parse string returned from downloader
 		string page_url = page->getURL();
-		cout << page_url << endl;
 		if(page_url[0]=='/'){
 			page_text = "";
 			file.open(page_url.data());
@@ -54,9 +53,7 @@ void WebCrawler::CrawlWeb(){
 			  page_text.append(line);
 			}
 			file.close();
-			cout << page_text << endl;
 		}else{
-			cout << "downloading page" << endl;
 			page_text = downloader.download(*page);
 		}
 		parser.setNewPage(page_text, page_url);

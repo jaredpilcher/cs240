@@ -36,6 +36,9 @@ public:
 
 	//Sets the URL and removes the file name
 	void setURLBase(string url);
+	
+	//Removes all items after ?
+	void stripQuery(string& url);
 
 private:
 	char stored_url[URL_SIZE];

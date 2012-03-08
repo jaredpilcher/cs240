@@ -34,6 +34,7 @@ class HTMLParser{
 public:
 	//Default Constructor
 	HTMLParser(string arg_start){
+		lowerRoot(arg_start);
 		start_url.setURLBase(arg_start);
 	}
 
@@ -109,6 +110,13 @@ private:
 
 	//Determines if the character is a word character
 	bool isWordChar(char character);
+
+	//Converts uppercase value to lower case
+	//WARNING: modifies string
+	void toLowerChar(char & character);
+
+	//Changes the base of the url to lower case
+	void lowerRoot(string url);
 };
 
 #endif /* HTMLPARSER_H_ */

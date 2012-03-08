@@ -17,6 +17,7 @@ void HTMLParser::setNewPage(const string & arg_page_text, const string arg_url){
 	words.Clear();
 	links.Clear();
 	page_text = arg_page_text;
+	lowerRoot(arg_url);
 	base_url = arg_url;
 }
 
@@ -37,10 +38,14 @@ void HTMLParser::findLinks(){
 		if(startsWith(token.GetValue(),"a ") && token.GetType()!=TAG_END && 
 			can_parse && token.GetType()!=COMMENT && !startsWith(token.GetValue(), "<!")){
 
-			URL temp_url = token.GetAttribute("href");
+			URL temp_url = token.GetAttribute("href");	
+			if(!startsWith(temp_url.getURL(),"http") && !startsWith(temp_url.getURL(),"file")){
+				temp_url.addBase(base_url);
+			}else if(startsWith(temp_url.getURL(),"http")){
+				lowerRoot(temp_url.getURL());
+			}
 			if(isInScope(temp_url)){
 				temp_url.addBase(base_url);
-				cout << "here3" << endl;
 				links.Insert(temp_url, links.GetLast());
 			}
 		}
@@ -49,10 +54,21 @@ void HTMLParser::findLinks(){
 }
 
 bool HTMLParser::isInScope(URL url){
-	if(startsWith(url.getURL(),"http")) return false;
-	url.addBase(base_url);
 	if(url.getURL().find(start_url.getURL())!=npos) return true;
 	return false;
+}
+
+//makes all of the 
+void HTMLParser::lowerRoot(string url){
+	string temp_url;
+	int slash_count = 0;
+	for(unsigned int i=0;i<url.size();++i){
+		if(url[i]=='/'){
+			slash_count++;
+		}
+		if(slash_count==3) break;
+		toLowerChar(url[i]);
+	}
 }
 
 void HTMLParser::findWords(){
@@ -146,6 +162,12 @@ void HTMLParser::toCapital(string & line){
 		if(line[i] >= 'a' && line[i] <= 'z'){
 			line[i]=line[i]-' ';
 		}
+	}
+}
+
+void HTMLParser::toLowerChar(char & character){
+	if(character >= 'A' && character <= 'Z'){
+		character=character+' ';
 	}
 }
 
