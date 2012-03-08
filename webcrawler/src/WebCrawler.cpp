@@ -72,7 +72,6 @@ void WebCrawler::CrawlWeb(){
 
 		//Get links from html, create new page and push on queue and history
 		while(parser.hasNextLink()){
-			
 			link = parser.getLink();
 			if(!isHTML(link)) continue;
 			page=new Page(link);

@@ -35,6 +35,7 @@ public:
 	//Default Constructor
 	HTMLParser(string arg_start){
 		lowerRoot(arg_start);
+		
 		start_url.setURLBase(arg_start);
 	}
 

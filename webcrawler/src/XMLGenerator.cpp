@@ -14,7 +14,6 @@ void XMLGenerator::writeFile(){
 	wordTags();
 	createTag("/website");
 	ofstream xml_file(output_file.data());
-	cout << xml.data();
 	xml_file << xml;
 	xml_file.close();
 }

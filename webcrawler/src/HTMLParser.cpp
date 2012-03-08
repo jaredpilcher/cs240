@@ -6,6 +6,8 @@
  */
 
 #include "HTMLParser.h"
+#include <iostream>
+using namespace std;
 static const size_t npos = -1;
 
 //Clears the words, and links
@@ -45,7 +47,6 @@ void HTMLParser::findLinks(){
 				lowerRoot(temp_url.getURL());
 			}
 			if(isInScope(temp_url)){
-				temp_url.addBase(base_url);
 				links.Insert(temp_url, links.GetLast());
 			}
 		}
