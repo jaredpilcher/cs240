@@ -15,6 +15,8 @@
 #include "Page.h"
 #include <string>
 
+#define MAX_LINE 32000
+
 void WebCrawler::CrawlWeb(){
 	PageDownloader downloader;
 	WordIndex index;
@@ -22,8 +24,11 @@ void WebCrawler::CrawlWeb(){
 	StopWords stop_words;
 	PageHistory history;
 	PageQueue queue;
-	XMLGenerator generator(&history, &index, start_url);
+	XMLGenerator generator(&history, &index, start_url, output_file);
 	string word, link;
+	ifstream file;
+	string line;
+	string page_text;
 
 	//create new page and place in queue and history
 	Page* page = new Page(start_url);
@@ -39,7 +44,20 @@ void WebCrawler::CrawlWeb(){
 		//Download page
 		//Parse string returned from downloader
 		string page_url = page->getURL();
-		parser.setNewPage(downloader.download(*page), page_url);
+		cout << page_url << endl;
+		if(page_url[0]=='/'){
+			page_text = "";
+			file.open(page_url.data());
+			while (file.good())
+			{
+			  getline (file,line);
+			  page_text.append(line);
+			}
+			cout << page_text << endl;
+		}else{
+			page_text = downloader.download(*page);
+		}
+		parser.setNewPage(page_text, page_url);
 		parser.parsePage();
 
 		//Grab the description and set to page
@@ -67,6 +85,7 @@ void WebCrawler::CrawlWeb(){
 		}
 
 	}
+	cout << "Finished Loop" << endl;
 	generator.writeFile();
 	cout << "end" << endl;
 

@@ -20,16 +20,22 @@ using namespace StringUtil;
 class XMLGenerator{
 	//Contains history of pages indexed
 	PageHistory * history;
+
 	//Contains the queue of pages
 	WordIndex * index;
+
 	//contains the start_url of the web crawler
 	string start_url;
+
 	//contains the finalized xml of the output
 	string xml;
+	
+	//contains the output filename
+	string output_file;
 public:
 	//Default constructor
-	XMLGenerator(PageHistory * arg_history, WordIndex * arg_index, string arg_start_url): 
-			history(arg_history), index(arg_index), start_url(arg_start_url) {
+	XMLGenerator(PageHistory * arg_history, WordIndex * arg_index, string arg_start_url, string arg_output): 
+			history(arg_history), index(arg_index), start_url(arg_start_url), output_file(arg_output) {
 	}
 
 	//Default Deconstructor

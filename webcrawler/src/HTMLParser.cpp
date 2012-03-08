@@ -40,6 +40,7 @@ void HTMLParser::findLinks(){
 			URL temp_url = token.GetAttribute("href");
 			if(isInScope(temp_url)){
 				temp_url.addBase(base_url);
+				cout << "here3" << endl;
 				links.Insert(temp_url, links.GetLast());
 			}
 		}

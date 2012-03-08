@@ -80,7 +80,7 @@ obj/StopWords.o: src/StopWords.cpp inc/StopWords.h
 obj/XMLGenerator.o: src/XMLGenerator.cpp inc/XMLGenerator.h utils/obj/StringUtil.o obj/PageHistory.o obj/WordIndex.o
 	@g++ -c -Wall -o obj/XMLGenerator.o -I inc/ -I utils/inc/ src/XMLGenerator.cpp
 
-obj/WebCrawler.o: $(OBJ_FILES)
+obj/WebCrawler.o: obj/Page.o obj/PageQueue.o obj/PageHistory.o obj/PageDownloader.o obj/HTMLParser.o obj/WordIndex.o obj/StopWords.o obj/XMLGenerator.o src/WebCrawler.cpp inc/WebCrawler.h
 	@g++ -c -Wall -o obj/WebCrawler.o -I inc/ -I utils/inc/ src/WebCrawler.cpp
 
 

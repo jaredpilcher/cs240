@@ -359,6 +359,7 @@ bool HTMLParserTest(ostream & os, bool success){
 			char temp[MAX_CHAR_IN_LINE];
 			LinkedList<string> words;
 			while(1){
+				cout << "here" << endl;
 				file.getline(temp,MAX_CHAR_IN_LINE);
 				if(!file) break;
 				words.Insert(temp, words.GetLast());
@@ -691,13 +692,14 @@ bool StopWordsTest(ostream & os, bool success){
 bool XMLGeneratorTest(ostream & os, bool success){
 	string start_url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawlindex.html";
 	string stop_file = "StopWordsTestFiles/stopwords.txt";
+	string output_file = "output.xml";
 	PageDownloader downloader;
 	WordIndex index;
 	HTMLParser parser(start_url);
 	StopWords stop_words;
 	PageHistory history;
 	PageQueue queue;
-	XMLGenerator generator(&history, &index, start_url);
+	XMLGenerator generator(&history, &index, start_url, output_file);
 	string word;
 
 	//create new page and place in queue and history

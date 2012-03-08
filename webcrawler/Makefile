@@ -1,4 +1,4 @@
-BIN_FILE = bin/webcrawler
+BIN_FILE = bin/crawler
 MAIN_OBJ = obj/main.o
 OBJ_FILES = obj/Page.o obj/PageQueue.o obj/PageHistory.o obj/PageDownloader.o obj/URL.o obj/HTMLParser.o obj/Occurrence.o obj/OccurrenceSet.o obj/WordIndex.o obj/StopWords.o obj/XMLGenerator.o obj/WebCrawler.o
 TEST_BIN_FILE = bin/testProject1
