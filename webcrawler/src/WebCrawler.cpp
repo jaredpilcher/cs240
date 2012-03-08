@@ -53,8 +53,10 @@ void WebCrawler::CrawlWeb(){
 			  getline (file,line);
 			  page_text.append(line);
 			}
+			file.close();
 			cout << page_text << endl;
 		}else{
+			cout << "downloading page" << endl;
 			page_text = downloader.download(*page);
 		}
 		parser.setNewPage(page_text, page_url);
