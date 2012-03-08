@@ -38,7 +38,9 @@ void XMLGenerator::pageTags(){
 	Page * page;
 	createTag("pages");
 	while(!history->isEmpty()){
+		//cout << history->getSize() << endl;
 		page = history->pop();
+		//cout << page << endl;
 		createTag("page");
 		createTag("url");
 		addText(page->getURL());

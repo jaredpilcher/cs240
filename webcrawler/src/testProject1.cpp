@@ -32,14 +32,62 @@ bool StopWordsTest(ostream & os, bool success);
 bool XMLGeneratorTest(ostream & os, bool success);
 bool WebCrawlerTest(ostream & os, bool success);
 
+bool test(ostream & os, bool success){
+	//Multiple push test
+	occurrences.push(url);
+	occurrences.push(url2);
+	occurrences.push(url3);
+	occurrences.push(url4);
+	occurrences.push(url5);
+	occurrences.push(url6);
+	occurrences.push(url7);
+	occurrences.push(url8);
+	occurrences.push(url9);
+	occurrences.push(url10);
+	occurrences.push(url11);
+	occurrences.push(url12);
+	occurrences.push(url13);
+	occurrences.push(url14);
+	occurrences.push(url15);
+	occurrences.push(url16);
+	occurrences.push(url17);
+	occurrences.push(url18);
+	occurrences.push(url19);
+	occurrences.push(url20);
+	occurrences.push(url21);
+	occurrences.push(url22);
+	occurrences.push(url23);
+	occurrences.push(url24);
+	int i = 0;
+	while(!occurrences.isEmpty()){
+		i++;
+		occurrence = occurrences.pop();
+		TEST(occurrence.getURL()==url || occurrence.getURL()==url2 || 
+				occurrence.getURL()==url3 || occurrence.getURL()==url4 || 
+				occurrence.getURL()==url5 || occurrence.getURL()==url6 || 
+				occurrence.getURL()==url7 || occurrence.getURL()==url8 || 
+				occurrence.getURL()==url9 || occurrence.getURL()==url10 ||
+				occurrence.getURL()==url11 || occurrence.getURL()==url12 ||
+				occurrence.getURL()==url13 || occurrence.getURL()==url14 ||
+				occurrence.getURL()==url15 || occurrence.getURL()==url16 ||
+				occurrence.getURL()==url17 || occurrence.getURL()==url18 ||
+				occurrence.getURL()==url19 || occurrence.getURL()==url20 ||
+				occurrence.getURL()==url21 || occurrence.getURL()==url22 ||
+				occurrence.getURL()==url23 || occurrence.getURL()==url24);
+	}
+	cout << i << endl;
+	TEST(i==24);
+	return success;
+}
+
 int main(int argc, char* argv[]){
 	bool success=true;
+	/*
 	//Page Test
 	success = pageTest(cout, success);
 
 	//PageQueue Test
 	success = pageQueueTest(cout, success);
-
 	//PageHistory Test
 	success = pageHistoryTest(cout, success);
 
@@ -68,7 +116,7 @@ int main(int argc, char* argv[]){
 	//success = XMLGeneratorTest(cout, success);
 
 	//WebCrawler Test
-	success = WebCrawlerTest(cout, success);
+	success = WebCrawlerTest(cout, success);*/
 
 	if(success){
 		cout << "Success!" << endl;
@@ -461,6 +509,28 @@ bool OccurrenceSetTest(ostream & os, bool success){
 	string url = "http://www.google.com";
 	string url2 = "http://www.yahoo.com";
 	string url3 = "http://www.amazon.com";
+	string url4 = "http://www.amazon2.com";
+	string url5 = "http://www.amazon3.com";
+	string url6 = "http://www.amazon4.com";
+	string url7 = "http://www.amazon5.com";
+	string url8 = "http://www.amazon6.com";
+	string url9 = "http://www.amazon7.com";
+	string url10 = "http://www.amazon8.com";
+	string url11 = "http://www.amazon9.com";
+	string url12 = "http://www.amazon10.com";
+	string url13 = "http://www.amazon11.com";
+	string url14 = "http://www.amazon12.com";
+	string url15 = "http://www.amazon13.com";
+	string url16 = "http://www.amazon14.com";
+	string url17 = "http://www.amazon15.com";
+	string url18 = "http://www.amazon16.com";
+	string url19 = "http://www.amazon17.com";
+	string url20 = "http://www.amazon18.com";
+	string url21 = "http://www.amazon19.com";
+	string url22 = "http://www.amazon20.com";
+	string url23 = "http://www.amazon21.com";
+	string url24 = "http://www.amazon22.com";
+
 	OccurrenceSet occurrences;
 	Occurrence occurrence;
 
@@ -479,6 +549,7 @@ bool OccurrenceSetTest(ostream & os, bool success){
 	occurrences.push(url);
 	occurrences.push(url2);
 	occurrences.push(url2);
+
 	occurrence = occurrences.pop();
 	if(occurrence.getURL()==url){
 		TEST(occurrence.getCount()==1);
@@ -494,6 +565,51 @@ bool OccurrenceSetTest(ostream & os, bool success){
 		TEST(occurrence.getCount()==2);
 	}
 	TEST(occurrences.isEmpty());
+
+	//Multiple push test
+	occurrences.push(url);
+	occurrences.push(url2);
+	occurrences.push(url3);
+	occurrences.push(url4);
+	occurrences.push(url5);
+	occurrences.push(url6);
+	occurrences.push(url7);
+	occurrences.push(url8);
+	occurrences.push(url9);
+	occurrences.push(url10);
+	occurrences.push(url11);
+	occurrences.push(url12);
+	occurrences.push(url13);
+	occurrences.push(url14);
+	occurrences.push(url15);
+	occurrences.push(url16);
+	occurrences.push(url17);
+	occurrences.push(url18);
+	occurrences.push(url19);
+	occurrences.push(url20);
+	occurrences.push(url21);
+	occurrences.push(url22);
+	occurrences.push(url23);
+	occurrences.push(url24);
+	int i = 0;
+	while(!occurrences.isEmpty()){
+		i++;
+		occurrence = occurrences.pop();
+		TEST(occurrence.getURL()==url || occurrence.getURL()==url2 || 
+				occurrence.getURL()==url3 || occurrence.getURL()==url4 || 
+				occurrence.getURL()==url5 || occurrence.getURL()==url6 || 
+				occurrence.getURL()==url7 || occurrence.getURL()==url8 || 
+				occurrence.getURL()==url9 || occurrence.getURL()==url10 ||
+				occurrence.getURL()==url11 || occurrence.getURL()==url12 ||
+				occurrence.getURL()==url13 || occurrence.getURL()==url14 ||
+				occurrence.getURL()==url15 || occurrence.getURL()==url16 ||
+				occurrence.getURL()==url17 || occurrence.getURL()==url18 ||
+				occurrence.getURL()==url19 || occurrence.getURL()==url20 ||
+				occurrence.getURL()==url21 || occurrence.getURL()==url22 ||
+				occurrence.getURL()==url23 || occurrence.getURL()==url24);
+	}
+	cout << i << endl;
+	TEST(i==24);
 	return success;
 }
 
@@ -547,6 +663,7 @@ bool WordIndexTest(ostream & os, bool success){
 
 		//Test second occurrence
 		occurrence = occurrences->pop();
+	cout << "here2" << endl;
 		TEST(!occurrences->isEmpty());
 		TEST(occurrence.getCount()==1);
 		TEST(occurrence.getURL()==url || occurrence.getURL()==url2 || occurrence.getURL()==url3);
@@ -673,7 +790,7 @@ bool XMLGeneratorTest(ostream & os, bool success){
 
 bool WebCrawlerTest(ostream & os, bool success){
 	string start_url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawlindex.html";
-	string output_file = "/home/jared/cs240/webcrawler/output.xml";
+	string output_file = "output.xml";
 	string stop_words_file = "StopWordsTestFiles/stopwords.txt";
 	WebCrawler crawler(start_url, output_file, stop_words_file);
 	crawler.CrawlWeb();

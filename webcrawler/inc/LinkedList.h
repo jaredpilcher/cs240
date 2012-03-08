@@ -10,8 +10,7 @@ class LinkedList;
 
 //! LLNode implements a doubly-linked list node
 template <typename Type>
-class LLNode 
-{		
+class LLNode {		
 		friend class LinkedList<Type>;  //!< LinkedList can access private members of LLNode
 	public:
 	
@@ -69,8 +68,7 @@ class LLNode
 
 //! LinkedList implements a doubly-linked list
 template <typename Type>
-class LinkedList
-{
+class LinkedList{
 	public:
 	
 		//!  No-arg constructor.  Initializes an empty linked list

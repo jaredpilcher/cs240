@@ -86,7 +86,7 @@ private:
 	string findDescription();
 
 	//Grabs the next word in the sentence
-	string getNextWord(char * sentence);
+	string getNextWord(char* &sentence);
 	
 	//Grab the first 100 characters (excluding whitespace) of the tokenizer
 	string firstHundredChar(HTMLTokenizer tokenizer);
@@ -106,6 +106,9 @@ private:
 
 	//Determines if the given url is in scope
 	bool isInScope(URL url);
+
+	//Determines if the character is a word character
+	bool isWordChar(char character);
 };
 
 #endif /* HTMLPARSER_H_ */

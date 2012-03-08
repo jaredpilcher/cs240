@@ -25,7 +25,9 @@ bool PageHistory::push(Page * page){
 //@ret page - page pointer popped off
 //must verify that is empty before using this function
 Page * PageHistory::pop(){
+	cout << "here" << endl;
 	Page * page = history.PopValue();
+	cout << "here2" << endl;
 	return page;
 }
 

@@ -1,0 +1,23 @@
+Running CppCheckStyle!
+In File: src/testProject1.cpp
+  Cyclomatic Complexity Error (Max Complexity Allowed = 10):
+    Line 342: In function bool HTMLParserTest(ostream & os, bool success)
+      Function has cyclomatic complexity of 17
+
+  Function Length Error (Max Function Length Allowed = 50):
+    Line 182: In function bool URLTest(ostream & os, bool success)
+      Function length of 114
+    Line 342: In function bool HTMLParserTest(ostream & os, bool success)
+      Function length of 70
+    Line 501: In function bool WordIndexTest(ostream & os, bool success)
+      Function length of 79
+
+
+
+Justifications:
+    Cyclomatic Complexity Error: Cyclomatic Complexity gives an indication of the number of basic paths through a function. A function with high Cyclomatic Complexity becomes difficult to understand.
+    Function Length Error: Long functions are often not decomposed enough, and it is hard to tell what they do.
+
+Files Processed: 17
+Tests Run: 119
+Errors Found: 4

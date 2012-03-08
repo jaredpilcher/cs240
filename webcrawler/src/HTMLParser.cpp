@@ -34,7 +34,9 @@ void HTMLParser::findLinks(){
 		if(startsWith(token.GetValue(),"TITLE") || startsWith(token.GetValue(),"BODY")){
 			can_parse = !can_parse;
 		}
-		if(startsWith(token.GetValue(),"a ") && token.GetType()!=TAG_END && can_parse && token.GetType()!=COMMENT && !startsWith(token.GetValue(), "<!")){
+		if(startsWith(token.GetValue(),"a ") && token.GetType()!=TAG_END && 
+			can_parse && token.GetType()!=COMMENT && !startsWith(token.GetValue(), "<!")){
+
 			URL temp_url = token.GetAttribute("href");
 			if(isInScope(temp_url)){
 				temp_url.addBase(base_url);
@@ -60,7 +62,8 @@ void HTMLParser::findWords(){
 		if(startsWith(token.GetValue(),"TITLE") || startsWith(token.GetValue(),"BODY")){
 			can_parse = !can_parse;
 		}
-		if(token.GetType()==TEXT && can_parse && token.GetType()!=COMMENT && !startsWith(token.GetValue(), "<!")){
+		if(token.GetType()==TEXT && can_parse && token.GetType()!=COMMENT && 
+				!startsWith(token.GetValue(), "<!")){
 			insertWords(token);
 		}
 		token = tokenizer.GetNextToken();
@@ -71,40 +74,36 @@ void HTMLParser::findWords(){
 //@par page_text - the html string of the current page
 //@ret string - the description found on the page
 string HTMLParser::findDescription(){
+	string description = "";	
 	HTMLTokenizer tokenizer(page_text);
 	HTMLToken token = tokenizer.GetNextToken();
-	string title,h1,h2,h3,body;
 	bool got_title=false;
 	bool got_h1=false;
 	bool got_h2=false;
 	bool got_h3=false;
 	bool got_body=false;
 	while(1){
-		if(startsWith(token.GetValue(),"TITLE") && got_title==false){
-			title = tokenizer.GetNextToken().GetValue();
+		if(startsWith(token.GetValue(),"TITLE") && !got_title){
+			description = tokenizer.GetNextToken().GetValue();
 			got_title=true;
-		}else if(startsWith(token.GetValue(),"h1") && got_h1==false){
-			h1 = tokenizer.GetNextToken().GetValue();
+		}else if(startsWith(token.GetValue(),"h1") && !got_h1 && !got_title){
+			description = tokenizer.GetNextToken().GetValue();
 			got_h1=true;
-		}else if(startsWith(token.GetValue(),"h2") && got_h2==false){
-			h2 = tokenizer.GetNextToken().GetValue();
+		}else if(startsWith(token.GetValue(),"h2") && !got_h2 && !got_h1 && !got_title){
+			description = tokenizer.GetNextToken().GetValue();
 			got_h2=true;
-		}else if(startsWith(token.GetValue(),"h3") && got_h3==false){
-			h3 = tokenizer.GetNextToken().GetValue();
+		}else if(startsWith(token.GetValue(),"h3") && !got_h3 && !got_h2 && !got_h1 && !got_title){
+			description = tokenizer.GetNextToken().GetValue();
 			got_h3=true;
-		}else if(startsWith(token.GetValue(),"body") && got_body==false){
-			body = firstHundredChar(tokenizer);
+		}else if(startsWith(token.GetValue(),"body") && !got_body && !got_h3 
+					&& !got_h2 && !got_h1 && !got_title){
+			description = firstHundredChar(tokenizer);
 			got_body=true;
 		}
 		if(!tokenizer.HasNextToken()) break;
 		token = tokenizer.GetNextToken();
 	}
-	if(title.size()!=0) return title;
-	if(h1.size()!=0) return h1;
-	if(h2.size()!=0) return h2;
-	if(h3.size()!=0) return h3;
-	if(body.size()!=0) return body;
-	return "";
+	return description;
 }
 
 string HTMLParser::firstHundredChar(HTMLTokenizer tokenizer){
@@ -159,10 +158,11 @@ void HTMLParser::insertWords(HTMLToken token){
 	//TO DO LATER: Change this to a malloc
 	char value[MAX_CHAR_IN_LINE];
 	strcpy(value, token.GetValue().data());
+	char *temp_value_ptr = value;
 	//END TO DO LATER
 	string word;
-	while(strlen(value)!=0){
-		word = getNextWord(value);
+	while(strlen(temp_value_ptr)!=0){
+		word = getNextWord(temp_value_ptr);
 		if(!isWhiteSpace(word)){
 			words.Insert(word,words.GetLast());
 		}
@@ -170,42 +170,48 @@ void HTMLParser::insertWords(HTMLToken token){
 }
 
 bool HTMLParser::isWhiteSpace(string word){
-	return word.find(" ")!=npos || word.find("\n")!=npos || word.find("\t")!=npos || word.find("\r")!=npos;
+	return word.find(" ")!=npos || word.find("\n")!=npos || 
+				word.find("\t")!=npos || word.find("\r")!=npos;
 }
 
 //Grab the next word in the sentence
-string HTMLParser::getNextWord(char * sentence){
-	int start = 0;
-	int end = 0;
+string HTMLParser::getNextWord(char* &sentence){
+	int start = -1;
+	int end = -1;
 	bool started = false;
-	unsigned int i;
-	for(i=strlen(sentence);i>0;i--){
-		if(((sentence[i]>='a' && sentence[i]<='z') || (sentence[i]>='0' && sentence[i]<='9') || (sentence[i]>='A' && sentence[i]<='Z') || sentence[i]=='-' || sentence[i]=='_') && !started){
-			end=i;
+	unsigned int i=0;
+	char * return_string;
+	for(;i<strlen(sentence);++i){
+		if(isWordChar(sentence[i]) && !started){
+			start=i;
 			started=true;
 		}
-		if(!((sentence[i]>='a' && sentence[i]<='z') || (sentence[i]>='0' && sentence[i]<='9') || (sentence[i]>='A' && sentence[i]<='Z') || sentence[i]=='-' || sentence[i]=='_') && started){
-			start=i;
+		if(!isWordChar(sentence[i]) && started){
+			end=i;
 			break;
 		}
 	}
-	char * return_string;
-	if(i!=0){
-		return_string = &sentence[start+1];
-		sentence[i]=0;
-	}else if(sentence[0]==' '){
-		return_string = &sentence[start+1];
-		sentence[i]=0;
+	if(end==-1 && start==-1){
+		sentence = &sentence[strlen(sentence)];
+		return " ";
+	}else if(end!=-1 && start!=-1){
+		return_string = &sentence[start];
+		sentence[end]=0;
+		sentence = (&sentence[end])+1;
+		return return_string;
 	}else{
-		//TO DO LATER: change this to a malloc
-		char return_string_end[MAX_CHAR_IN_LINE];
-		strcpy(return_string_end,sentence);
-		//END TO DO LATER
-		return_string = return_string_end;
-		sentence[0]=0;
+		return_string = &sentence[start];
+		sentence = &sentence[strlen(sentence)];
+		return return_string;
 	}
-	sentence[end+1]=0;
-	return string(return_string);
+}
+
+bool HTMLParser::isWordChar(char character){
+	if((character>='a' && character<='z') || (character>='0' && character<='9') || 
+			(character>='A' && character<='Z') || character=='-' || character=='_'){
+		return true;
+	}
+	return false;
 }
 
 //Retrieves the description of the page

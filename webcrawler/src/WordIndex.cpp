@@ -24,7 +24,7 @@ void WordIndex::push(string word, const string url){
 	if(node==NULL){
 		OccurrenceSet * set = new OccurrenceSet();
 		set->push(url);
-		word_map.Insert(word,set);
+		word_map.Insert(word,set)==NULL;
 	}else{
 		node->GetValue()->push(url);
 	}

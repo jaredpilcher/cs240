@@ -20,7 +20,8 @@ class WebCrawler{
 		string stop_file;
 	public:
 		//Default Constructor
-		WebCrawler(string arg_url, string arg_output, string arg_stop): start_url(arg_url), output_file(arg_output), stop_file(arg_stop){
+		WebCrawler(string arg_url, string arg_output, string arg_stop): 
+			start_url(arg_url), output_file(arg_output), stop_file(arg_stop){
 		}
 
 		//Default Deconstructor

@@ -9,8 +9,7 @@ class BST;
 
 //!  BSTNode<Type, Type2> implements a binary search tree node
 template <typename Type, typename Type2>
-class BSTNode 
-{
+class BSTNode {
 		friend class BST<Type, Type2>;   //!< BST can access private members of BSTNode<Type, Type2>
 	
 	public:
@@ -74,6 +73,7 @@ class BSTNode
 			}
 			cout << "Node has: " << endl;
 			cout << ">>>>key: " << key << endl;
+			cout << ">>>>value: " << value << endl;
 			cout << ">>>>left: " << left << endl;
 			cout << ">>>>right: " << right << endl;
 			cout << ">>>>addr: " << this << endl;
@@ -99,13 +99,12 @@ class BSTNode
 			else{
 				if(right != NULL && left != NULL){
 					key = right->MinKey();
+					value = right->MinValue();
 					return right->Remove(key, this);
-				}
-				if(parent->left == this){
+				}else if(parent->left == this){
 					parent->left = (left != NULL) ? left : right;
 					return this;
-				}
-				if(parent->right == this){
+				}else if(parent->right == this){
 					parent->right = (left != NULL) ? left : right;
 					return this;
 				}
@@ -135,8 +134,7 @@ class BSTNode
 
 //!  BSTNode<Type, Type2> implements a binary search tree
 template <typename Type, typename Type2>
-class BST 
-{
+class BST {
 	
 	public:
 		//!  No-arg constructor.  Initializes an empty BSTNode<Type, Type2>
@@ -176,7 +174,8 @@ class BST
 		}
 
 
-		//!  @return true if the BSTNode<Type, Type2> is empty, or false if the BSTNode<Type, Type2> is not empty
+		//!  @return true if the BSTNode<Type, Type2> is empty, 
+		//!  or false if the BSTNode<Type, Type2> is not empty
 		bool IsEmpty() const{
 			return top == NULL;
 		}
@@ -204,7 +203,7 @@ class BST
 		//!  @return a pointer to the newly inserted node, or NULL if k was already
 		//!          in the tree (i.e., NULL is used to indicate a duplicate insertion)
 		BSTNode<Type, Type2> * Insert(const Type & k, const Type2 & v){	
-			if(Find(k)) return NULL;
+			if(Find(k)!=NULL) return NULL;
 			BSTNode<Type, Type2> * Node;
 			Node = new BSTNode<Type, Type2>(k,v);
 			insertNode(top,Node);
@@ -266,29 +265,36 @@ class BST
 
 		}
 
+
+		
+
 		//! @returns the smallest key in the tree
 		//! WARNING: Does not check to see that top is not NULL, must check first!!!
 		Type PopKey(){
-			Type min_key = top->MinKey();
-			Remove(min_key);
-			return min_key;
+			BSTNode<Type,Type2> * node = getSoloNode(top,NULL);
+			Type key = node->key;
+			delete node;
+			return key;
 		}
 
 		Type2 PopValue(){
-			Type min_key = top->MinKey();
-			return Pop(min_key);
+			return Pop();
 		}
 
-		Type2 Pop(Type min_key){
-			Type2 min_value = top->MinValue();
-			Remove(min_key);
-			return min_value;
+		Type2 Pop(){
+			BSTNode<Type,Type2> * node = getSoloNode(top,NULL);
+			cout << "here3" << endl;
+			Type2 value = node->value;
+			delete node;
+			return value;
 		}
 
 		Type2 PopVandK(Type & key){
-			Type min_key = top->MinKey();
-			key = min_key;
-			return Pop(min_key);
+			BSTNode<Type,Type2> * node = getSoloNode(top,NULL);
+			Type2 value = node->value;
+			key = node->key;
+			delete node;
+			return value;
 		}
 
 		//! @returns the smallest key in the list, or NULL if the list is empty
@@ -361,6 +367,31 @@ class BST
 			Node->left = copyTree(otherNode->left);
 			Node->right = copyTree(otherNode->right);
 			return Node;	
+		}
+
+		BSTNode<Type, Type2> * getSoloNode(BSTNode<Type,Type2>*current,BSTNode<Type,Type2>*parent){
+			cout << "in getSoloNode()" << endl;
+			cout << current << endl;
+			if(current->left!=NULL){// && current->left!=(BSTNode<Type,Type2>*)0xffffffff){
+				//cout << current->left << endl;
+				return getSoloNode(current->left,current);
+			}
+			if(current->right!=NULL){// && current->right!=(BSTNode<Type,Type2>*)0xffffffff){
+				cout << current->right << endl;
+				return getSoloNode(current->right,current);
+			}
+			if(parent==NULL){
+				cout << "parent is null" << endl;
+				return current;
+			}
+			if(parent->left == current){
+				parent->left = NULL;
+			}
+			if(parent->right == current){
+				parent->right = NULL;
+			}
+			return current;
+			
 		}
 		
  
