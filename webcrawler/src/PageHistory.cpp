@@ -7,6 +7,8 @@
 
 #include "PageHistory.h"
 
+//static int count =0;
+
 //Default Constructor
 PageHistory::PageHistory(){
 }
@@ -18,6 +20,7 @@ PageHistory::~PageHistory(){
 //Push the page onto the history BST
 //@par page - page to be inserted
 bool PageHistory::push(Page * page){
+       // cout << ++count << endl;
 	return history.Insert(page->getURL(),page) != NULL;
 }
 
@@ -25,9 +28,9 @@ bool PageHistory::push(Page * page){
 //@ret page - page pointer popped off
 //must verify that is empty before using this function
 Page * PageHistory::pop(){
-	cout << "here" << endl;
+	//cout << --count << endl;
 	Page * page = history.PopValue();
-	cout << "here2" << endl;
+	//cout << "in pagehistory pop" << endl;
 	return page;
 }
 

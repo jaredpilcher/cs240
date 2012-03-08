@@ -16,6 +16,7 @@
 #include <string>
 
 void WebCrawler::CrawlWeb(){
+	//cout << "Finished main loop" << endl;
 	PageDownloader downloader;
 	WordIndex index;
 	HTMLParser parser(start_url);
@@ -27,14 +28,14 @@ void WebCrawler::CrawlWeb(){
 
 	//create new page and place in queue and history
 	Page* page = new Page(start_url);
-	cout << queue.getSize() << endl;
+	//cout << queue.getSize() << endl;
 	queue.push(page);
-	cout << queue.getSize() << endl;
-	cout << history.getSize() << endl;
+	//cout << queue.getSize() << endl;
+	//cout << history.getSize() << endl;
 	history.push(page);
-	cout << history.getSize() << endl;
+	//cout << history.getSize() << endl;
 	history.push(page);
-	cout << history.getSize() << endl;
+	//cout << history.getSize() << endl;
 
 	stop_words.getWords(stop_file);
 	while(!queue.isEmpty()){
@@ -61,7 +62,6 @@ void WebCrawler::CrawlWeb(){
 		//Get links from html, create new page and push on queue and history
 		while(parser.hasNextLink()){
 			
-			cout << history.getSize() << endl;
 			link = parser.getLink();
 			if(!isHTML(link)) continue;
 			page=new Page(link);
@@ -69,12 +69,10 @@ void WebCrawler::CrawlWeb(){
 				queue.push(page);
 				continue;
 			}
-			cout << history.getSize() << endl;
 			delete page;
 		}
 
 	}
-
 	generator.writeFile();
 	cout << "end" << endl;
 

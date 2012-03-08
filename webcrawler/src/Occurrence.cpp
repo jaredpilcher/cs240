@@ -34,3 +34,7 @@ string Occurrence::getURL(){
 int Occurrence::getCount(){
 	return count;
 }
+
+void Occurrence::setURL(string arg_url){
+	url=arg_url;
+}

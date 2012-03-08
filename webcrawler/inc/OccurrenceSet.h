@@ -35,6 +35,8 @@ public:
 	//Returns whether or not the occurrence set is empty
 	bool isEmpty();
 
+	void print();
+
 private:
 	//The BST that holds the set of occurrences
 	BST<string,Occurrence*> occurrences;

@@ -28,8 +28,6 @@ void OccurrenceSet::push(string url){
 	if(node==NULL){
 		Occurrence * occurrence = new Occurrence(url);
 		occurrence->addOccurrence();
-		static int count = 0;
-        cout << "push count: " << ++count << endl;
 		occurrences.Insert(url,occurrence);
 	}else{
 		node->GetValue()->addOccurrence();
@@ -41,8 +39,10 @@ void OccurrenceSet::push(string url){
 Occurrence OccurrenceSet::pop(){
 	
 	Occurrence * temp_ptr = occurrences.PopValue();
-	static int count = 0;
-	cout << "pop count: " << ++count << endl;
+	//cout << "in pop" << endl;
+	//cout << occurrences.GetSize() << endl;
+	//occurrences.print();
+	//cout << "in occurrenceset pop" << endl;
 	Occurrence temp(*temp_ptr);
 	delete temp_ptr;
 	return temp;
@@ -51,4 +51,9 @@ Occurrence OccurrenceSet::pop(){
 //Returns whether or not the occurrence set is empty
 bool OccurrenceSet::isEmpty(){
 	return occurrences.IsEmpty();
+}
+
+//Prints
+void OccurrenceSet::print(){
+	occurrences.print();
 }

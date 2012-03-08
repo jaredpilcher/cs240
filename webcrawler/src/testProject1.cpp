@@ -32,58 +32,11 @@ bool StopWordsTest(ostream & os, bool success);
 bool XMLGeneratorTest(ostream & os, bool success);
 bool WebCrawlerTest(ostream & os, bool success);
 
-bool test(ostream & os, bool success){
-	//Multiple push test
-	occurrences.push(url);
-	occurrences.push(url2);
-	occurrences.push(url3);
-	occurrences.push(url4);
-	occurrences.push(url5);
-	occurrences.push(url6);
-	occurrences.push(url7);
-	occurrences.push(url8);
-	occurrences.push(url9);
-	occurrences.push(url10);
-	occurrences.push(url11);
-	occurrences.push(url12);
-	occurrences.push(url13);
-	occurrences.push(url14);
-	occurrences.push(url15);
-	occurrences.push(url16);
-	occurrences.push(url17);
-	occurrences.push(url18);
-	occurrences.push(url19);
-	occurrences.push(url20);
-	occurrences.push(url21);
-	occurrences.push(url22);
-	occurrences.push(url23);
-	occurrences.push(url24);
-	int i = 0;
-	while(!occurrences.isEmpty()){
-		i++;
-		occurrence = occurrences.pop();
-		TEST(occurrence.getURL()==url || occurrence.getURL()==url2 || 
-				occurrence.getURL()==url3 || occurrence.getURL()==url4 || 
-				occurrence.getURL()==url5 || occurrence.getURL()==url6 || 
-				occurrence.getURL()==url7 || occurrence.getURL()==url8 || 
-				occurrence.getURL()==url9 || occurrence.getURL()==url10 ||
-				occurrence.getURL()==url11 || occurrence.getURL()==url12 ||
-				occurrence.getURL()==url13 || occurrence.getURL()==url14 ||
-				occurrence.getURL()==url15 || occurrence.getURL()==url16 ||
-				occurrence.getURL()==url17 || occurrence.getURL()==url18 ||
-				occurrence.getURL()==url19 || occurrence.getURL()==url20 ||
-				occurrence.getURL()==url21 || occurrence.getURL()==url22 ||
-				occurrence.getURL()==url23 || occurrence.getURL()==url24);
-	}
-	cout << i << endl;
-	TEST(i==24);
-	return success;
-}
 
 int main(int argc, char* argv[]){
 	bool success=true;
-	/*
-	//Page Test
+	
+	/*//Page Test
 	success = pageTest(cout, success);
 
 	//PageQueue Test
@@ -101,12 +54,12 @@ int main(int argc, char* argv[]){
 	success = HTMLParserTest(cout, success);
 
 	//Occurrence Test
-	success = OccurrenceTest(cout, success);
+	success = OccurrenceTest(cout, success);*/
 
 	//OccurrenceSet Test
 	success = OccurrenceSetTest(cout, success);
 
-	//WordIndex Test
+	/*//WordIndex Test
 	success = WordIndexTest(cout, success);
 
 	//StopWords Test
@@ -214,8 +167,9 @@ bool pageHistoryTest(ostream & os, bool success){
 	
 	//No items in history
 	TEST(0==history.getSize());
-	
+	cout << sizeof(page) << endl;
 	delete page;
+	delete page2;
 	return success;
 
 }
@@ -591,6 +545,8 @@ bool OccurrenceSetTest(ostream & os, bool success){
 	occurrences.push(url22);
 	occurrences.push(url23);
 	occurrences.push(url24);
+	cout << "occurrences: " << endl;
+	occurrences.print();
 	int i = 0;
 	while(!occurrences.isEmpty()){
 		i++;
@@ -608,7 +564,6 @@ bool OccurrenceSetTest(ostream & os, bool success){
 				occurrence.getURL()==url21 || occurrence.getURL()==url22 ||
 				occurrence.getURL()==url23 || occurrence.getURL()==url24);
 	}
-	cout << i << endl;
 	TEST(i==24);
 	return success;
 }
@@ -663,7 +618,6 @@ bool WordIndexTest(ostream & os, bool success){
 
 		//Test second occurrence
 		occurrence = occurrences->pop();
-	cout << "here2" << endl;
 		TEST(!occurrences->isEmpty());
 		TEST(occurrence.getCount()==1);
 		TEST(occurrence.getURL()==url || occurrence.getURL()==url2 || occurrence.getURL()==url3);
@@ -789,7 +743,7 @@ bool XMLGeneratorTest(ostream & os, bool success){
 }
 
 bool WebCrawlerTest(ostream & os, bool success){
-	string start_url = "http://students.cs.byu.edu/~cs240ta/crawler_tests/crawlindex.html";
+	string start_url = "http://lightplanet.com/mormons/people/joseph_smith/index.html";
 	string output_file = "output.xml";
 	string stop_words_file = "StopWordsTestFiles/stopwords.txt";
 	WebCrawler crawler(start_url, output_file, stop_words_file);

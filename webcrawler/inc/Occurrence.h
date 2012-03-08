@@ -30,6 +30,7 @@ public:
 
 	string getURL();
 	int getCount();
+	void setURL(string arg_url);
 
 private:
 	//The number of times the occurrence happens

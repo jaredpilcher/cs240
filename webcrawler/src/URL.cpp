@@ -29,7 +29,8 @@ URL::~URL(){
 }
 
 string URL::getURL(){
-	return string(stored_url);
+	string return_string = stored_url;
+	return return_string;
 }
 
 URL& URL::operator=(const URL& other){
