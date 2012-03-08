@@ -66,22 +66,18 @@ void XMLGenerator::wordTags(){
 		createTag("/value");
 		while(!occurrences->isEmpty()){
 			createTag("occurrence");
-			//cout << "here2" << endl;
 			occurrence = occurrences->pop();
-			//cout << "here3" << endl;
 			createTag("url");
 			addText(occurrence.getURL());
-			//cout << "here4" << endl;
 			createTag("/url");
 			createTag("count");
 			sprintf(count_string,"%d",occurrence.getCount());
-			//cout << "here5" << endl;
 			addText(count_string);
 			createTag("/count");
 			createTag("/occurrence");
 		}
-		//cout << "here6" << endl;
 		createTag("/word");
+		delete occurrences;
 	}
 	createTag("/index");
 }

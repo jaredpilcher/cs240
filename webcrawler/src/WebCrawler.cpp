@@ -16,7 +16,6 @@
 #include <string>
 
 void WebCrawler::CrawlWeb(){
-	//cout << "Finished main loop" << endl;
 	PageDownloader downloader;
 	WordIndex index;
 	HTMLParser parser(start_url);
@@ -28,14 +27,9 @@ void WebCrawler::CrawlWeb(){
 
 	//create new page and place in queue and history
 	Page* page = new Page(start_url);
-	//cout << queue.getSize() << endl;
 	queue.push(page);
-	//cout << queue.getSize() << endl;
-	//cout << history.getSize() << endl;
 	history.push(page);
-	//cout << history.getSize() << endl;
 	history.push(page);
-	//cout << history.getSize() << endl;
 
 	stop_words.getWords(stop_file);
 	while(!queue.isEmpty()){

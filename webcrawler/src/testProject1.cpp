@@ -545,8 +545,8 @@ bool OccurrenceSetTest(ostream & os, bool success){
 	occurrences.push(url22);
 	occurrences.push(url23);
 	occurrences.push(url24);
-	cout << "occurrences: " << endl;
-	occurrences.print();
+	//cout << "occurrences: " << endl;
+	//occurrences.print();
 	int i = 0;
 	while(!occurrences.isEmpty()){
 		i++;

@@ -19,12 +19,13 @@ WordIndex::~WordIndex(){
 //@par word - the word to be indexed
 //@par url - the url that the word was found on
 void WordIndex::push(string word, const string url){
-	BSTNode<string,OccurrenceSet*> * node = word_map.Find(word);
 	ToLower(word);
+	BSTNode<string,OccurrenceSet*> * node = word_map.Find(word);
+
 	if(node==NULL){
 		OccurrenceSet * set = new OccurrenceSet();
 		set->push(url);
-		word_map.Insert(word,set)==NULL;
+		word_map.Insert(word,set);
 	}else{
 		node->GetValue()->push(url);
 	}

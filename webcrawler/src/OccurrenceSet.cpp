@@ -39,10 +39,6 @@ void OccurrenceSet::push(string url){
 Occurrence OccurrenceSet::pop(){
 	
 	Occurrence * temp_ptr = occurrences.PopValue();
-	//cout << "in pop" << endl;
-	//cout << occurrences.GetSize() << endl;
-	//occurrences.print();
-	//cout << "in occurrenceset pop" << endl;
 	Occurrence temp(*temp_ptr);
 	delete temp_ptr;
 	return temp;

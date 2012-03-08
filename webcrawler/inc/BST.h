@@ -256,8 +256,6 @@ class BST {
 				aux_top.SetLeft(top);
 				BSTNode<Type, Type2> * removed_node = top->Remove(k,&aux_top);
 				top=aux_top.GetLeft();
-				cout << "\nremoved node:" << endl;
-				removed_node->print();
 				if(removed_node != NULL){
 					delete removed_node;
 					--size;
@@ -270,8 +268,6 @@ class BST {
 			else{
 				BSTNode<Type, Type2> * removed_node = top->Remove(k,NULL);
 				if(removed_node != NULL){
-				cout << "\nremoved node:" << endl;
-				removed_node->print();
 					delete removed_node;
 					--size;
 					return true;
@@ -295,14 +291,7 @@ class BST {
 		Type2 PopValue(){
 			Type min_key = top->MinKey();
 			Type2 value = top->MinValue();
-			/*cout << "key: " << min_key << endl;
-			cout << "value: " << value << endl;
-			cout << "node count: " << CountNodes(top) << endl;*/
-			cout << "\nNew Tree: " << endl;
-			print();
 			Remove(min_key);
-			/*cout << "node count: " << CountNodes(top) << endl;
-			cout << "find min_key?: " << Find(min_key) << endl;*/
 			return value;
 		}
 
