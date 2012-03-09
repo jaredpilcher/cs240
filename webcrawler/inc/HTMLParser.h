@@ -34,7 +34,7 @@ class HTMLParser{
 public:
 	//Default Constructor
 	HTMLParser(string arg_start){
-		lowerRoot(arg_start);
+		arg_start = lowerRoot(arg_start);
 		
 		start_url.setURLBase(arg_start);
 	}
@@ -88,7 +88,7 @@ private:
 	string findDescription();
 
 	//Grabs the next word in the sentence
-	string getNextWord(char* &sentence);
+	string getNextWord(string& word, string sentence);
 	
 	//Grab the first 100 characters (excluding whitespace) of the tokenizer
 	string firstHundredChar(HTMLTokenizer tokenizer);
@@ -117,7 +117,10 @@ private:
 	void toLowerChar(char & character);
 
 	//Changes the base of the url to lower case
-	void lowerRoot(string url);
+	string lowerRoot(string url);
+
+	//Determines if word starts with an invalid character
+	bool startsWithNumber(string word);
 };
 
 #endif /* HTMLPARSER_H_ */

@@ -6,7 +6,14 @@
  */
 #ifndef WEBCRAWLER_H_
 #define WEBCRAWLER_H_
-
+#include "PageDownloader.h"
+#include "WordIndex.h"
+#include "HTMLParser.h"
+#include "StopWords.h"
+#include "PageHistory.h"
+#include "PageQueue.h"
+#include "XMLGenerator.h"
+#include "Page.h"
 #include <string>
 using namespace std;
 
@@ -49,6 +56,9 @@ class WebCrawler{
 
 		//Returns the extension of the filename
 		string getExtension(string url);
+
+		//Get links from html, create new page and push on queue and history
+		void gatherLinks(HTMLParser& parser, PageHistory& history, PageQueue& queue);
 };
 
 #endif /* WEBCRAWLER_H_ */

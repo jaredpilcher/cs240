@@ -57,10 +57,10 @@ int main(int argc, char* argv[]){
 	success = OccurrenceTest(cout, success);*/
 
 	//OccurrenceSet Test
-	success = OccurrenceSetTest(cout, success);
+	//success = OccurrenceSetTest(cout, success);
 
-	/*//WordIndex Test
-	success = WordIndexTest(cout, success);
+	//WordIndex Test
+	//success = WordIndexTest(cout, success);
 
 	//StopWords Test
 	success = StopWordsTest(cout, success);
@@ -69,7 +69,7 @@ int main(int argc, char* argv[]){
 	//success = XMLGeneratorTest(cout, success);
 
 	//WebCrawler Test
-	success = WebCrawlerTest(cout, success);*/
+	//success = WebCrawlerTest(cout, success);
 
 	if(success){
 		cout << "Success!" << endl;

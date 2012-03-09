@@ -40,6 +40,7 @@ public:
 	//Removes all items after ?
 	void stripQuery(string& url);
 
+
 private:
 	char stored_url[URL_SIZE];
 

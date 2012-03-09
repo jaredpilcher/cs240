@@ -5,15 +5,6 @@
  *      Author: jared
  */
 #include "WebCrawler.h"
-#include "PageDownloader.h"
-#include "WordIndex.h"
-#include "HTMLParser.h"
-#include "StopWords.h"
-#include "PageHistory.h"
-#include "PageQueue.h"
-#include "XMLGenerator.h"
-#include "Page.h"
-#include <string>
 
 #define MAX_LINE 32000
 
@@ -25,30 +16,26 @@ void WebCrawler::CrawlWeb(){
 	PageHistory history;
 	PageQueue queue;
 	XMLGenerator generator(&history, &index, start_url, output_file);
-	string word, link;
+	string word;
 	ifstream file;
 	string line;
 	string page_text;
-
 	//create new page and place in queue and history
 	Page* page = new Page(start_url);
 	queue.push(page);
 	history.push(page);
 	history.push(page);
-
 	stop_words.getWords(stop_file);
 	while(!queue.isEmpty()){
 		//pop page from queue
 		page = queue.pop();
-
 		//Download page
 		//Parse string returned from downloader
 		string page_url = page->getURL();
 		if(page_url[0]=='/'){
 			page_text = "";
 			file.open(page_url.data());
-			while (file.good())
-			{
+			while (file.good()){
 			  getline (file,line);
 			  page_text.append(line);
 			}
@@ -58,35 +45,41 @@ void WebCrawler::CrawlWeb(){
 		}
 		parser.setNewPage(page_text, page_url);
 		parser.parsePage();
-
 		//Grab the description and set to page
 		page->setDescription(parser.getDescription());
 
 		//Go through the html document and index words
 		while(!parser.isEmpty()){
 			word =parser.getWord();
+			cout << "checking word: " << word << endl;
 			if(!stop_words.isStopWord(word)){
+				cout << "word passed: " << word << endl;
 				index.push(word, page->getURL());
 			}
 		}
 
-		//Get links from html, create new page and push on queue and history
-		while(parser.hasNextLink()){
-			link = parser.getLink();
-			if(!isHTML(link)) continue;
-			page=new Page(link);
-			if(history.push(page)){
-				queue.push(page);
-				continue;
-			}
-			delete page;
-		}
+		gatherLinks(parser,history,queue);
 
 	}
-	cout << "Finished Loop" << endl;
 	generator.writeFile();
-	cout << "end" << endl;
+}
 
+//Get links from html, create new page and push on queue and history
+void WebCrawler::gatherLinks(HTMLParser& parser, PageHistory& history, PageQueue& queue){
+	Page* page;
+	string link;
+	while(parser.hasNextLink()){
+		link = parser.getLink();
+		if(!isHTML(link)){
+			continue;
+		}
+		page=new Page(link);
+		if(history.push(page)){
+			queue.push(page);
+			continue;
+		}
+		delete page;
+	}
 }
 
 
@@ -95,7 +88,7 @@ bool WebCrawler::isHTML(string url){
 	if(url[url.size()-1]=='/') return true;
 	if(!hasExtension(url)) return true;
 	if(hasCorrectExtension(url)) return true;
-	return true;
+	return false;
 }
 
 bool WebCrawler::hasExtension(string url){
@@ -121,7 +114,6 @@ bool WebCrawler::hasCorrectExtension(string url){
 	if(extension=="html" || extension=="htm" || extension=="shtml" || 
 		extension=="cgi" || extension=="jsp" || extension=="asp"   || 
 		extension=="aspx"|| extension=="php" || extension=="pl"    || extension=="cfm"){
-		
 		return true;
 	}
 	return false;

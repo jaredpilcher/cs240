@@ -10,7 +10,9 @@
 #include <string>
 #include <fstream>
 #include <stdlib.h>
+#include "StringUtil.h"
 using namespace std;
+using namespace StringUtil;
 #define MAX_WORDS 64000
 #define MAX_CHAR_IN_LINE 32000
 

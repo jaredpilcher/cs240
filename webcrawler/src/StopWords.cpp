@@ -6,7 +6,6 @@
  */
 #include "StopWords.h"
 
-
 //Default Constructor
 StopWords::StopWords():count(0){
 
@@ -38,7 +37,8 @@ int comparator(const void * key,const void * other){
 //Determines if the given word is a stop word
 //@par word - word to be found
 bool StopWords::isStopWord(string word){
-	return bsearch(&word, stop_words, count, sizeof(stop_words[0]), comparator) != NULL;
+	ToLower(word);
+	return bsearch(&word, stop_words, count+1, sizeof(stop_words[0]), comparator) != NULL;
 }
 
 unsigned int StopWords::getCount(){

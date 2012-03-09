@@ -15,11 +15,11 @@ static const size_t npos = -1;
 //Finds all words and links found in page_text
 //@par page_text - the html text of the new page
 //@par arg_url - url of the page being crawled
-void HTMLParser::setNewPage(const string & arg_page_text, const string arg_url){
+void HTMLParser::setNewPage(const string & arg_page_text, string arg_url){
 	words.Clear();
 	links.Clear();
 	page_text = arg_page_text;
-	lowerRoot(arg_url);
+	arg_url = lowerRoot(arg_url);
 	base_url = arg_url;
 }
 
@@ -34,17 +34,18 @@ void HTMLParser::findLinks(){
 	HTMLToken token = tokenizer.GetNextToken();
 	bool can_parse = false;
 	while(tokenizer.HasNextToken()){
-		if(startsWith(token.GetValue(),"TITLE") || startsWith(token.GetValue(),"BODY")){
+		if((startsWith(token.GetValue(),"TITLE") || startsWith(token.GetValue(),"BODY"))  && 
+				token.GetType()!=TEXT ){
 			can_parse = !can_parse;
 		}
-		if(startsWith(token.GetValue(),"a ") && token.GetType()!=TAG_END && 
+		if(startsWith(token.GetValue(),"a") && token.GetType()!=TAG_END && 
 			can_parse && token.GetType()!=COMMENT && !startsWith(token.GetValue(), "<!")){
 
-			URL temp_url = token.GetAttribute("href");	
+			URL temp_url = token.GetAttribute("href");
 			if(!startsWith(temp_url.getURL(),"http") && !startsWith(temp_url.getURL(),"file")){
 				temp_url.addBase(base_url);
 			}else if(startsWith(temp_url.getURL(),"http")){
-				lowerRoot(temp_url.getURL());
+				temp_url.setURL(lowerRoot(temp_url.getURL()));
 			}
 			if(isInScope(temp_url)){
 				links.Insert(temp_url, links.GetLast());
@@ -60,8 +61,7 @@ bool HTMLParser::isInScope(URL url){
 }
 
 //makes all of the 
-void HTMLParser::lowerRoot(string url){
-	string temp_url;
+string HTMLParser::lowerRoot(string url){
 	int slash_count = 0;
 	for(unsigned int i=0;i<url.size();++i){
 		if(url[i]=='/'){
@@ -70,6 +70,7 @@ void HTMLParser::lowerRoot(string url){
 		if(slash_count==3) break;
 		toLowerChar(url[i]);
 	}
+	return url;
 }
 
 void HTMLParser::findWords(){
@@ -77,12 +78,17 @@ void HTMLParser::findWords(){
 	HTMLToken token = tokenizer.GetNextToken();
 	bool can_parse = false;
 	while(tokenizer.HasNextToken()){
-		if(startsWith(token.GetValue(),"TITLE") || startsWith(token.GetValue(),"BODY")){
+		if((startsWith(token.GetValue(),"TITLE") || startsWith(token.GetValue(),"BODY")) && 
+				token.GetType()!=TEXT){
 			can_parse = !can_parse;
 		}
-		if(token.GetType()==TEXT && can_parse && token.GetType()!=COMMENT && 
-				!startsWith(token.GetValue(), "<!")){
-			insertWords(token);
+		cout << "Token: " << token.GetValue() << endl;
+		cout << "Type Test: " << (token.GetType()==TEXT) << endl;
+		cout << "can parse: " << can_parse << endl;
+		cout << "starts with test: " << !startsWith(token.GetValue(), "<!") << endl;
+		if(token.GetType()==TEXT && can_parse && !startsWith(token.GetValue(), "<!")){
+				//cout << "Trying to insert: " << token.GetValue() << endl;
+				insertWords(token);
 		}
 		token = tokenizer.GetNextToken();
 	}
@@ -105,7 +111,12 @@ string HTMLParser::findDescription(){
 			description = tokenizer.GetNextToken().GetValue();
 			got_title=true;
 		}else if(startsWith(token.GetValue(),"h1") && !got_h1 && !got_title){
-			description = tokenizer.GetNextToken().GetValue();
+			token = tokenizer.GetNextToken();
+			if(token.GetType()!=TEXT){
+				description = tokenizer.GetNextToken().GetValue();
+			}else{
+				description = token.GetValue();
+			}
 			got_h1=true;
 		}else if(startsWith(token.GetValue(),"h2") && !got_h2 && !got_h1 && !got_title){
 			description = tokenizer.GetNextToken().GetValue();
@@ -115,7 +126,9 @@ string HTMLParser::findDescription(){
 			got_h3=true;
 		}else if(startsWith(token.GetValue(),"body") && !got_body && !got_h3 
 					&& !got_h2 && !got_h1 && !got_title){
+			//cout << "here" << endl;
 			description = firstHundredChar(tokenizer);
+			//cout << description << endl;
 			got_body=true;
 		}
 		if(!tokenizer.HasNextToken()) break;
@@ -128,33 +141,36 @@ string HTMLParser::firstHundredChar(HTMLTokenizer tokenizer){
 	string value;
 	string hundred_char;
 	int char_count = 0;
+	bool got_space;
 	while(tokenizer.HasNextToken()){
 		HTMLToken token = tokenizer.GetNextToken();
 		if(token.GetType()!=TEXT || token.GetType()==COMMENT) continue;
 		if(startsWith(token.GetValue(),"Body")) return hundred_char;
-	
 		value = token.GetValue();
 		for(unsigned int i=0;i<value.size();++i){
-			hundred_char.append(1,value[i]);
+			if(value[i]!='\t' && value[i]!='\n' && value[i]!='\r') hundred_char.append(1,value[i]);
 			if(value[i]!=' ' && value[i]!='\t' && value[i]!='\n' && value[i]!='\r'){
 				++char_count;
 			}
 			if(char_count==100) return hundred_char;
 		}
+		if(hundred_char[hundred_char.size()-1]!=' ')hundred_char.append(" ");
 		
 	}
-	return "";
+	return hundred_char;
 }
 
 bool HTMLParser::startsWith(string line,string substring){
 	toCapital(line);
 	toCapital(substring);
-	for(unsigned int i=0;i<substring.size() && i<line.size();++i){
+	unsigned int i=0;
+	for(;i<substring.size() && i<line.size();++i){
 		if(line[i]==substring[i]){
 			continue;
 		}
 		return false;
 	}
+	if(i<substring.size()) return false;
 	return true;
 }
 
@@ -179,15 +195,13 @@ void HTMLParser::printWords(){
 
 
 void HTMLParser::insertWords(HTMLToken token){
-	//TO DO LATER: Change this to a malloc
-	char value[MAX_CHAR_IN_LINE];
-	strcpy(value, token.GetValue().data());
-	char *temp_value_ptr = value;
-	//END TO DO LATER
 	string word;
-	while(strlen(temp_value_ptr)!=0){
-		word = getNextWord(temp_value_ptr);
-		if(!isWhiteSpace(word)){
+	string sentence = token.GetValue();
+	while(sentence.size()>0){
+		//cout << "sentence: " << sentence << endl;
+		sentence = getNextWord(word, sentence);
+		if(word.size()>0){
+			//cout << "actually inserting: " << word << endl;
 			words.Insert(word,words.GetLast());
 		}
 	}
@@ -199,35 +213,56 @@ bool HTMLParser::isWhiteSpace(string word){
 }
 
 //Grab the next word in the sentence
-string HTMLParser::getNextWord(char* &sentence){
-	int start = -1;
-	int end = -1;
+string HTMLParser::getNextWord(string& word, string sentence){
+	int start = 0;
+	int end = 0;
 	bool started = false;
+	bool finished = false;
+	string return_string;
 	unsigned int i=0;
-	char * return_string;
-	for(;i<strlen(sentence);++i){
+	for(;i<sentence.size();++i){
 		if(isWordChar(sentence[i]) && !started){
 			start=i;
 			started=true;
 		}
 		if(!isWordChar(sentence[i]) && started){
+			//cout << "here6" << endl;
 			end=i;
+			finished=true;
 			break;
 		}
 	}
-	if(end==-1 && start==-1){
-		sentence = &sentence[strlen(sentence)];
-		return " ";
-	}else if(end!=-1 && start!=-1){
-		return_string = &sentence[start];
-		sentence[end]=0;
-		sentence = (&sentence[end])+1;
-		return return_string;
-	}else{
-		return_string = &sentence[start];
-		sentence = &sentence[strlen(sentence)];
-		return return_string;
+	//cout << "finished: " << finished << endl;
+	//cout << "start: " << start << endl;
+	
+	if(!started){
+		//cout << "here1" << endl;
+		word = "";
+		return "";
+	}else if(!finished && !startsWithNumber(sentence.substr(start))){
+		//cout << "here2" << endl;
+		word = sentence.substr(start);
+		return "";
+	}else if(!startsWithNumber(sentence.substr(start,end-start))){
+		//cout << "here3" << endl;
+		word = sentence.substr(start,end-start);
+		//cout << "end: " << end << endl;
+		return sentence.substr(end+1);
+	}else if(i!=sentence.size()){
+		//cout << "here4" << endl;
+		word = "";
+		return sentence.substr(end+1);
 	}
+		//cout << "here5" << endl;
+	word = "";
+	return "";
+}
+
+bool HTMLParser::startsWithNumber(string word){
+	if((word[0]>='a' && word[0]<='z') || (word[0]>='A' && word[0]<='Z')){
+		return false;
+	}
+	return true;
 }
 
 bool HTMLParser::isWordChar(char character){

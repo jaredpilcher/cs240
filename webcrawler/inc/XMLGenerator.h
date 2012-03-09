@@ -34,7 +34,8 @@ class XMLGenerator{
 	string output_file;
 public:
 	//Default constructor
-	XMLGenerator(PageHistory * arg_history, WordIndex * arg_index, string arg_start_url, string arg_output): 
+	XMLGenerator(PageHistory * arg_history, WordIndex * arg_index, 
+					string arg_start_url, string arg_output): 
 			history(arg_history), index(arg_index), start_url(arg_start_url), output_file(arg_output) {
 	}
 

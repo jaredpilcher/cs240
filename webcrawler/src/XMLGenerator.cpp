@@ -61,6 +61,7 @@ void XMLGenerator::wordTags(){
 	while(!index->isEmpty()){
 		createTag("word");
 		occurrences = index->pop(indexed_word);
+		cout << "popped word: " << indexed_word << endl;
 		createTag("value");
 		addText(indexed_word);
 		createTag("/value");
