@@ -68,7 +68,7 @@ MEMMAIN_O = $(CONT_OBJ)memcheck_main.o
 
 # This macro should be used to store all of the object files created 
 # from *your* source files
-MY_OBJS =  
+MY_OBJS =  $(CONT_OBJ)IChessController.o
 
 # These are all the object files that go into the library
 LIB_OBJS = $(VIEW_OBJ)ChessView.o \
@@ -139,7 +139,7 @@ $(MEXE): $(MEMMAIN_O) $(MY_OBJS) $(CHESS_LIB)
 	
 
 # Main object file
-$(MAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.h
+$(MAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.h $(CONT_INC)IChessController.h
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MAIN_O) -c $(LOG_FLAG) $(CONT_SRC)main.cpp
 
 # Main .o for memory testing
@@ -151,6 +151,10 @@ $(MEMMAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessVi
 ################################################################################
 # Targets for YOUR object files...
 
+# Main object file
+$(CONT_OBJ)IChessController.o: $(CONT_SRC)IChessController.cpp $(CONT_INC)IChessController.h $(VIEW_INC)ChessView.h
+	g++ -c -Wall -o $(CONT_OBJ)IChessController.o $(INCLUDES) $(CONT_SRC)IChessController.cpp
+	@#g++ $(INCLUDES) -o $(CONT_OBJ)IChessController.o -c $(CONT_SRC)IChessController.cpp
 
 
 
