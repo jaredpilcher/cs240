@@ -106,6 +106,7 @@ clean:
 	@rm -f $(CONT_OBJ)*.o
 	@rm -f $(EXE)
 	@rm -f $(MEXE)
+	@rm -f $(LIB_FOLDER)*.o
 
 
 ################################################################################
@@ -127,14 +128,14 @@ clean:
 # in the actual library file.
 $(EXE): $(MAIN_O) $(MY_OBJS) $(CHESS_LIB)
 	@# Re-link executable. Again, this should link the library file, not the .o's
-	@g++ $(INCLUDES) -o $(EXE) $(MAIN_O) $(MY_OBJS) $(CFLAGS) $(LIBS) -L$(LIB_FOLDER) -lchess
-	@chmod ugo+x $(EXE)
+	@g++ $(INCLUDES) -o $(EXE) $(MAIN_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(CFLAGS) $(LIBS)
+	export LD_LIBRARY_PATH=/users/home1/guest/j/jpilcher/cs240/chess/lib; $(EXE)
 
 # Executable for memory testing
 $(MEXE): $(MEMMAIN_O) $(MY_OBJS) $(CHESS_LIB)
 	@# Re-link executable. Again, this should link the library file, not the .o's
-	@g++ $(INCLUDES) -o $(MEXE) $(MEMMAIN_O) $(MY_OBJS) $(CFLAGS) $(LIBS) -L$(LIB_FOLDER) -lchess
-	@chmod ugo+x $(MEXE)
+	@g++ $(INCLUDES) -o $(MEXE) $(MEMMAIN_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(CFLAGS) $(LIBS)
+	export LD_LIBRARY_PATH=/users/home1/guest/j/jpilcher/cs240/chess/lib; $(MEXE)
 	
 
 # Main object file
@@ -178,4 +179,4 @@ $(VIEW_OBJ)SelectDialog.o: $(VIEW_SRC)SelectDialog.cpp
 ################################################################################
 # Targets for GUI-related share library
 $(CHESS_LIB): $(LIB_OBJS)
-	g++ -shared -o $(LIB_FOLDER)libchess.so -fPIC $(LIB_OBJS)
+	g++ -shared -o libchess.so -fPIC $(LIB_OBJS)
