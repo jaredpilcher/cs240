@@ -46,7 +46,7 @@ virtual void on_SaveGameAs(){
  * Handle when the user selected the load game button.
  */
 virtual void on_LoadGame(){
-	view->SelectLoadFile();
+	//view->SelectLoadFile();
 }
 
 /**
