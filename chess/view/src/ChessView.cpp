@@ -109,6 +109,7 @@ void ChessView::on_NewGame()
 
 	if(controller != 0)
 	{
+
 		controller->on_NewGame();
 	}
 }
@@ -147,7 +148,6 @@ void ChessView::on_LoadGame()
 	/*
 	Called when someone selects 'Open' from the toolbar, 'Game' menu, or presses 'Ctrl-O'.
 	*/
-	
 	if(controller != 0)
 	{
 	  	controller->on_LoadGame();

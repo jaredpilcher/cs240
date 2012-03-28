@@ -4,55 +4,71 @@
  * Indicate to the player that the user clicked on the given
  * row and column with the mouse.
  */
-virtual void on_CellSelected(int row, int col, int button){
-	
+void IChessController::on_CellSelected(int row, int col, int button){
+	g_debug("IChessController::on_CellSelected");
 }
 
 ///@param row where drag began
 ///@param col where drag began
-virtual void on_DragStart(int row,int col){
+void IChessController::on_DragStart(int row,int col){
+	g_debug("IChessController::on_DragStart");
 
 }
 
 ///@param row where drag ended
 ///@param col where drag ended
 ///@return true if the drag resulted in a successful drop
-virtual bool on_DragEnd(int row,int col){
+bool IChessController::on_DragEnd(int row,int col){
+	g_debug("IChessController::on_DragEnd");
 	return false;
 }
 
 /**
  * Handle when the user selected the new game button.
+ * Calls to Board to reset pieces
+ * Calls to model to delete Current and History
  */
-virtual void on_NewGame(){
+void IChessController::on_NewGame(){
+	g_debug("IChessController::on_NewGame");
 
 }
 
 /**
  * Handle when the user selected the save game button.
+ * Calls to the Model to save the current file with 
+ * 		Current and History
  */
-virtual void on_SaveGame(){
+void IChessController::on_SaveGame(){
+	g_debug("IChessController::on_SaveGame");
 
 }
 
 /**
  * Handle when the user selected the save game as button.
+ * Calls to view to get the path
+ * Calls to the Model to save file with Current and History
  */
-virtual void on_SaveGameAs(){
-
+void IChessController::on_SaveGameAs(){
+	view->SelectSaveFile();
 }
 
 /**
- * Handle when the user selected the load game button.
+ * Handles when the user selected the load game button.
+ * Calls SelectLoadFile() to get file path.
+ * Calls to Model to read the file and load contents into
+ * 		Current and History objects in Model
  */
-virtual void on_LoadGame(){
-	//view->SelectLoadFile();
+void IChessController::on_LoadGame(){
+	view->SelectLoadFile();
 }
 
 /**
  * Handle when the user selected the undo move button.
+ * Grabs last move from History and instructs the board to 
+ * 	undo those moves
  */
-virtual void on_UndoMove(){
+void IChessController::on_UndoMove(){
+	g_debug("IChessController::on_UndoMove");
 
 }
 	
@@ -60,20 +76,24 @@ virtual void on_UndoMove(){
  * Handle when the user selects to quit the game, either through the
  * quit button, the close X button, or the file menu.
  */
-virtual void on_QuitGame(){
+void IChessController::on_QuitGame(){
+	g_debug("IChessController::on_QuitGame");
 
 }
 	
 /**
  * Handle when a timer event has been signaled.
+ * Calls Player timer Events
  */
-virtual void on_TimerEvent(){
+void IChessController::on_TimerEvent(){
+	//g_debug("IChessController::on_TimerEvent");
 
 }
 
 /**
  * Set the IChessView that this IChessController will handle inputs for.
  */
-virtual void SetView(IChessView* view){
-
+void IChessController::SetView(IChessView* view){
+	g_debug("IChessController::SetView");
+	this->view = view;
 }

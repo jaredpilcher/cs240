@@ -25,14 +25,17 @@ using namespace std;
 //object to your IChessController object using the SetController method.
 void connectController(ChessView& view, IChessController ** cont, int argc, char ** argv)
 {
+	//TO DO LATER!!!
 	// 1. Process command-line args
+	//END TO DO LATER!!!
 	
-	// 2. Initialize controller. This is tricky because it's a double pointer.
-	// Example:
-	//		(*cont) = new MyController(parameters);
+	(*cont) = new IChessController();
  
 	// 3. Connect the view and controller using the IChessController::SetView 
 	// and IChessView::SetController methods
+
+	view.SetController((*cont));
+	(*cont)->SetView(&view);
 }
 
 
@@ -101,7 +104,6 @@ void ChessGui_log_handler(const gchar *log_domain,
 
 int main(int argc,char ** argv)
 {
-
 	IChessController* controller = 0;	
 	
 	#ifndef MEMCHECK

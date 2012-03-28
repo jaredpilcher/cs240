@@ -2,13 +2,25 @@
 #define I_CHESS_CONTROLLER_H
 
 #include "IChessView.h"
+#include "Model.h"
+#include "Board.h"
 
-class ChessViewer;
+class ChessView;
 
+//Processes Events from gui
+//Makes all appropriate calls to Current and History 
+//	for storing/retrieving
 class IChessController
 {
-	ChessViewer * view;
+	IChessView * view;
+	Model model;
+	Board board;
+	
 public:
+	/**
+	 * Constructor
+	 */
+	IChessController(){}
 	
 	/**
 	 * Destructor

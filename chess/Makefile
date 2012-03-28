@@ -54,7 +54,7 @@ EXE = bin/chess			# normal executable
 MEXE = bin/mchess			# executable for memory testing
 
 # Macros for compilation flags
-INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC)
+INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) $(CFLAGS)
 DEBUG = #-g # Uncomment this if you want to compile with debug info
 
 # Uncomment the flag on this next line to turn off the logging messages from the
@@ -68,7 +68,12 @@ MEMMAIN_O = $(CONT_OBJ)memcheck_main.o
 
 # This macro should be used to store all of the object files created 
 # from *your* source files
-MY_OBJS =  $(CONT_OBJ)IChessController.o
+MY_OBJS =  $(CONT_OBJ)IChessController.o $(CONT_OBJ)Board.o \
+			$(CONT_OBJ)Player.o $(CONT_OBJ)Piece.o $(MODEL_OBJ)Model.o \
+			$(MODEL_OBJ)Current.o $(MODEL_OBJ)History.o $(MODEL_OBJ)Move.o \
+			$(MODEL_OBJ)XMLIO.o $(MODEL_OBJ)XML.o $(CONT_OBJ)Queen.o \
+			$(CONT_OBJ)Pawn.o $(CONT_OBJ)Knight.o $(CONT_OBJ)Rook.o \
+			$(CONT_OBJ)Bishop.o $(CONT_OBJ)King.o 
 
 # These are all the object files that go into the library
 LIB_OBJS = $(VIEW_OBJ)ChessView.o \
@@ -87,16 +92,17 @@ CHESS_LIB = lib/libchess.so
 ################################################################################
 # Pseudo-targets
 
-run: $(EXE)
-	$(EXE)
-
 bin: $(EXE)
+
+run: $(EXE)
+	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; $(EXE)
 
 # Run the executable for memory testing
 # Instructions: Edit the command below so that it runs the  
 # memory-check executable in Human-Human mode (i.e., add necessary command  
 # line arguments to the end of valgrind the command below).	
 memcheck: $(MEXE)
+	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; \
 	valgrind --tool=memcheck --leak-check=yes --max-stackframe=5000000 --show-reachable=yes --suppressions=string.supp $(MEXE) #command-line args go here
 
 # Clean removes all of the .o files, libraries, and executables
@@ -106,7 +112,8 @@ clean:
 	@rm -f $(CONT_OBJ)*.o
 	@rm -f $(EXE)
 	@rm -f $(MEXE)
-	@rm -f $(LIB_FOLDER)*.o
+	@rm -f $(LIB_FOLDER)*.so
+	
 
 
 ################################################################################
@@ -128,36 +135,95 @@ clean:
 # in the actual library file.
 $(EXE): $(MAIN_O) $(MY_OBJS) $(CHESS_LIB)
 	@# Re-link executable. Again, this should link the library file, not the .o's
-	@g++ $(INCLUDES) -o $(EXE) $(MAIN_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(CFLAGS) $(LIBS)
+	@g++ $(INCLUDES) -o $(EXE) $(MAIN_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(LIBS)
 	export LD_LIBRARY_PATH=/users/home1/guest/j/jpilcher/cs240/chess/lib; $(EXE)
 
 # Executable for memory testing
 $(MEXE): $(MEMMAIN_O) $(MY_OBJS) $(CHESS_LIB)
 	@# Re-link executable. Again, this should link the library file, not the .o's
-	@g++ $(INCLUDES) -o $(MEXE) $(MEMMAIN_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(CFLAGS) $(LIBS)
+	@g++ $(INCLUDES) -o $(MEXE) $(MEMMAIN_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(LIBS)
 	export LD_LIBRARY_PATH=/users/home1/guest/j/jpilcher/cs240/chess/lib; $(MEXE)
 	
 
 # Main object file
 $(MAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.h $(CONT_INC)IChessController.h
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MAIN_O) -c $(LOG_FLAG) $(CONT_SRC)main.cpp
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) -o $(MAIN_O) -c $(LOG_FLAG) $(CONT_SRC)main.cpp
 
 # Main .o for memory testing
 $(MEMMAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.h
-	g++ -DMEMCHECK $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MEMMAIN_O) -c $(LOG_FLAG) $(CONT_SRC)main.cpp
+	g++ -DMEMCHECK $(DEBUG) $(INCLUDES) $(CFLAGS) -o $(MEMMAIN_O) -c $(LOG_FLAG) $(CONT_SRC)main.cpp
 
 
 
 ################################################################################
 # Targets for YOUR object files...
 
-# Main object file
-$(CONT_OBJ)IChessController.o: $(CONT_SRC)IChessController.cpp $(CONT_INC)IChessController.h $(VIEW_INC)ChessView.h
+# Controller object file
+$(CONT_OBJ)IChessController.o: $(CONT_SRC)IChessController.cpp \
+		$(CONT_INC)IChessController.h $(VIEW_INC)ChessView.h \
+		$(MODEL_INC)Model.h $(CONT_INC)Board.h
 	g++ -c -Wall -o $(CONT_OBJ)IChessController.o $(INCLUDES) $(CONT_SRC)IChessController.cpp
-	@#g++ $(INCLUDES) -o $(CONT_OBJ)IChessController.o -c $(CONT_SRC)IChessController.cpp
+	
+# Board object file
+$(CONT_OBJ)Board.o: $(CONT_SRC)Board.cpp $(CONT_INC)Board.h $(CONT_INC)Player.h \
+	$(CONT_INC)Piece.h $(MODEL_INC)Move.h $(CONT_INC)Queen.h
+	g++ -c -Wall -o $(CONT_OBJ)Board.o $(INCLUDES) $(CONT_SRC)Board.cpp
 
+# Player object file
+$(CONT_OBJ)Player.o: $(CONT_SRC)Player.cpp $(CONT_INC)Player.h $(CONT_INC)Piece.h
+	g++ -c -Wall -o $(CONT_OBJ)Player.o $(INCLUDES) $(CONT_SRC)Player.cpp
+	
+# Piece object file
+$(CONT_OBJ)Piece.o: $(CONT_SRC)Piece.cpp $(CONT_INC)Piece.h $(CONT_INC)Board.h
+	g++ -c -Wall -o $(CONT_OBJ)Piece.o $(INCLUDES) $(CONT_SRC)Piece.cpp
+	
+# Model object file
+$(MODEL_OBJ)Model.o: $(MODEL_SRC)Model.cpp $(MODEL_INC)Model.h $(MODEL_INC)History.h $(MODEL_INC)Current.h $(MODEL_INC)XMLIO.h
+	g++ -c -Wall -o $(MODEL_OBJ)Model.o $(INCLUDES) $(MODEL_SRC)Model.cpp
+	
+# Current object file
+$(MODEL_OBJ)Current.o: $(MODEL_SRC)Current.cpp $(MODEL_INC)Current.h $(CONT_INC)Piece.h
+	g++ -c -Wall -o $(MODEL_OBJ)Current.o $(INCLUDES) $(MODEL_SRC)Current.cpp
+	
+# History object file
+$(MODEL_OBJ)History.o: $(MODEL_SRC)History.cpp $(MODEL_INC)History.h $(MODEL_INC)Move.h
+	g++ -c -Wall -o $(MODEL_OBJ)History.o $(INCLUDES) $(MODEL_SRC)History.cpp
+	
+# Move object file
+$(MODEL_OBJ)Move.o: $(MODEL_SRC)Move.cpp $(MODEL_INC)Move.h $(CONT_INC)Piece.h
+	g++ -c -Wall -o $(MODEL_OBJ)Move.o $(INCLUDES) $(MODEL_SRC)Move.cpp
 
+# XMLIO object file
+$(MODEL_OBJ)XMLIO.o: $(MODEL_SRC)XMLIO.cpp $(MODEL_INC)XMLIO.h $(MODEL_INC)XML.h
+	g++ -c -Wall -o $(MODEL_OBJ)XMLIO.o $(INCLUDES) $(MODEL_SRC)XMLIO.cpp
+	
+# XML object file
+$(MODEL_OBJ)XML.o: $(MODEL_SRC)XML.cpp $(MODEL_INC)XML.h
+	g++ -c -Wall -o $(MODEL_OBJ)XML.o $(INCLUDES) $(MODEL_SRC)XML.cpp
+	
+# Queen object file
+$(CONT_OBJ)Queen.o: $(CONT_SRC)Queen.cpp $(CONT_INC)Queen.h $(CONT_INC)Piece.h
+	g++ -c -Wall -o $(CONT_OBJ)Queen.o $(INCLUDES) $(CONT_SRC)Queen.cpp
+	
+# Pawn object file
+$(CONT_OBJ)Pawn.o: $(CONT_SRC)Pawn.cpp $(CONT_INC)Pawn.h $(CONT_INC)Piece.h
+	g++ -c -Wall -o $(CONT_OBJ)Pawn.o $(INCLUDES) $(CONT_SRC)Pawn.cpp
 
+# Knight object file
+$(CONT_OBJ)Knight.o: $(CONT_SRC)Knight.cpp $(CONT_INC)Knight.h $(CONT_INC)Piece.h
+	g++ -c -Wall -o $(CONT_OBJ)Knight.o $(INCLUDES) $(CONT_SRC)Knight.cpp
+	
+# Rook object file
+$(CONT_OBJ)Rook.o: $(CONT_SRC)Rook.cpp $(CONT_INC)Rook.h $(CONT_INC)Piece.h
+	g++ -c -Wall -o $(CONT_OBJ)Rook.o $(INCLUDES) $(CONT_SRC)Rook.cpp
+	
+# Bishop object file
+$(CONT_OBJ)Bishop.o: $(CONT_SRC)Bishop.cpp $(CONT_INC)Bishop.h $(CONT_INC)Piece.h
+	g++ -c -Wall -o $(CONT_OBJ)Bishop.o $(INCLUDES) $(CONT_SRC)Bishop.cpp
+	
+# King object file
+$(CONT_OBJ)King.o: $(CONT_SRC)King.cpp $(CONT_INC)King.h $(CONT_INC)Piece.h
+	g++ -c -Wall -o $(CONT_OBJ)King.o $(INCLUDES) $(CONT_SRC)King.cpp
 
 ################################################################################
 # Targets for GUI-related object files
@@ -183,4 +249,4 @@ $(VIEW_OBJ)SelectDialog.o: $(VIEW_SRC)SelectDialog.cpp
 ################################################################################
 # Targets for GUI-related share library
 $(CHESS_LIB): $(LIB_OBJS)
-	g++ -shared -o libchess.so -fPIC $(LIB_OBJS)
+	g++ -shared -o $(LIB_FOLDER)libchess.so -fPIC $(LIB_OBJS)

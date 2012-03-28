@@ -48,7 +48,7 @@
 
 ///@brief This class is the main interface between the Students code and the provided GUI
 ///
-///The Student will implement each of the signal handlers found in this class.
+///The Student will implement eachn of the signal handlers found in this class.
 ///It is permitted to add member data and functions.
 //The constructor and the destructor should be finished to suit the needs
 ///of the student.
