@@ -1,20 +1,29 @@
 #ifndef PIECE_GUARD
 #define PIECE_GUARD
 
+#include "IChessView.h"
+#define WHITE 0
+#define BLACK 1
+
+//Enum for subclasses to keep track of which type they are
+//Unsure if needed. Add if necessary
 enum pieceType { pawn, knight, rook, bishop, queen, king};
 
 class Board;
+class ChessView;
 
 /**
  * Base class for pieces
  */
 class Piece{
-	int row;
-	int col;
-	int type;
+protected:
+	int x;
+	int y;
 	int active;
 	int selected;
+	int color;
 	Board * board;
+	IChessView * view;
 public:
 	
 

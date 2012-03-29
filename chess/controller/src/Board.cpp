@@ -2,7 +2,7 @@
 
 
 //Default Constructor
-Board::Board(): turn(PLAYER1){
+Board::Board(): turn(PLAYER1), view(NULL){
 	initializePieces();
 }
 
@@ -62,10 +62,26 @@ void Board::checkMoveValid(Piece* piece, int from_row, int from_col,
 
 //Initializes the positions of all pieces on board
 void Board::initializePieces(){
-	for(int i =0; i<PIECES_PER_SIDE; ++i){
-		if(i<8){
-			pieces1[i] = new Queen();
-			pieces1[i] = new Queen();
+	initializeSide(pieces1, WHITE);
+	initializeSide(pieces2, BLACK);
+}
+
+/**
+ * Initializes the pieces passed in
+ */
+void Board::initializeSide(Piece** pieces, int color){
+	int i = 0;
+	for(;i<8;++i){
+		if(color==WHITE){
+			pieces[i] = new Pawn(i,1,WHITE, view);
+		}else{
+			pieces[i] = new Pawn(i,1,BLACK, view);
 		}
 	}
+	
+}
+
+//Sets the view that we are working with
+void Board::setView(IChessView * _view){
+	this->view= _view;
 }

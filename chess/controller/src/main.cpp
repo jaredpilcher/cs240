@@ -12,6 +12,7 @@
 #include "ChessGuiImages.h"
 #include "ChessView.h"
 #include "IChessController.h"
+#include "Board.h"
 
 #include <iostream>
 using namespace std;
@@ -23,12 +24,13 @@ using namespace std;
 //Create your instance of the IChessController interface here and connect it to
 //the game object using the SetView method.  Don't forget to connect the game
 //object to your IChessController object using the SetController method.
-void connectController(ChessView& view, IChessController ** cont, int argc, char ** argv)
+void connectController(ChessView& view, IChessController ** cont, Board ** board, int argc, char ** argv)
 {
 	//TO DO LATER!!!
 	// 1. Process command-line args
 	//END TO DO LATER!!!
 	
+	(*board) = new Board();
 	(*cont) = new IChessController();
  
 	// 3. Connect the view and controller using the IChessController::SetView 
@@ -36,6 +38,7 @@ void connectController(ChessView& view, IChessController ** cont, int argc, char
 
 	view.SetController((*cont));
 	(*cont)->SetView(&view);
+	(*cont)->SetBoard((*board));
 }
 
 
@@ -105,6 +108,7 @@ void ChessGui_log_handler(const gchar *log_domain,
 int main(int argc,char ** argv)
 {
 	IChessController* controller = 0;	
+	Board* board = 0;
 	
 	#ifndef MEMCHECK
 
@@ -127,7 +131,7 @@ int main(int argc,char ** argv)
 		
 		ChessView game;
 		
-		connectController(game, &controller, argc, argv);
+		connectController(game, &controller, &board, argc, argv);
 
 		game.run();
 
@@ -142,7 +146,7 @@ int main(int argc,char ** argv)
 		ChessView game(gladeFile);
 				
 		
-		connectController(game, &controller, argc, argv);		
+		connectController(game, &controller, &board, argc, argv);		
 		
 		
 		///run game
@@ -168,6 +172,7 @@ int main(int argc,char ** argv)
 	#endif
 	
 	delete controller;
+	delete board;
 
 	return 0;
 }

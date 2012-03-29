@@ -5,9 +5,14 @@
 #include "Piece.h"
 #include "Move.h"
 #include "Queen.h"
+#include "Pawn.h"
+#include "IChessView.h"
+
 #define PLAYER1 0
 #define PLAYER2 1
 #define PIECES_PER_SIDE 16
+
+class ChessView;
 
 //Contains two players with pieces and calls players to move their
 // stored pieces
@@ -24,6 +29,7 @@ class Board{
 	//Player's turn
 	int turn;
 	
+	IChessView * view;
 public:	
 	//Default Constructor
 	Board();
@@ -52,6 +58,9 @@ public:
 	
 	//Resets all pieces to original positions
 	void resetBoard();
+	
+	//Sets the view that we are working with
+	void setView(IChessView * _view);
 
 private:
 	//Highlights the given square
@@ -69,6 +78,11 @@ private:
 	
 	//Initializes the positions of all pieces on board
 	void initializePieces();
+	
+	/**
+	 * Initializes the pieces passed in
+	 */
+	void initializeSide(Piece** pieces, int color);
 };
 
 #endif

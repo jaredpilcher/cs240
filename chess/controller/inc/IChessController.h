@@ -3,9 +3,9 @@
 
 #include "IChessView.h"
 #include "Model.h"
-#include "Board.h"
 
 class ChessView;
+class Board;
 
 //Processes Events from gui
 //Makes all appropriate calls to Current and History 
@@ -14,7 +14,7 @@ class IChessController
 {
 	IChessView * view;
 	Model model;
-	Board board;
+	Board * board;
 	
 public:
 	/**
@@ -81,6 +81,11 @@ public:
 	 * Set the IChessView that this IChessController will handle inputs for.
 	 */
 	virtual void SetView(IChessView* view);
+	
+	/**
+	 * Set the Board that this IChessController will handle inputs for.
+	 */
+	virtual void SetBoard(Board* board);
 };
 
 #endif

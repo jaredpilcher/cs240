@@ -1,4 +1,5 @@
 #include "IChessController.h"
+#include "Board.h"
 
 /**
  * Indicate to the player that the user clicked on the given
@@ -96,4 +97,13 @@ void IChessController::on_TimerEvent(){
 void IChessController::SetView(IChessView* view){
 	g_debug("IChessController::SetView");
 	this->view = view;
+	this->board->setView(view);
+}
+
+/**
+ * Set the Board that this IChessController will handle inputs for.
+ */
+void IChessController::SetBoard(Board* board){
+	g_debug("IChessController::SetBoard");
+	this->board = board;
 }

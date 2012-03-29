@@ -2,11 +2,13 @@
 #define PAWN_GUARD
 
 #include "Piece.h"
+#include "ChessGuiDefines.h"
+#include "ChessView.h"
 
 class Pawn: public Piece{
 public:
 	//Constructor
-	Pawn(){}
+	Pawn(int _x, int _y, int color, IChessView * _view);
 	
 	//Destructor
 	~Pawn(){}
