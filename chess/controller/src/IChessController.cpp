@@ -7,6 +7,7 @@
  */
 void IChessController::on_CellSelected(int row, int col, int button){
 	g_debug("IChessController::on_CellSelected");
+	board->handleSelect(row, col);
 }
 
 ///@param row where drag began
@@ -97,7 +98,6 @@ void IChessController::on_TimerEvent(){
 void IChessController::SetView(IChessView* view){
 	g_debug("IChessController::SetView");
 	this->view = view;
-	this->board->setView(view);
 }
 
 /**

@@ -2,6 +2,8 @@
 #define PIECE_GUARD
 
 #include "IChessView.h"
+#include "ChessGuiDefines.h"
+#include "ChessView.h"
 #define WHITE 0
 #define BLACK 1
 

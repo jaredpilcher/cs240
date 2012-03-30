@@ -6,7 +6,7 @@
 class Bishop: public Piece{
 public:
 	//Constructor
-	Bishop(){}
+	Bishop(int _x, int _y, int color, IChessView * _view);
 	
 	//Destructor
 	~Bishop(){}

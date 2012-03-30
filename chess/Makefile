@@ -174,7 +174,8 @@ $(CONT_OBJ)Player.o: $(CONT_SRC)Player.cpp $(CONT_INC)Player.h $(CONT_INC)Piece.
 	g++ -c -Wall -o $(CONT_OBJ)Player.o $(INCLUDES) $(CONT_SRC)Player.cpp
 	
 # Piece object file
-$(CONT_OBJ)Piece.o: $(CONT_SRC)Piece.cpp $(CONT_INC)Piece.h $(CONT_INC)Board.h
+$(CONT_OBJ)Piece.o: $(CONT_SRC)Piece.cpp $(CONT_INC)Piece.h $(CONT_INC)Board.h \
+	$(VIEW_INC)IChessView.h $(VIEW_INC)ChessGuiDefines.h $(VIEW_INC)ChessView.h
 	g++ -c -Wall -o $(CONT_OBJ)Piece.o $(INCLUDES) $(CONT_SRC)Piece.cpp
 	
 # Model object file

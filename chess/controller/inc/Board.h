@@ -6,11 +6,24 @@
 #include "Move.h"
 #include "Queen.h"
 #include "Pawn.h"
+#include "Rook.h"
+#include "Knight.h"
+#include "Bishop.h"
+#include "King.h"
 #include "IChessView.h"
+#include <list>
+#include <iostream>
 
 #define PLAYER1 0
 #define PLAYER2 1
 #define PIECES_PER_SIDE 16
+
+using namespace std;
+
+struct square{
+	int row;
+	int col;
+};
 
 class ChessView;
 
@@ -30,9 +43,11 @@ class Board{
 	int turn;
 	
 	IChessView * view;
+	
+	list<square> lit_squares;
 public:	
 	//Default Constructor
-	Board();
+	Board(IChessView* _view);
 	
 	//Destructor
 	~Board();
@@ -58,9 +73,6 @@ public:
 	
 	//Resets all pieces to original positions
 	void resetBoard();
-	
-	//Sets the view that we are working with
-	void setView(IChessView * _view);
 
 private:
 	//Highlights the given square
@@ -83,6 +95,11 @@ private:
 	 * Initializes the pieces passed in
 	 */
 	void initializeSide(Piece** pieces, int color);
+	
+	/*
+	 * Determines if the square is currently lit
+	 */
+	 bool isLit(int row, int column);
 };
 
 #endif

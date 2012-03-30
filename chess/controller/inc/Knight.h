@@ -6,7 +6,7 @@
 class Knight: public Piece{
 public:
 	//Constructor
-	Knight(){}
+	Knight(int _x, int _y, int color, IChessView * _view);
 	
 	//Destructor
 	~Knight(){}

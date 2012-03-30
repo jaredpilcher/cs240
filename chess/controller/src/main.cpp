@@ -30,15 +30,16 @@ void connectController(ChessView& view, IChessController ** cont, Board ** board
 	// 1. Process command-line args
 	//END TO DO LATER!!!
 	
-	(*board) = new Board();
+	(*board) = new Board(&view);
 	(*cont) = new IChessController();
  
 	// 3. Connect the view and controller using the IChessController::SetView 
 	// and IChessView::SetController methods
 
 	view.SetController((*cont));
-	(*cont)->SetView(&view);
 	(*cont)->SetBoard((*board));
+	(*cont)->SetView(&view);
+	
 }
 
 
@@ -148,6 +149,7 @@ int main(int argc,char ** argv)
 		
 		connectController(game, &controller, &board, argc, argv);		
 		
+		g_debug("Main::Before game start");
 		
 		///run game
 		game.run(myapp);

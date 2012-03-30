@@ -6,7 +6,7 @@
 class King: public Piece{
 public:
 	//Constructor
-	King(){}
+	King(int _x, int _y, int color, IChessView * _view);
 	
 	//Destructor
 	~King(){}

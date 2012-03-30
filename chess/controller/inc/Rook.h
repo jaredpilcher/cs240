@@ -6,7 +6,7 @@
 class Rook: public Piece{
 public:
 	//Constructor
-	Rook(){}
+	Rook(int _x, int _y, int color, IChessView * _view);
 	
 	//Destructor
 	~Rook(){}

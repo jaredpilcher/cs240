@@ -1,11 +1,7 @@
 #ifndef PAWN_GUARD
 #define PAWN_GUARD
-//START HERE: 3-29-12
-//SEG FAULTS
-//INCLUDE THESE IN MAKE FILE
+
 #include "Piece.h"
-#include "ChessGuiDefines.h"
-#include "ChessView.h"
 
 class Pawn: public Piece{
 public:

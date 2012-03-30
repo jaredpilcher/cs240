@@ -13,7 +13,7 @@ class Board;
 class IChessController
 {
 	IChessView * view;
-	Model model;
+	//Model model;
 	Board * board;
 	
 public:

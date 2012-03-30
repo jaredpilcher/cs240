@@ -6,7 +6,7 @@
 class Queen: public Piece{
 public:
 	//Constructor
-	Queen(){}
+	Queen(int _x, int _y, int color, IChessView * _view);
 	
 	//Destructor
 	~Queen(){}
