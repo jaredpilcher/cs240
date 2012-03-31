@@ -1,14 +1,12 @@
 #include "King.h"
+#include "Board.h"
 
 //Constructor
-King::King(int _x, int _y, int _color, IChessView * _view){
-	x = _x;
-	y = _y;
-	color = _color;
-	view = _view;
+King::King(int _row, int _col, int _color, IChessView * _view):
+		Piece(_row,_col,_color,_view){
 	if(color == WHITE){
-		view->PlacePiece(_x,_y,W_KING);
+		view->PlacePiece(_row,_col,W_KING);
 	}else{
-		view->PlacePiece(_x,_y,B_KING);
+		view->PlacePiece(_row,_col,B_KING);
 	}
 }

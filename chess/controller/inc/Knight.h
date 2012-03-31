@@ -6,7 +6,7 @@
 class Knight: public Piece{
 public:
 	//Constructor
-	Knight(int _x, int _y, int color, IChessView * _view);
+	Knight(int _row, int _col, int color, IChessView * _view);
 	
 	//Destructor
 	~Knight(){}
@@ -14,21 +14,14 @@ public:
 	/**
 	 * Called when the piece is selected
 	 */
-	void selectPiece(){}
+	list<square> selectPiece(){}
 	
 	/**
 	 * Called after piece is selected
 	 * Determines if move is valid
 	 */
-	 int selectCell(){}
+	 int selectCell(int row, int col){return 1;}
 	 
-	 int getRow(){}
-	 
-	 int getCol(){}
-	 
-	 int getActive(){}
-	 
-	 int getSelected(){}
 	
 };
 

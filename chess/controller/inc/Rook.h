@@ -6,7 +6,7 @@
 class Rook: public Piece{
 public:
 	//Constructor
-	Rook(int _x, int _y, int color, IChessView * _view);
+	Rook(int _row, int _col, int color, IChessView * _view);
 	
 	//Destructor
 	~Rook(){}
@@ -14,21 +14,13 @@ public:
 	/**
 	 * Called when the piece is selected
 	 */
-	void selectPiece(){}
+	list<square> selectPiece(){}
 	
 	/**
 	 * Called after piece is selected
 	 * Determines if move is valid
 	 */
-	 int selectCell(){}
-	 
-	 int getRow(){}
-	 
-	 int getCol(){}
-	 
-	 int getActive(){}
-	 
-	 int getSelected(){}
+	 int selectCell(int row, int col){return 1;}
 	
 };
 

@@ -20,11 +20,6 @@
 
 using namespace std;
 
-struct square{
-	int row;
-	int col;
-};
-
 class ChessView;
 
 //Contains two players with pieces and calls players to move their
@@ -41,6 +36,11 @@ class Board{
 	
 	//Player's turn
 	int turn;
+	
+	//Last Piece Selected
+	int prev_piece;
+	
+	int prev_row, prev_col;
 	
 	IChessView * view;
 	
@@ -100,6 +100,36 @@ private:
 	 * Determines if the square is currently lit
 	 */
 	 bool isLit(int row, int column);
+	 
+	 /*
+	  * Highlights and unhighlights appropriate squares
+	  */
+	  void highlightSquares(int row, int col);
+	  
+	  /*
+	   * determines if a piece is on the specified square
+	   */
+	   bool isObject(int row, int col);
+	   
+	   /*
+	    * determines if the row and column were the last ones selected
+	    */
+	   bool sameAsLast(int row, int col);
+	   
+	   /*
+	    * Returns the piece pointer of the object with these coordinates
+	    */
+	   Piece* getPiece(int row, int col);
+	   
+	   /*
+	    * highlights all squares in the list
+	    */
+	   bool highlightList(list<square>& squares);
+	   
+	   /*
+	    * Determine if the selected piece is the right player
+	    */
+	   bool correctPlayer(int row, int col);
 };
 
 #endif

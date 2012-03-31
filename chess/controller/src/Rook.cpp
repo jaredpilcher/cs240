@@ -1,15 +1,13 @@
 #include "Rook.h"
+#include "Board.h"
 
 
 //Constructor
-Rook::Rook(int _x, int _y, int _color, IChessView * _view){
-	x = _x;
-	y = _y;
-	color = _color;
-	view = _view;
+Rook::Rook(int _row, int _col, int _color, IChessView * _view):
+		Piece(_row,_col,_color,_view){
 	if(color == WHITE){
-		view->PlacePiece(_x,_y,W_ROOK);
+		view->PlacePiece(_row,_col,W_ROOK);
 	}else{
-		view->PlacePiece(_x,_y,B_ROOK);
+		view->PlacePiece(_row,_col,B_ROOK);
 	}
 }

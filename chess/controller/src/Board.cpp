@@ -1,8 +1,10 @@
 #include "Board.h"
+#include <iostream>
 
 
 //Default Constructor
-Board::Board(IChessView* _view): turn(PLAYER1), view(_view){
+Board::Board(IChessView* _view): turn(PLAYER1), view(_view), 
+		prev_row(-1), prev_col(-1), prev_piece(NULL){
 	this->view= _view;
 	initializePieces();
 }
@@ -29,16 +31,44 @@ Board::~Board(){
 	//Creates a move object and passes it back
 	//includes pieces destroyed
 void Board::handleSelect(int row, int col){
-	if(isLit(row,col)){
-		g_debug("Square is lit");
-		unlightSquares();
+	highlightSquares(row, col);
+	
+	
+	prev_row = row;
+	prev_col = col;
+}
+
+void Board::highlightSquares(int row, int col){
+	if(isObject(row, col)){
+		//g_debug("Found Piece!");
+		if(sameAsLast(row, col)){
+			//g_debug("Same as Last!");
+			unlightSquares();
+		}
+		else if(correctPlayer(row, col)){
+			//g_debug("Correct Player!");
+			Piece * temp_piece = getPiece(row, col);
+			//std::cout << "temp_piece " << temp_piece << std::endl;
+			unlightSquares();
+			list<square> temp_squares = temp_piece->selectPiece();
+			//std::cout << "temp_squares: " << temp_squares.size() << std::endl;
+			highlightList(temp_squares);
+		}else{
+			unlightSquares();
+		}
 	}else{
-		lightSquare(row,col);
-		square temp_square;
-		temp_square.row = row;
-		temp_square.col = col;
-		lit_squares.push_front(temp_square);
+		
 	}
+	//if(isLit(row,col)){
+		//g_debug("Square is lit");
+		//unlightSquares();
+	//}else{
+		//lightSquare(row,col);
+		//square temp_square;
+		//temp_square.row = row;
+		//temp_square.col = col;
+		//lit_squares.push_front(temp_square);
+	//}
 }
 
 //Uses the passed in Move object to move the pieces back
@@ -54,13 +84,13 @@ void Board::resetBoard(){
 
 //Highlights the given square
 void Board::lightSquare(int row, int col){
-	 view->HighlightSquare(row, col,64);
+	 view->HighlightSquare(row, col, 65535);
+	 lit_squares.push_front((square){row,col});
 }
 
 //Unhighlight all squares
 void Board::unlightSquares(){
 	list<square>::iterator it;
-	square temp_square;
 	for(it = lit_squares.begin();it!=lit_squares.end();it++){
 		view->UnHighlightSquare((*it).row,(*it).col);
 	}
@@ -140,12 +170,62 @@ void Board::initializeSide(Piece** pieces, int color){
 }
 
 bool Board::isLit(int row, int col){
-		g_debug("here");
 	list<square>::iterator it;
 	for(it = lit_squares.begin();it!=lit_squares.end();it++){
 		if(((*it).row == row) && ((*it).col == col)){
 			return true;
 		}
+	}
+	return false;
+}
+
+bool Board::isObject(int row, int col){
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		if(pieces1[i]->getRow() == row && pieces1[i]->getCol() == col){
+				return true;
+		}
+		if(pieces2[i]->getRow() == row && pieces2[i]->getCol() == col){
+				return true;
+		}
+	}
+	return false;
+}
+
+bool Board::sameAsLast(int row, int col){
+	return row==prev_row && col==prev_col;
+}
+
+bool Board::correctPlayer(int row, int col){
+	 Piece ** pieces;
+	if(turn==PLAYER1){
+		pieces=pieces1;
+	}else{
+		pieces=pieces2;
+	}
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		if(pieces[i]->getRow() == row && pieces[i]->getCol() == col){
+				return true;
+		}
+	}
+	return false;
+}
+
+Piece* Board::getPiece(int row, int col){
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		if(pieces1[i]->getRow() == row && pieces1[i]->getCol() == col){
+				return pieces1[i];
+		}
+		if(pieces2[i]->getRow() == row && pieces2[i]->getCol() == col){
+				return pieces2[i];
+		}
+	}
+	return NULL;
+}
+
+bool Board::highlightList(list<square>& squares){
+	list<square>::iterator it;
+	for(it = squares.begin();it!=squares.end();it++){
+		lightSquare((*it).row, (*it).col);
 	}
 	return false;
 }

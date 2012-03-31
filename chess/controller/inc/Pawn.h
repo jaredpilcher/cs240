@@ -4,9 +4,10 @@
 #include "Piece.h"
 
 class Pawn: public Piece{
+	int first_time;
 public:
 	//Constructor
-	Pawn(int _x, int _y, int color, IChessView * _view);
+	Pawn(int _row, int _col, int color, IChessView * _view);
 	
 	//Destructor
 	~Pawn(){}
@@ -14,21 +15,13 @@ public:
 	/**
 	 * Called when the piece is selected
 	 */
-	void selectPiece(){}
+	list<square> selectPiece();
 	
 	/**
 	 * Called after piece is selected
 	 * Determines if move is valid
 	 */
-	 int selectCell(){}
-	 
-	 int getRow(){}
-	 
-	 int getCol(){}
-	 
-	 int getActive(){}
-	 
-	 int getSelected(){}
+	 int selectCell(int row, int col);
 	
 };
 
