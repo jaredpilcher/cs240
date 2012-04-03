@@ -32,33 +32,75 @@ Board::~Board(){
 	//includes pieces destroyed
 void Board::handleSelect(int row, int col){
 	highlightSquares(row, col);
-	
-	
-	prev_row = row;
-	prev_col = col;
 }
 
 void Board::highlightSquares(int row, int col){
+	int temp_row = row;
+	int temp_col = col;
 	if(isObject(row, col)){
-		//g_debug("Found Piece!");
+		g_debug("Found Piece!");
 		if(sameAsLast(row, col)){
-			//g_debug("Same as Last!");
+			g_debug("Same as Last!");
+			unselectObjects();
 			unlightSquares();
+			temp_row = -1;
+			temp_col = -1;
 		}
 		else if(correctPlayer(row, col)){
-			//g_debug("Correct Player!");
+			g_debug("Correct Player!");
 			Piece * temp_piece = getPiece(row, col);
 			//std::cout << "temp_piece " << temp_piece << std::endl;
 			unlightSquares();
+			unselectObjects();
 			list<square> temp_squares = temp_piece->selectPiece();
 			//std::cout << "temp_squares: " << temp_squares.size() << std::endl;
 			highlightList(temp_squares);
 		}else{
-			unlightSquares();
+			g_debug("Not an Object!");
+			if(isObjectSelected()){
+				g_debug("Piece was selected!");
+				Piece* destroyed_piece = getPiece(row, col);
+				bool success_select = notifyObject(row,col);
+				std::cout << "success_select: " << success_select << endl;
+				if(success_select){
+					switchTurns();
+					if(destroyed_piece != NULL){
+						destroyed_piece->destroyObject();
+					}
+				}
+				unselectObjects();
+				unlightSquares();
+				temp_row = -1;
+				temp_col = -1;
+			}else{
+				g_debug("Piece was not selected!");
+				unselectObjects();
+				unlightSquares();
+			}
 		}
 	}else{
+		g_debug("Not an Object!");
+		if(isObjectSelected()){
+			g_debug("Piece was selected!");
+			bool success_select = notifyObject(row,col);
+			std::cout << "success_select: " << success_select << endl;
+			if(success_select){
+				switchTurns();
+			}
+			unselectObjects();
+			unlightSquares();
+			temp_row = -1;
+			temp_col = -1;
+		}else{
+			g_debug("Piece was not selected!");
+			unselectObjects();
+			unlightSquares();
+		}
 		
 	}
+	
+	prev_row = temp_row;
+	prev_col = temp_col;
 	//if(isLit(row,col)){
 		//g_debug("Square is lit");
 		//unlightSquares();
@@ -121,48 +163,48 @@ void Board::initializeSide(Piece** pieces, int color){
 	int i = 0;
 	if(color==WHITE){
 		for(;i<8;++i){
-			pieces[i] = new Pawn(6,i,WHITE, view);
+			pieces[i] = new Pawn(6,i,WHITE, view, this);
 		}
 	}else{
 		for(;i<8;++i){
-			pieces[i] = new Pawn(1,i,BLACK, view);
+			pieces[i] = new Pawn(1,i,BLACK, view, this);
 		}
 	}
 	
 	if(color==WHITE){
-		pieces[i++] = new Rook(7,0,WHITE, view);
-		pieces[i++] = new Rook(7,7,WHITE, view);
+		pieces[i++] = new Rook(7,0,WHITE, view, this);
+		pieces[i++] = new Rook(7,7,WHITE, view, this);
 	}else{
-		pieces[i++] = new Rook(0,0,BLACK, view);
-		pieces[i++] = new Rook(0,7,BLACK, view);
+		pieces[i++] = new Rook(0,0,BLACK, view, this);
+		pieces[i++] = new Rook(0,7,BLACK, view, this);
 	}
 	
 	if(color==WHITE){
-		pieces[i++] = new Knight(7,1,WHITE, view);
-		pieces[i++] = new Knight(7,6,WHITE, view);
+		pieces[i++] = new Knight(7,1,WHITE, view, this);
+		pieces[i++] = new Knight(7,6,WHITE, view, this);
 	}else{
-		pieces[i++] = new Knight(0,1,BLACK, view);
-		pieces[i++] = new Knight(0,6,BLACK, view);
+		pieces[i++] = new Knight(0,1,BLACK, view, this);
+		pieces[i++] = new Knight(0,6,BLACK, view, this);
 	}
 	
 	if(color==WHITE){
-		pieces[i++] = new Bishop(7,2,WHITE, view);
-		pieces[i++] = new Bishop(7,5,WHITE, view);
+		pieces[i++] = new Bishop(7,2,WHITE, view, this);
+		pieces[i++] = new Bishop(7,5,WHITE, view, this);
 	}else{
-		pieces[i++] = new Bishop(0,2,BLACK, view);
-		pieces[i++] = new Bishop(0,5,BLACK, view);
+		pieces[i++] = new Bishop(0,2,BLACK, view, this);
+		pieces[i++] = new Bishop(0,5,BLACK, view, this);
 	}
 	
 	if(color==WHITE){
-		pieces[i++] = new Queen(7,3,WHITE, view);
+		pieces[i++] = new Queen(7,3,WHITE, view, this);
 	}else{
-		pieces[i++] = new Queen(0,3,BLACK, view);
+		pieces[i++] = new Queen(0,3,BLACK, view, this);
 	}
 	
 	if(color==WHITE){
-		pieces[i++] = new King(7,4,WHITE, view);
+		pieces[i++] = new King(7,4,WHITE, view, this);
 	}else{
-		pieces[i++] = new King(0,4,BLACK, view);
+		pieces[i++] = new King(0,4,BLACK, view, this);
 	}
 	
 	
@@ -210,6 +252,21 @@ bool Board::correctPlayer(int row, int col){
 	return false;
 }
 
+bool Board::canDestroy(int row, int col){
+	 Piece ** pieces;
+	if(turn==PLAYER1){
+		pieces=pieces2;
+	}else{
+		pieces=pieces1;
+	}
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		if(pieces[i]->getRow() == row && pieces[i]->getCol() == col){
+				return true;
+		}
+	}
+	return false;
+}
+
 Piece* Board::getPiece(int row, int col){
 	for(int i=0; i<PIECES_PER_SIDE;++i){
 		if(pieces1[i]->getRow() == row && pieces1[i]->getCol() == col){
@@ -228,4 +285,41 @@ bool Board::highlightList(list<square>& squares){
 		lightSquare((*it).row, (*it).col);
 	}
 	return false;
+}
+
+bool Board::isObjectSelected(){
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		if(pieces1[i]->isSelected() || pieces2[i]->isSelected()){
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Board::notifyObject(int row,int col){
+	Piece* piece = getSelectedPiece();
+	return piece->selectCell(row,col);
+}
+
+Piece* Board::getSelectedPiece(){
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		if(pieces1[i]->isSelected()){
+				return pieces1[i];
+		}
+		if(pieces2[i]->isSelected()){
+				return pieces2[i];
+		}
+	}
+	return NULL;
+}
+
+void Board::unselectObjects(){
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		pieces1[i]->setSelected(false);
+		pieces2[i]->setSelected(false);
+	}
+}
+
+void Board::switchTurns(){
+	turn = !turn;
 }

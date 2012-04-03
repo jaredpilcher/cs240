@@ -14,6 +14,9 @@
 #include <list>
 #include <iostream>
 
+/**
+ * Must be 0 and 1 for switchTurns() to work
+ */
 #define PLAYER1 0
 #define PLAYER2 1
 #define PIECES_PER_SIDE 16
@@ -74,6 +77,21 @@ public:
 	//Resets all pieces to original positions
 	void resetBoard();
 
+	/**
+	* determines if a piece belongs to player whose turn it is not
+	*/
+	 bool canDestroy(int row, int col);
+	 
+   /*
+   * determines if a piece is on the specified square
+   */
+   bool isObject(int row, int col);
+
+   /*
+	* Returns the piece pointer of the object with these coordinates
+	*/
+   Piece* getPiece(int row, int col);
+
 private:
 	//Highlights the given square
 	void lightSquare(int row, int col);
@@ -105,21 +123,11 @@ private:
 	  * Highlights and unhighlights appropriate squares
 	  */
 	  void highlightSquares(int row, int col);
-	  
-	  /*
-	   * determines if a piece is on the specified square
-	   */
-	   bool isObject(int row, int col);
 	   
 	   /*
 	    * determines if the row and column were the last ones selected
 	    */
 	   bool sameAsLast(int row, int col);
-	   
-	   /*
-	    * Returns the piece pointer of the object with these coordinates
-	    */
-	   Piece* getPiece(int row, int col);
 	   
 	   /*
 	    * highlights all squares in the list
@@ -130,6 +138,35 @@ private:
 	    * Determine if the selected piece is the right player
 	    */
 	   bool correctPlayer(int row, int col);
+	  
+	    
+	    /*
+	     * Notifies the selected object that cell has been successful
+	     * Returns true if the cell was valid
+	     */
+	     bool notifyObject(int row,int col);
+	     
+	     /*
+	      * Returns pointer to selected piece
+	      * Only one piece can be selected at a time
+	      */
+	     Piece* getSelectedPiece();
+	     
+	     /**
+	      * Unselects all objects in pieces1 and pieces2
+	      */
+	     void unselectObjects();
+	     
+	     /**
+	      * Switches turns
+	      */
+	     void switchTurns();
+	     
+	     /*
+		* Determines if any piece is selected
+		*/
+		bool isObjectSelected();
+	    
 };
 
 #endif

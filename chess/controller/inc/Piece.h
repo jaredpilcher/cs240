@@ -29,15 +29,16 @@ class Piece{
 protected:
 	int row;
 	int col;
-	int active;
-	int selected;
+	bool active;
+	bool selected;
 	int color;
 	Board * board;
 	IChessView * view;
 	
 public:
 	
-	Piece(int _row, int _col, int _color, IChessView * _view);
+	Piece(int _row, int _col, int _color, 
+			IChessView * _view, Board* _board);
 
 	/**
 	 * Called when the piece is selected
@@ -48,15 +49,27 @@ public:
 	 * Called after piece is selected
 	 * Determines if move is valid
 	 */
-	 virtual int selectCell(int row, int col)=0;
+	 virtual bool selectCell(int _row, int _col)=0;
+	 
+	 /**
+	  * Moves the piece from current location to location given
+	  */
+	 virtual bool movePiece(int _row, int _col)=0;
 	 
 	 virtual int getRow();
 	 
 	 virtual int getCol();
 	 
-	 virtual int getActive();
+	 virtual bool isActive();
 	 
-	 virtual int getSelected();
+	 virtual bool isSelected();
+	 
+	 virtual bool setSelected(bool _selected);
+	 
+	 virtual bool setActive(bool _active);
+	 
+	 virtual bool destroyObject();
+	 
 };
 
 #endif
