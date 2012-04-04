@@ -56,7 +56,7 @@ void Board::highlightSquares(int row, int col){
 			//std::cout << "temp_squares: " << temp_squares.size() << std::endl;
 			highlightList(temp_squares);
 		}else{
-			g_debug("Not an Object!");
+			g_debug("Not an Object of Current Player!");
 			if(isObjectSelected()){
 				g_debug("Piece was selected!");
 				Piece* destroyed_piece = getPiece(row, col);

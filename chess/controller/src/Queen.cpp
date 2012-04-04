@@ -28,8 +28,40 @@ void Queen::getMoves(list<square>& moves){
 }
 
 void Queen::getDiagonalSquares(list<square>& moves){
-	getDiagonal(moves,1,1,UP,LEFT);
-	getDiagonal(moves,1,6,UP,RIGHT);
+	//UP->LEFT
+	int temp_row=row-1;
+	int temp_col=col-1;
+	while(temp_row>=0 && temp_col>=0){
+		if(isPossibleMove(temp_row,temp_col)){
+			moves.push_front((square){temp_row,temp_col});
+			if(board->canDestroy(temp_row,temp_col)){
+				break;
+			}
+		}else{
+			break;
+		}
+		temp_row-=1;
+		temp_col-=1;
+	}
+	
+	//UP->RIGHT
+	temp_row=row-1;
+	temp_col=col+1;
+	while(temp_row>=0 && temp_col<=7){
+		if(isPossibleMove(temp_row,temp_col)){
+			moves.push_front((square){temp_row,temp_col});
+			if(board->canDestroy(temp_row,temp_col)){
+				break;
+			}
+		}else{
+			break;
+		}
+		temp_row-=1;
+		temp_col+=1;
+	}
+		
+	//getDiagonal(moves,1,1,UP,LEFT);
+	//getDiagonal(moves,1,6,UP,RIGHT);
 
 	/*if(board->canDestroy(row-1, col-1)){
 		moves.push_front((square){row-1,col-1});
@@ -37,44 +69,6 @@ void Queen::getDiagonalSquares(list<square>& moves){
 	if(board->canDestroy(row-1, col+1)){
 		moves.push_front((square){row-1,col+1});
 	}*/
-}
-
-void Queen::getDiagonal(list<square>& moves, int row_corner, int col_corner,
-		int vertical, int horizontal){
-	int temp_row=row;
-	int temp_col=col;
-	if(vertical==UP){
-		if(horizontal==RIGHT){
-			while(temp_row>=row_corner && temp_col>=col_corner){
-				if(!diagonalHelper(moves,row_corner,col_corner,vertical, 
-									horizontal, temp_row, temp_col)){
-					break;
-				}
-			}
-		}else{
-			
-		}
-	}else{
-		if(horizontal==RIGHT){
-			
-		}else{
-			
-		}
-	}
-}
-
-bool Queen::diagonalHelper(list<square>& moves, int& row_corner, int& col_corner,
-		int& vertical, int& horizontal, int& temp_row, int& temp_col){
-	if(isPossibleMove(temp_row+vertical,temp_col+horizontal)){
-		moves.push_front((square){temp_row+vertical,temp_col+horizontal});
-		if(board->canDestroy(temp_row,temp_col)){
-			return false;
-		}
-	}else{
-		return false;
-	}
-	temp_row+=vertical;
-	temp_col+=horizontal;
 }
 
 bool Queen::isPossibleMove(int _row, int _col){
