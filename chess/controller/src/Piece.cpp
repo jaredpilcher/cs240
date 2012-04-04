@@ -2,9 +2,9 @@
 #include "Board.h"
 
 Piece::Piece(int _row, int _col, int _color, 
-			IChessView * _view, Board* _board):
+			IChessView * _view, Board* _board, ImageName _type):
 		row(_row),col(_col),color(_color),view(_view),selected(false),
-		active(true), board(_board){}
+		active(true), board(_board), type(_type){}
 
 int Piece::getRow(){
 	return row;
@@ -34,4 +34,213 @@ bool Piece::destroyObject(){
 	active = false;
 	row = -1;
 	col = -1;
+}
+
+void Piece::getUpSquares(list<square>& moves){
+	int temp_row=row-1;
+	while(temp_row>=0){
+		if(isPossibleMove(temp_row,col)){
+			moves.push_front((square){temp_row,col});
+			if(board->canDestroy(temp_row,col)){
+				break;
+			}
+		}else{
+			break;
+		}
+		temp_row-=1;
+	}
+}
+
+/**
+* Apends all of the valid moves in the down 
+* direction to mvoes list
+*/
+void Piece::getDownSquares(list<square>& moves){
+	int temp_row=row+1;
+	while(temp_row<=7){
+		if(isPossibleMove(temp_row,col)){
+			moves.push_front((square){temp_row,col});
+			if(board->canDestroy(temp_row,col)){
+				break;
+			}
+		}else{
+			break;
+		}
+		temp_row+=1;
+	}
+}
+ 
+/**
+* Apends all of the valid moves in the right 
+* direction to mvoes list
+*/
+void Piece::getRightSquares(list<square>& moves){
+	int temp_col=col-1;
+	while(temp_col>=0){
+		if(isPossibleMove(row,temp_col)){
+			moves.push_front((square){row,temp_col});
+			if(board->canDestroy(row,temp_col)){
+				break;
+			}
+		}else{
+			break;
+		}
+		temp_col-=1;
+	}
+}
+
+/**
+* Apends all of the valid moves in the left 
+* direction to mvoes list
+*/
+void Piece::getLeftSquares(list<square>& moves){
+	int temp_col=col+1;
+	while(temp_col<=7){
+		if(isPossibleMove(row,temp_col)){
+			moves.push_front((square){row,temp_col});
+			if(board->canDestroy(row,temp_col)){
+				break;
+			}
+		}else{
+			break;
+		}
+		temp_col+=1;
+	}
+}
+
+/**
+* Apends all of the valid moves in the up-left 
+* direction to mvoes list
+*/
+void Piece::getUpLeftSquares(list<square>& moves){
+	int temp_row=row-1;
+	int temp_col=col-1;
+	while(temp_row>=0 && temp_col>=0){
+		if(isPossibleMove(temp_row,temp_col)){
+			moves.push_front((square){temp_row,temp_col});
+			if(board->canDestroy(temp_row,temp_col)){
+				break;
+			}
+		}else{
+			break;
+		}
+		temp_row-=1;
+		temp_col-=1;
+	}
+}
+
+/**
+* Apends all of the valid moves in the up-right 
+* direction to mvoes list
+*/
+void Piece::getUpRightSquares(list<square>& moves){
+	int temp_row=row-1;
+	int temp_col=col+1;
+	while(temp_row>=0 && temp_col<=7){
+		if(isPossibleMove(temp_row,temp_col)){
+			moves.push_front((square){temp_row,temp_col});
+			if(board->canDestroy(temp_row,temp_col)){
+				break;
+			}
+		}else{
+			break;
+		}
+		temp_row-=1;
+		temp_col+=1;
+	}
+}
+
+/**
+* Apends all of the valid moves in the down-left 
+* direction to mvoes list
+*/
+void Piece::getDownLeftSquares(list<square>& moves){
+	int temp_row=row+1;
+	int temp_col=col-1;
+	while(temp_row<=7 && temp_col>=0){
+		if(isPossibleMove(temp_row,temp_col)){
+			moves.push_front((square){temp_row,temp_col});
+			if(board->canDestroy(temp_row,temp_col)){
+				break;
+			}
+		}else{
+			break;
+		}
+		temp_row+=1;
+		temp_col-=1;
+	}
+}
+
+/**
+* Apends all of the valid moves in the down-right 
+* direction to mvoes list
+*/
+void Piece::getDownRightSquares(list<square>& moves){
+	int temp_row=row+1;
+	int temp_col=col+1;
+	while(temp_row<=7 && temp_col<=7){
+		if(isPossibleMove(temp_row,temp_col)){
+			moves.push_front((square){temp_row,temp_col});
+			if(board->canDestroy(temp_row,temp_col)){
+				break;
+			}
+		}else{
+			break;
+		}
+		temp_row+=1;
+		temp_col+=1;
+	}
+}
+
+
+bool Piece::isPossibleMove(int _row, int _col){
+	return(!board->isObject(_row,_col) || board->canDestroy(_row,_col));
+}
+
+
+bool Piece::movePiece(int _row, int _col){
+	Piece* destroyed_piece = board->getPiece(_row, _col);
+	if(destroyed_piece != NULL){
+		g_debug("Piece Destroyed!");
+		destroyed_piece->destroyObject();
+	}
+	if(color == WHITE){
+		view->PlacePiece(_row,_col,type);
+	}else{
+		view->PlacePiece(_row,_col,type);
+	}
+	view->ClearPiece(row,col);
+	row = _row;
+	col = _col;
+}
+
+bool Piece::isMove(list<square>& moves, int _row, int _col){
+	list<square>::iterator it;
+	for(it = moves.begin();it!=moves.end();it++){
+		if((*it).row==_row && (*it).col==_col){
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+ * Called after piece is selected
+ * Determines if move is valid
+ */
+bool Piece::selectCell(int _row, int _col){
+	//change first_time
+	if(active && isValidMove(_row,_col)){
+		movePiece(_row,_col);
+		//first_move=0;
+		return true;
+	}
+	return false;
+
+}
+
+bool Piece::isValidMove(int _row,int _col){
+	list<square> moves;
+	getMoves(moves);
+	return isMove(moves,_row,_col);
 }

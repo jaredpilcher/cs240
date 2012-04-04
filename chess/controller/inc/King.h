@@ -6,7 +6,8 @@
 class King: public Piece{
 public:
 	//Constructor
-	King(int _row, int _col, int color, IChessView * _view, Board* _board);
+	King(int _row, int _col, int color, IChessView * _view, 
+				Board* _board, ImageName type);
 	
 	//Destructor
 	~King(){}
@@ -14,18 +15,21 @@ public:
 	/**
 	 * Called when the piece is selected
 	 */
-	list<square> selectPiece(){}
-	
-	/**
-	 * Called after piece is selected
-	 * Determines if move is valid
-	 */
-	 bool selectCell(int row, int col){return 1;}
-	
-	/**
-	  * Moves the piece from current location to location given
+	list<square> selectPiece();
+	 
+private:
+	 
+	 /**
+	  * Appends to the list all valid moves
 	  */
-	 virtual bool movePiece(int _row, int _col);
+	 void getMoves(list<square>& moves);
+	 
+	 /**
+	  * Append to the list all squares surrounding piece
+	  */
+	  void getImmediateSquares(list<square>& moves);
+	
+	 
 	
 };
 

@@ -6,7 +6,8 @@
 class Knight: public Piece{
 public:
 	//Constructor
-	Knight(int _row, int _col, int color, IChessView * _view, Board* _board);
+	Knight(int _row, int _col, int color, IChessView * _view, 
+				Board* _board, ImageName type);
 	
 	//Destructor
 	~Knight(){}
@@ -14,18 +15,21 @@ public:
 	/**
 	 * Called when the piece is selected
 	 */
-	list<square> selectPiece(){}
-	
-	/**
-	 * Called after piece is selected
-	 * Determines if move is valid
-	 */
-	 bool selectCell(int row, int col){return 1;}
+	list<square> selectPiece();
 	 
-	/**
-	  * Moves the piece from current location to location given
+private:
+	 
+	 /**
+	  * Returns a list of all valid moves
 	  */
-	 virtual bool movePiece(int _row, int _col);
+	 void getMoves(list<square>& moves);
+	 
+	 /**
+	  * appends valid squares in L direction
+	  */
+	 void getLSquares(list<square>& moves);
+	
+	 
 	
 };
 

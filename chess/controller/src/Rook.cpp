@@ -4,8 +4,8 @@
 
 //Constructor
 Rook::Rook(int _row, int _col, int _color, 
-		IChessView * _view, Board* _board):
-		Piece(_row,_col,_color,_view,_board){
+		IChessView * _view, Board* _board, ImageName _type):
+		Piece(_row,_col,_color,_view,_board,_type){//, first_move(true){
 	if(color == WHITE){
 		view->PlacePiece(_row,_col,W_ROOK);
 	}else{
@@ -13,9 +13,22 @@ Rook::Rook(int _row, int _col, int _color,
 	}
 }
 
-/**
- * Moves the piece from current location to location given
- */
-bool Rook::movePiece(int _row, int _col){
-	return true;
+list<square> Rook::selectPiece(){
+	list<square> moves;
+	if(active){
+		selected = true;
+		getMoves(moves);
+	}
+	return moves;
+}
+
+void Rook::getMoves(list<square>& moves){
+	getStraightSquares(moves);
+}
+	
+void Rook::getStraightSquares(list<square>& moves){
+	getUpSquares(moves);
+	getDownSquares(moves);
+	getRightSquares(moves);
+	getLeftSquares(moves);
 }

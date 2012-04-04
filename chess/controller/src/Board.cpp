@@ -59,14 +59,14 @@ void Board::highlightSquares(int row, int col){
 			g_debug("Not an Object of Current Player!");
 			if(isObjectSelected()){
 				g_debug("Piece was selected!");
-				Piece* destroyed_piece = getPiece(row, col);
+				//Piece* destroyed_piece = getPiece(row, col);
 				bool success_select = notifyObject(row,col);
 				std::cout << "success_select: " << success_select << endl;
 				if(success_select){
 					switchTurns();
-					if(destroyed_piece != NULL){
-						destroyed_piece->destroyObject();
-					}
+					//if(destroyed_piece != NULL){
+						//destroyed_piece->destroyObject();
+					//}
 				}
 				unselectObjects();
 				unlightSquares();
@@ -163,48 +163,48 @@ void Board::initializeSide(Piece** pieces, int color){
 	int i = 0;
 	if(color==WHITE){
 		for(;i<8;++i){
-			pieces[i] = new Pawn(6,i,WHITE, view, this);
+			pieces[i] = new Pawn(6,i,WHITE, view, this, W_PAWN);
 		}
 	}else{
 		for(;i<8;++i){
-			pieces[i] = new Pawn(1,i,BLACK, view, this);
+			pieces[i] = new Pawn(1,i,BLACK, view, this, B_PAWN);
 		}
 	}
 	
 	if(color==WHITE){
-		pieces[i++] = new Rook(7,0,WHITE, view, this);
-		pieces[i++] = new Rook(7,7,WHITE, view, this);
+		pieces[i++] = new Rook(7,0,WHITE, view, this, W_ROOK);
+		pieces[i++] = new Rook(7,7,WHITE, view, this, W_ROOK);
 	}else{
-		pieces[i++] = new Rook(0,0,BLACK, view, this);
-		pieces[i++] = new Rook(0,7,BLACK, view, this);
+		pieces[i++] = new Rook(0,0,BLACK, view, this, B_ROOK);
+		pieces[i++] = new Rook(0,7,BLACK, view, this, B_ROOK);
 	}
 	
 	if(color==WHITE){
-		pieces[i++] = new Knight(7,1,WHITE, view, this);
-		pieces[i++] = new Knight(7,6,WHITE, view, this);
+		pieces[i++] = new Knight(7,1,WHITE, view, this, W_KNIGHT);
+		pieces[i++] = new Knight(7,6,WHITE, view, this, W_KNIGHT);
 	}else{
-		pieces[i++] = new Knight(0,1,BLACK, view, this);
-		pieces[i++] = new Knight(0,6,BLACK, view, this);
+		pieces[i++] = new Knight(0,1,BLACK, view, this, B_KNIGHT);
+		pieces[i++] = new Knight(0,6,BLACK, view, this, B_KNIGHT);
 	}
 	
 	if(color==WHITE){
-		pieces[i++] = new Bishop(7,2,WHITE, view, this);
-		pieces[i++] = new Bishop(7,5,WHITE, view, this);
+		pieces[i++] = new Bishop(7,2,WHITE, view, this, W_BISHOP);
+		pieces[i++] = new Bishop(7,5,WHITE, view, this, W_BISHOP);
 	}else{
-		pieces[i++] = new Bishop(0,2,BLACK, view, this);
-		pieces[i++] = new Bishop(0,5,BLACK, view, this);
+		pieces[i++] = new Bishop(0,2,BLACK, view, this, B_BISHOP);
+		pieces[i++] = new Bishop(0,5,BLACK, view, this, B_BISHOP);
 	}
 	
 	if(color==WHITE){
-		pieces[i++] = new Queen(7,3,WHITE, view, this);
+		pieces[i++] = new Queen(7,3,WHITE, view, this, W_QUEEN);
 	}else{
-		pieces[i++] = new Queen(0,3,BLACK, view, this);
+		pieces[i++] = new Queen(0,3,BLACK, view, this, B_QUEEN);
 	}
 	
 	if(color==WHITE){
-		pieces[i++] = new King(7,4,WHITE, view, this);
+		pieces[i++] = new King(7,4,WHITE, view, this, W_KING);
 	}else{
-		pieces[i++] = new King(0,4,BLACK, view, this);
+		pieces[i++] = new King(0,4,BLACK, view, this, W_KING);
 	}
 	
 	

@@ -6,7 +6,8 @@
 class Bishop: public Piece{
 public:
 	//Constructor
-	Bishop(int _row, int _col, int color, IChessView * _view, Board* _board);
+	Bishop(int _row, int _col, int color, IChessView * _view, 
+				Board* _board, ImageName type);
 	
 	//Destructor
 	~Bishop(){}
@@ -14,18 +15,21 @@ public:
 	/**
 	 * Called when the piece is selected
 	 */
-	list<square> selectPiece(){}
-	
-	/**
-	 * Called after piece is selected
-	 * Determines if move is valid
-	 */
-	 bool selectCell(int row, int col){return 1;}
+	list<square> selectPiece();
+	 
+private:
 	 
 	 /**
-	  * Moves the piece from current location to location given
+	  * Returns a list of all valid moves
 	  */
-	 virtual bool movePiece(int _row, int _col);
+	 void getMoves(list<square>& moves);
+	 
+	 /**
+	  * appends valid squares in diagonal direction
+	  */
+	 void getDiagonalSquares(list<square>& moves);
+	
+	 
 	
 };
 

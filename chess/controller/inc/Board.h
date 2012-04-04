@@ -91,6 +91,11 @@ public:
 	* Returns the piece pointer of the object with these coordinates
 	*/
    Piece* getPiece(int row, int col);
+   
+   /*
+	* Determine if the selected piece is the right player
+	*/
+   bool correctPlayer(int row, int col);
 
 private:
 	//Highlights the given square
@@ -133,11 +138,6 @@ private:
 	    * highlights all squares in the list
 	    */
 	   bool highlightList(list<square>& squares);
-	   
-	   /*
-	    * Determine if the selected piece is the right player
-	    */
-	   bool correctPlayer(int row, int col);
 	  
 	    
 	    /*
