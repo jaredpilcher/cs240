@@ -320,7 +320,7 @@ void Board::getKingSquare(int& row, int& col){
 		if((pieces[i]->getType() == W_KING) || (pieces[i]->getType() == B_KING)){
 				row = pieces[i]->getRow();
 				col = pieces[i]->getCol();
-				std::cout << "Found King at row: " << row << " and col: " << col << std::endl;
+				//std::cout << "Found King at row: " << row << " and col: " << col << std::endl;
 				return;
 		}
 	}

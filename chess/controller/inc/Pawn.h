@@ -40,6 +40,8 @@ private:
 	  * appends valid squares in row and column 
 	  */
 	 void getStraightSquares(list<square>& moves);
+	 
+	 bool movePiece(int _row, int _col);
 
 	 
 	

@@ -80,4 +80,21 @@ void Pawn::getStraightSquares(list<square>& moves){
 	}
 }
 
+bool Pawn::movePiece(int _row, int _col){
+	Piece* destroyed_piece = board->getPiece(_row, _col);
+	if(destroyed_piece != NULL){
+		g_debug("Piece Destroyed!");
+		destroyed_piece->destroyObject();
+	}
+	if(color == WHITE){
+		view->PlacePiece(_row,_col,type);
+	}else{
+		view->PlacePiece(_row,_col,type);
+	}
+	view->ClearPiece(row,col);
+	row = _row;
+	col = _col;
+	first_move=false;
+}
+
 
