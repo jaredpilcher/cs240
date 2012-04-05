@@ -1,13 +1,49 @@
 #include "IChessController.h"
 #include "Board.h"
 
+
+/**
+ * Constructor
+ */
+IChessController::IChessController(char ** argv, int argc){
+	
+		std::cout << "argv: " << argv[1] << std::endl;
+	if(argv[1]==0){
+		std::cout << "Human vs Human" << std::endl;
+		player1 = new Human();
+		player2 = new Human();
+		p1_type = HUMAN;
+		p2_type = HUMAN;
+	}
+	
+	if(argv[1]=="1"){
+		std::cout << "Human vs Computer" << std::endl;
+		player1 = new Human();
+		player2 = new Computer();
+		p1_type = HUMAN;
+		p2_type = COMPUTER;
+	}
+}
+
+/**
+ * Destructor
+ */
+IChessController::~IChessController(){
+	//delete player1;
+	//delete player2;
+}
+
 /**
  * Indicate to the player that the user clicked on the given
  * row and column with the mouse.
  */
 void IChessController::on_CellSelected(int row, int col, int button){
 	g_debug("IChessController::on_CellSelected");
-	board->handleSelect(row, col);
+	if((board->isWhiteTurn()) && p1_type==HUMAN){
+		board->handleSelect(row, col);
+	}else if(!(board->isWhiteTurn()) && p2_type==HUMAN){
+		board->handleSelect(row, col);
+	}
 }
 
 ///@param row where drag began
@@ -31,8 +67,9 @@ bool IChessController::on_DragEnd(int row,int col){
  * Calls to model to delete Current and History
  */
 void IChessController::on_NewGame(){
-	g_debug("IChessController::on_NewGame");
-
+	//g_debug("IChessController::on_NewGame");
+	
+	board->initializePieces();
 }
 
 /**
@@ -79,7 +116,7 @@ void IChessController::on_UndoMove(){
  * quit button, the close X button, or the file menu.
  */
 void IChessController::on_QuitGame(){
-	g_debug("IChessController::on_QuitGame");
+	//g_debug("IChessController::on_QuitGame");
 
 }
 	
@@ -89,7 +126,8 @@ void IChessController::on_QuitGame(){
  */
 void IChessController::on_TimerEvent(){
 	//g_debug("IChessController::on_TimerEvent");
-
+	//player1->on_TimerEvent();
+	//player2->on_TimerEvent();
 }
 
 /**

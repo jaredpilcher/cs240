@@ -1,7 +1,7 @@
 #ifndef PLAYER_GUARD
 #define PLAYER_GUARD
 
-#include "Piece.h"
+//#include "Board.h"
 
 /**
  * The IChessPlayer class provides an interface for a ChessController implementation to interact
@@ -9,6 +9,8 @@
  */
 class Player{
 public: //methods
+
+	Player(){}
 	/**
 	 * Indicate to the player that the user clicked on the given
 	 * row and column with the mouse.

@@ -6,7 +6,6 @@
 Board::Board(IChessView* _view): turn(PLAYER1), view(_view), 
 		prev_row(-1), prev_col(-1), prev_piece(NULL){
 	this->view= _view;
-	initializePieces();
 }
 
 //Destructor
@@ -30,13 +29,10 @@ Board::~Board(){
 //Notifies controller if move is made (and which one)
 	//Creates a move object and passes it back
 	//includes pieces destroyed
-void Board::handleSelect(int row, int col){
-	highlightSquares(row, col);
-}
-
-void Board::highlightSquares(int row, int col){
+bool Board::handleSelect(int row, int col){
 	int temp_row = row;
 	int temp_col = col;
+	bool return_bool = false;
 	if(isObject(row, col)){
 		if(sameAsLast(row, col)){
 			unselectObjects();
@@ -70,6 +66,7 @@ void Board::highlightSquares(int row, int col){
 			bool success_select = notifyObject(row,col);
 			if(success_select){
 				switchTurns();
+				return_bool = true;
 			}
 			unselectObjects();
 			unlightSquares();
@@ -84,6 +81,7 @@ void Board::highlightSquares(int row, int col){
 	
 	prev_row = temp_row;
 	prev_col = temp_col;
+	return return_bool;
 }
 
 //Uses the passed in Move object to move the pieces back
@@ -344,4 +342,11 @@ bool Board::isMyMove(int& row, int& col){
 		}
 	}
 	return false;
+}
+
+/**
+* Returns who's turn it is
+*/
+bool Board::isWhiteTurn(){
+	return !turn;
 }

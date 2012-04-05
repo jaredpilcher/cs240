@@ -3,9 +3,15 @@
 
 #include "IChessView.h"
 #include "Model.h"
+#include "Human.h"
+#include "Computer.h"
+
+#define HUMAN 0
+#define COMPUTER 1
 
 class ChessView;
 class Board;
+class Player;
 
 //Processes Events from gui
 //Makes all appropriate calls to Current and History 
@@ -16,16 +22,23 @@ class IChessController
 	//Model model;
 	Board * board;
 	
+	//Players on the board
+	Player* player1;
+	Player* player2;
+	
+	int p1_type;
+	int p2_type;
+	
 public:
 	/**
 	 * Constructor
 	 */
-	IChessController(){}
+	IChessController(char ** argv, int argc);
 	
 	/**
 	 * Destructor
 	 */
-	virtual ~IChessController(){}
+	virtual ~IChessController();
 	
 	/**
 	 * Indicate to the player that the user clicked on the given

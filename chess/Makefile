@@ -73,7 +73,8 @@ MY_OBJS =  $(CONT_OBJ)IChessController.o $(CONT_OBJ)Board.o \
 			$(MODEL_OBJ)Current.o $(MODEL_OBJ)History.o $(MODEL_OBJ)Move.o \
 			$(MODEL_OBJ)XMLIO.o $(MODEL_OBJ)XML.o $(CONT_OBJ)Queen.o \
 			$(CONT_OBJ)Pawn.o $(CONT_OBJ)Knight.o $(CONT_OBJ)Rook.o \
-			$(CONT_OBJ)Bishop.o $(CONT_OBJ)King.o 
+			$(CONT_OBJ)Bishop.o $(CONT_OBJ)King.o $(CONT_OBJ)Human.o \
+			$(CONT_OBJ)Computer.o 
 
 # These are all the object files that go into the library
 LIB_OBJS = $(VIEW_OBJ)ChessView.o \
@@ -94,8 +95,11 @@ CHESS_LIB = lib/libchess.so
 
 bin: $(EXE)
 
-run: $(EXE)
-	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; $(EXE)
+runhh: $(EXE)
+	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; $(EXE) "0";
+	
+runhc: $(EXE)
+	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; $(EXE) 1;
 
 # Run the executable for memory testing
 # Instructions: Edit the command below so that it runs the  
@@ -161,7 +165,7 @@ $(MEMMAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessVi
 # Controller object file
 $(CONT_OBJ)IChessController.o: $(CONT_SRC)IChessController.cpp \
 		$(CONT_INC)IChessController.h $(VIEW_INC)ChessView.h \
-		$(MODEL_INC)Model.h $(CONT_INC)Board.h
+		$(MODEL_INC)Model.h $(CONT_INC)Board.h $(CONT_INC)Player.h
 	g++ -c -Wall -o $(CONT_OBJ)IChessController.o $(INCLUDES) $(CONT_SRC)IChessController.cpp
 	
 # Board object file
@@ -170,8 +174,16 @@ $(CONT_OBJ)Board.o: $(CONT_SRC)Board.cpp $(CONT_INC)Board.h $(CONT_INC)Player.h 
 	g++ -c -Wall -o $(CONT_OBJ)Board.o $(INCLUDES) $(CONT_SRC)Board.cpp
 
 # Player object file
-$(CONT_OBJ)Player.o: $(CONT_SRC)Player.cpp $(CONT_INC)Player.h $(CONT_INC)Piece.h
+$(CONT_OBJ)Player.o: $(CONT_SRC)Player.cpp $(CONT_INC)Player.h $(CONT_INC)Board.h
 	g++ -c -Wall -o $(CONT_OBJ)Player.o $(INCLUDES) $(CONT_SRC)Player.cpp
+	
+# Computer object file
+$(CONT_OBJ)Computer.o: $(CONT_SRC)Computer.cpp $(CONT_INC)Computer.h $(CONT_INC)Board.h
+	g++ -c -Wall -o $(CONT_OBJ)Computer.o $(INCLUDES) $(CONT_SRC)Computer.cpp
+	
+# Human object file
+$(CONT_OBJ)Human.o: $(CONT_SRC)Human.cpp $(CONT_INC)Human.h $(CONT_INC)Board.h
+	g++ -c -Wall -o $(CONT_OBJ)Human.o $(INCLUDES) $(CONT_SRC)Human.cpp
 	
 # Piece object file
 $(CONT_OBJ)Piece.o: $(CONT_SRC)Piece.cpp $(CONT_INC)Piece.h $(CONT_INC)Board.h \

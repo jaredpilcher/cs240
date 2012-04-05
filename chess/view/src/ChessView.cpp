@@ -284,9 +284,13 @@ void ChessView::SetTimeoutMilliseconds(int milliseconds)
 
 void ChessView::run(Gtk::Main & app)
 {
+	std::cout << "BEFORE INITIALIZE TIMER" << std::endl;
 	InitializeTimer();
+	std::cout << "AFTER INITIALIZE TIMER" << std::endl;
 	on_NewGame();
+	std::cout << "BEFORE APP.RUN" << std::endl;
 	app.run(*gui);
+	std::cout << "AFTER APP.RUN" << std::endl;
 }
 
 /*****************************************
