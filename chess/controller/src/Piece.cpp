@@ -260,7 +260,6 @@ bool Piece::isValidPossibleMove(int _row,int _col){
 * Removes all squares that place King in check
 */
 void Piece::removeCheck(list<square>& moves){
-	//std::cout << "moves size begin: " << moves.size() << std::endl;
 	int temp_row = row;
 	int temp_col = col;
 	Piece* destroyed_piece = NULL;
@@ -268,32 +267,22 @@ void Piece::removeCheck(list<square>& moves){
 	list<square> temp_moves;
 	list<square>::iterator it;
 	for(it = moves.begin();it!=moves.end();++it){
-		//if(board->isObject((*it).row,(*it).col)){
-			//destroyed_piece = board->getPiece((*it).row, (*it).col);
-			//if(destroyed_piece!=NULL){
-			////std::cout << "destroyed piece: row: " << (*it).row << " col: " << (*it).col << std::endl;
-				////destroyed_piece->destroyObject();
-				//destroyed_piece->row =-1;
-				//destroyed_piece->col=-1;
-				//destroyed_piece->active =false;
-			//}
+			destroyed_piece = board->getPiece((*it).row, (*it).col);
+			if(destroyed_piece!=NULL){
+				destroyed_piece->active =false;
+			}
 		//}
 		row = (*it).row;
 		col = (*it).col;
-		//std::cout << "Placing Piece at: row: " << row << " col: " << col << std::endl;
 		if(!(board->inCheck())){
-			//std::cout << "move doesn't cause check" << std::endl;
 			temp_moves.push_front(*it);
 		}
-		//if(destroyed_piece!=NULL){
-			//destroyed_piece->row =(*it).row;
-			//destroyed_piece->col=(*it).col;
-			//destroyed_piece->active =true;
-		//}
+		if(destroyed_piece!=NULL){
+			destroyed_piece->active =true;
+		}
 	}
 	moves.clear();
 	moves = temp_moves;
-	//std::cout << "moves size end: " << moves.size() << std::endl;
 	row = temp_row;
 	col = temp_col;
 	board->switchTurns();

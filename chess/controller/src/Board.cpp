@@ -339,7 +339,7 @@ bool Board::isMyMove(int& row, int& col){
 		pieces=pieces2;
 	}
 	for(int i=0; i<PIECES_PER_SIDE;++i){
-		if(pieces[i]->isValidPossibleMove(row,col)){
+		if((pieces[i]->isActive()) && (pieces[i]->isValidPossibleMove(row,col))){
 			return true;
 		}
 	}

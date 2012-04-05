@@ -32,35 +32,35 @@ void Knight::getPossibleMoves(list<square>& moves){
 }
 
 void Knight::getLSquares(list<square>& moves){
-	if(row>=2 && col>=1){
+	if((row>=2 && col>=1) && !board->correctPlayer(row-2,col-1)){
 		moves.push_front((square){row-2,col-1});
 	}
 	
-	if(row>=2 && col<=6){
+	if((row>=2 && col<=6) && !board->correctPlayer(row-2,col+1)){
 		moves.push_front((square){row-2,col+1});
 	}
 	
-	if(row<=5 && col>=1){
+	if((row<=5 && col>=1) && !board->correctPlayer(row+2,col-1)){
 		moves.push_front((square){row+2,col-1});
 	}
 	
-	if(row<=5 && col<=6){
+	if((row<=5 && col<=6) && !board->correctPlayer(row+2,col+1)){
 		moves.push_front((square){row+2,col+1});
 	}
 	
-	if(row>=1 && col>=2){
+	if((row>=1 && col>=2) && !board->correctPlayer(row-1,col-2)){
 		moves.push_front((square){row-1,col-2});
 	}
 	
-	if(row<=6 && col>=2){
+	if((row<=6 && col>=2) && !board->correctPlayer(row+1,col-2)){
 		moves.push_front((square){row+1,col-2});
 	}
 	
-	if(row>=1 && col<=5){
+	if((row>=1 && col<=5) && !board->correctPlayer(row-1,col+2)){
 		moves.push_front((square){row-1,col+2});
 	}
 	
-	if(row<=6 && col<=5){
+	if((row<=6 && col<=5) && !board->correctPlayer(row+1,col+2)){
 		moves.push_front((square){row+1,col+2});
 	}
 }
