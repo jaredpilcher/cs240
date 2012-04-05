@@ -23,6 +23,11 @@ list<square> Rook::selectPiece(){
 }
 
 void Rook::getMoves(list<square>& moves){
+	getPossibleMoves(moves);
+	removeCheck(moves);
+}
+
+void Rook::getPossibleMoves(list<square>& moves){
 	getStraightSquares(moves);
 }
 	

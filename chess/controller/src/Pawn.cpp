@@ -23,6 +23,11 @@ list<square> Pawn::selectPiece(){
 }
 
 void Pawn::getMoves(list<square>& moves){
+	getPossibleMoves(moves);
+	removeCheck(moves);
+}
+
+void Pawn::getPossibleMoves(list<square>& moves){
 	getDiagonalSquares(moves);
 	getStraightSquares(moves);
 }

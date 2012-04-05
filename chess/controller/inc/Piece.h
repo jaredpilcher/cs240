@@ -15,10 +15,6 @@ struct square{
 	int col;
 };
 
-//Enum for subclasses to keep track of which type they are
-//Unsure if needed. Add if necessary
-enum pieceType { pawn, knight, rook, bishop, queen, king};
-
 class Board;
 class ChessView;
 
@@ -56,6 +52,8 @@ public:
 	 
 	 virtual int getCol();
 	 
+	 virtual ImageName getType();
+	 
 	 virtual bool isActive();
 	 
 	 virtual bool isSelected();
@@ -68,6 +66,16 @@ public:
 	  * Sets inactive and places off of board
 	  */
 	 virtual bool destroyObject();
+	 
+	 /**
+	 * Determines if a given square is a valid move
+	 */
+	virtual bool isValidMove(int _row,int _col);
+	
+	/**
+	 * Determines if move is possibly valid (without checking for check)
+	 */
+	bool isValidPossibleMove(int _row,int _col);
 	 
 protected:
 	 virtual void getMoves(list<square>& moves)=0;	 
@@ -137,14 +145,17 @@ protected:
 	  * for the current piece in the moves list<square>
 	  */
 	 virtual bool isMove(list<square>& moves, int _row, int _col);
-	 
-	 /**
-	 * Determines if a given square is a valid move
-	 */
-	virtual bool isValidMove(int _row,int _col);
 	
 
+	 /**
+	 * Removes all squares that place King in check
+	 */
+	 void removeCheck(list<square>& moves);
 	 
+	 /**
+	 * Retrieves all possible moves without checking for check
+	 */
+	 virtual void getPossibleMoves(list<square>& moves)=0;
 };
 
 #endif

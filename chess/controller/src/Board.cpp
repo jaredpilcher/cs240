@@ -38,52 +38,36 @@ void Board::highlightSquares(int row, int col){
 	int temp_row = row;
 	int temp_col = col;
 	if(isObject(row, col)){
-		g_debug("Found Piece!");
 		if(sameAsLast(row, col)){
-			g_debug("Same as Last!");
 			unselectObjects();
 			unlightSquares();
 			temp_row = -1;
 			temp_col = -1;
 		}
 		else if(correctPlayer(row, col)){
-			g_debug("Correct Player!");
 			Piece * temp_piece = getPiece(row, col);
-			//std::cout << "temp_piece " << temp_piece << std::endl;
 			unlightSquares();
 			unselectObjects();
 			list<square> temp_squares = temp_piece->selectPiece();
-			//std::cout << "temp_squares: " << temp_squares.size() << std::endl;
 			highlightList(temp_squares);
 		}else{
-			g_debug("Not an Object of Current Player!");
 			if(isObjectSelected()){
-				g_debug("Piece was selected!");
-				//Piece* destroyed_piece = getPiece(row, col);
 				bool success_select = notifyObject(row,col);
-				std::cout << "success_select: " << success_select << endl;
 				if(success_select){
 					switchTurns();
-					//if(destroyed_piece != NULL){
-						//destroyed_piece->destroyObject();
-					//}
 				}
 				unselectObjects();
 				unlightSquares();
 				temp_row = -1;
 				temp_col = -1;
 			}else{
-				g_debug("Piece was not selected!");
 				unselectObjects();
 				unlightSquares();
 			}
 		}
 	}else{
-		g_debug("Not an Object!");
 		if(isObjectSelected()){
-			g_debug("Piece was selected!");
 			bool success_select = notifyObject(row,col);
-			std::cout << "success_select: " << success_select << endl;
 			if(success_select){
 				switchTurns();
 			}
@@ -92,7 +76,6 @@ void Board::highlightSquares(int row, int col){
 			temp_row = -1;
 			temp_col = -1;
 		}else{
-			g_debug("Piece was not selected!");
 			unselectObjects();
 			unlightSquares();
 		}
@@ -101,16 +84,6 @@ void Board::highlightSquares(int row, int col){
 	
 	prev_row = temp_row;
 	prev_col = temp_col;
-	//if(isLit(row,col)){
-		//g_debug("Square is lit");
-		//unlightSquares();
-	//}else{
-		//lightSquare(row,col);
-		//square temp_square;
-		//temp_square.row = row;
-		//temp_square.col = col;
-		//lit_squares.push_front(temp_square);
-	//}
 }
 
 //Uses the passed in Move object to move the pieces back
@@ -204,7 +177,7 @@ void Board::initializeSide(Piece** pieces, int color){
 	if(color==WHITE){
 		pieces[i++] = new King(7,4,WHITE, view, this, W_KING);
 	}else{
-		pieces[i++] = new King(0,4,BLACK, view, this, W_KING);
+		pieces[i++] = new King(0,4,BLACK, view, this, B_KING);
 	}
 	
 	
@@ -322,4 +295,53 @@ void Board::unselectObjects(){
 
 void Board::switchTurns(){
 	turn = !turn;
+}
+
+/**
+* Determines if King is in check
+*/
+bool Board::inCheck(){
+	int row, col;
+	getKingSquare(row,col);
+	return isMyMove(row,col);
+}
+
+/**
+ * Gets the King's coodinate of opponent
+ */
+void Board::getKingSquare(int& row, int& col){
+	Piece ** pieces;
+	if(turn==PLAYER1){
+		pieces=pieces2;
+	}else{
+		pieces=pieces1;
+	}
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		if((pieces[i]->getType() == W_KING) || (pieces[i]->getType() == B_KING)){
+				row = pieces[i]->getRow();
+				col = pieces[i]->getCol();
+				std::cout << "Found King at row: " << row << " and col: " << col << std::endl;
+				return;
+		}
+	}
+	row = -1;
+	col = -1;
+}
+
+/**
+ * Determines if the given square is a valid curren player's move
+ */
+bool Board::isMyMove(int& row, int& col){
+	Piece ** pieces;
+	if(turn==PLAYER1){
+		pieces=pieces1;
+	}else{
+		pieces=pieces2;
+	}
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		if(pieces[i]->isValidPossibleMove(row,col)){
+			return true;
+		}
+	}
+	return false;
 }

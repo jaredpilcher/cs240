@@ -116,7 +116,7 @@ void Piece::getUpLeftSquares(list<square>& moves){
 	int temp_row=row-1;
 	int temp_col=col-1;
 	while(temp_row>=0 && temp_col>=0){
-		if(isPossibleMove(temp_row,temp_col)){
+		if(isPossibleMove(temp_row,temp_col) ){
 			moves.push_front((square){temp_row,temp_col});
 			if(board->canDestroy(temp_row,temp_col)){
 				break;
@@ -217,10 +217,12 @@ bool Piece::movePiece(int _row, int _col){
 bool Piece::isMove(list<square>& moves, int _row, int _col){
 	list<square>::iterator it;
 	for(it = moves.begin();it!=moves.end();it++){
+		std::cout << "Possible move: row: " << (*it).row << " col: " << (*it).col << std::endl;
 		if((*it).row==_row && (*it).col==_col){
 			return true;
 		}
 	}
+	std::cout << "Finish searching moves of piece" << std::endl;
 	return false;
 }
 
@@ -243,4 +245,45 @@ bool Piece::isValidMove(int _row,int _col){
 	list<square> moves;
 	getMoves(moves);
 	return isMove(moves,_row,_col);
+}
+
+bool Piece::isValidPossibleMove(int _row,int _col){
+	list<square> moves;
+	getPossibleMoves(moves);
+	if(type == W_QUEEN || type==B_QUEEN){
+		std::cout << "Determining Queen moves" << std::endl;
+	}
+	return isMove(moves,_row,_col);
+}
+
+/**
+* Removes all squares that place King in check
+*/
+void Piece::removeCheck(list<square>& moves){
+	std::cout << "moves size begin: " << moves.size() << std::endl;
+	int temp_row = row;
+	int temp_col = col;
+	board->switchTurns();
+	list<square> temp_moves;
+	list<square>::iterator it;
+	for(it = moves.begin();it!=moves.end();++it){
+		row = (*it).row;
+		col = (*it).col;
+		std::cout << "Placing Piece at: row: " << row << " col: " << col << std::endl;
+		if(!(board->inCheck())){
+			std::cout << "move doesn't cause check" << std::endl;
+			temp_moves.push_front(*it);
+		}
+	}
+	moves.clear();
+	moves = temp_moves;
+	std::cout << "moves size end: " << moves.size() << std::endl;
+	row = temp_row;
+	col = temp_col;
+	board->switchTurns();
+}
+
+
+ImageName Piece::getType(){
+	return type;
 }

@@ -22,7 +22,13 @@ list<square> Bishop::selectPiece(){
 	return moves;
 }
 
+
 void Bishop::getMoves(list<square>& moves){
+	getPossibleMoves(moves);
+	removeCheck(moves);
+}
+
+void Bishop::getPossibleMoves(list<square>& moves){
 	getDiagonalSquares(moves);
 }
 

@@ -23,6 +23,11 @@ list<square> Knight::selectPiece(){
 }
 
 void Knight::getMoves(list<square>& moves){
+	getPossibleMoves(moves);
+	removeCheck(moves);
+}
+
+void Knight::getPossibleMoves(list<square>& moves){
 	getLSquares(moves);
 }
 

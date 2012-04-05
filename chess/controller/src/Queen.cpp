@@ -23,6 +23,11 @@ list<square> Queen::selectPiece(){
 }
 
 void Queen::getMoves(list<square>& moves){
+	getPossibleMoves(moves);
+	removeCheck(moves);
+}
+
+void Queen::getPossibleMoves(list<square>& moves){
 	getDiagonalSquares(moves);
 	getStraightSquares(moves);
 }

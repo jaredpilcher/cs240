@@ -17,6 +17,11 @@ public:
 	 * Called when the piece is selected
 	 */
 	list<square> selectPiece();
+	
+	/**
+	 * Retrieves all possible moves without checking for check
+	 */
+	void getPossibleMoves(list<square>& moves);
 
 	 
 private:

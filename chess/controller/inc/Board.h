@@ -96,6 +96,16 @@ public:
 	* Determine if the selected piece is the right player
 	*/
    bool correctPlayer(int row, int col);
+   
+   /**
+   * Determines if King is in check
+   */
+   virtual bool inCheck();
+   
+   /**
+   * Switches turns
+   */
+   void switchTurns();
 
 private:
 	//Highlights the given square
@@ -156,17 +166,22 @@ private:
 	      * Unselects all objects in pieces1 and pieces2
 	      */
 	     void unselectObjects();
-	     
-	     /**
-	      * Switches turns
-	      */
-	     void switchTurns();
+	    
 	     
 	     /*
 		* Determines if any piece is selected
 		*/
 		bool isObjectSelected();
 	    
+	    /**
+		* Gets the King's coodinate of opponent
+		*/
+		void getKingSquare(int& row, int& col);
+		
+		/**
+    	* Determines if the given square is current player's move
+		*/
+		bool isMyMove(int& row, int& col);
 };
 
 #endif

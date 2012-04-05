@@ -23,6 +23,11 @@ list<square> King::selectPiece(){
 }
 
 void King::getMoves(list<square>& moves){
+	getPossibleMoves(moves);
+	removeCheck(moves);
+}
+
+void King::getPossibleMoves(list<square>& moves){
 	getImmediateSquares(moves);
 }
 
