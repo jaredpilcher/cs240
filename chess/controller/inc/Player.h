@@ -1,13 +1,15 @@
 #ifndef PLAYER_GUARD
 #define PLAYER_GUARD
 
-//#include "Board.h"
+class Board;
 
 /**
  * The IChessPlayer class provides an interface for a ChessController implementation to interact
  * with the player through, regardless of whether the player is a human or a computer.
  */
 class Player{
+protected:
+	Board* board;
 public: //methods
 
 	Player(){}
@@ -26,6 +28,11 @@ public: //methods
 	 * Handle when the timeout duration has passed.
 	 */
 	virtual void on_TimerEvent() = 0;
+	
+	/**
+	 * Sets the board pointer
+	 */
+	 virtual void setBoard(Board* _board);
 };
 
 #endif

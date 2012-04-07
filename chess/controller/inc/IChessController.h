@@ -5,6 +5,7 @@
 #include "Model.h"
 #include "Human.h"
 #include "Computer.h"
+#include <string.h>
 
 #define HUMAN 0
 #define COMPUTER 1
@@ -99,6 +100,11 @@ public:
 	 * Set the Board that this IChessController will handle inputs for.
 	 */
 	virtual void SetBoard(Board* board);
+	
+	/**
+	 * Ends the game
+	 */
+	void endOfGame();
 };
 
 #endif

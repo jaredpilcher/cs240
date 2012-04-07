@@ -12,6 +12,7 @@
 #include "IChessView.h"
 #include <list>
 #include <iostream>
+#include <time.h>
 
 /**
  * Must be 0 and 1 for switchTurns() to work
@@ -19,6 +20,10 @@
 #define PLAYER1 0
 #define PLAYER2 1
 #define PIECES_PER_SIDE 16
+
+#define NO_MOVE 0
+#define MOVED 1
+#define GAME_OVER 2
 
 using namespace std;
 
@@ -65,7 +70,7 @@ public:
 	//Notifies controller if move is made (and which one)
 		//Creates a move object and passes it back
 		//includes pieces destroyed
-	bool handleSelect(int row, int col);
+	int handleSelect(int row, int col);
 	
 	//Uses the passed in Move object to move the pieces back
 	//Activates pieces if necessary
@@ -111,6 +116,20 @@ public:
     
     	//Initializes the positions of all pieces on board
 	void initializePieces();
+	
+	
+	/**
+	* Determines if the given square is current player's move
+	*/
+	bool isMyMove(int& row, int& col);
+	
+	/**
+	 * Retrieves a random piece
+	 */
+	 Piece* getRandomPiece();
+	 
+	 //Checks Checkmate or stalemate
+	bool checkEOG();
 
 private:
 	//Highlights the given square
@@ -118,9 +137,6 @@ private:
 	
 	//Unhighlight all squares
 	void unlightSquares();
-	
-	//Checks Checkmate or stalemate
-	void checkEOG();
 	
 	//Checks validity of move (Checkmate)
 	void checkMoveValid(Piece* piece, int from_row, int from_col,
@@ -176,10 +192,6 @@ private:
 		*/
 		void getKingSquare(int& row, int& col);
 		
-		/**
-    	* Determines if the given square is current player's move
-		*/
-		bool isMyMove(int& row, int& col);
 };
 
 #endif

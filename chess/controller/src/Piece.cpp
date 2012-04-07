@@ -234,6 +234,8 @@ bool Piece::selectCell(int _row, int _col){
 	//change first_time
 	if(active && isValidMove(_row,_col)){
 		movePiece(_row,_col);
+		g_debug("moved piece!");
+		std::cout << "moved piece!" << std::endl;
 		//first_move=0;
 		return true;
 	}
@@ -291,4 +293,33 @@ void Piece::removeCheck(list<square>& moves){
 
 ImageName Piece::getType(){
 	return type;
+}
+
+/**
+* Get a random move and place in row and col
+*/
+void Piece::getRandomMove(int& row,int& col){
+	srand ( time(NULL) );
+	list<square> moves;
+	getMoves(moves);
+	std::cout << "here4" << std::endl;
+	int random_move;
+	if(moves.size()==0){
+		row = -1;
+		col = -1;
+		return;
+	}else{
+		random_move = (rand() % moves.size());
+	}
+	std::cout << "i: " << random_move << std::endl;
+	list<square>::iterator it;
+	int i=0;
+	for(it = moves.begin();it!=moves.end();++it){
+		if(i==random_move){
+			row = (*it).row;
+			col = (*it).col;
+			return;
+		}
+		++i;
+	}
 }

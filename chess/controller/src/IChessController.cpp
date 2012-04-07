@@ -6,9 +6,8 @@
  * Constructor
  */
 IChessController::IChessController(char ** argv, int argc){
-	
-		std::cout << "argv: " << argv[1] << std::endl;
-	if(argv[1]==0){
+	string temp_type = argv[1];
+	if(temp_type=="0"){
 		std::cout << "Human vs Human" << std::endl;
 		player1 = new Human();
 		player2 = new Human();
@@ -16,7 +15,7 @@ IChessController::IChessController(char ** argv, int argc){
 		p2_type = HUMAN;
 	}
 	
-	if(argv[1]=="1"){
+	if(temp_type=="1"){
 		std::cout << "Human vs Computer" << std::endl;
 		player1 = new Human();
 		player2 = new Computer();
@@ -38,11 +37,23 @@ IChessController::~IChessController(){
  * row and column with the mouse.
  */
 void IChessController::on_CellSelected(int row, int col, int button){
-	g_debug("IChessController::on_CellSelected");
+	int select_return;
 	if((board->isWhiteTurn()) && p1_type==HUMAN){
-		board->handleSelect(row, col);
+		select_return = board->handleSelect(row, col);
+		if(select_return == GAME_OVER){
+			endOfGame();
+		}else if(select_return == MOVED){
+			std::cout << "made your move1!" << std::endl;
+			player2->makeMove();
+		}
 	}else if(!(board->isWhiteTurn()) && p2_type==HUMAN){
-		board->handleSelect(row, col);
+		select_return = board->handleSelect(row, col);
+		if(select_return == GAME_OVER){
+			endOfGame();
+		}else if(select_return == MOVED){
+			std::cout << "made your move1!" << std::endl;
+			player1->makeMove();
+		}
 	}
 }
 
@@ -51,6 +62,10 @@ void IChessController::on_CellSelected(int row, int col, int button){
 void IChessController::on_DragStart(int row,int col){
 	g_debug("IChessController::on_DragStart");
 
+}
+
+void IChessController::endOfGame(){
+	
 }
 
 ///@param row where drag ended
@@ -144,4 +159,6 @@ void IChessController::SetView(IChessView* view){
 void IChessController::SetBoard(Board* board){
 	g_debug("IChessController::SetBoard");
 	this->board = board;
+	player1->setBoard(board);
+	player2->setBoard(board);
 }

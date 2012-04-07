@@ -5,7 +5,6 @@
 //Default Constructor
 Board::Board(IChessView* _view): turn(PLAYER1), view(_view), 
 		prev_row(-1), prev_col(-1), prev_piece(NULL){
-	this->view= _view;
 }
 
 //Destructor
@@ -29,10 +28,10 @@ Board::~Board(){
 //Notifies controller if move is made (and which one)
 	//Creates a move object and passes it back
 	//includes pieces destroyed
-bool Board::handleSelect(int row, int col){
+int Board::handleSelect(int row, int col){
 	int temp_row = row;
 	int temp_col = col;
-	bool return_bool = false;
+	bool return_int = NO_MOVE;
 	if(isObject(row, col)){
 		if(sameAsLast(row, col)){
 			unselectObjects();
@@ -51,6 +50,7 @@ bool Board::handleSelect(int row, int col){
 				bool success_select = notifyObject(row,col);
 				if(success_select){
 					switchTurns();
+				return_int = MOVED;
 				}
 				unselectObjects();
 				unlightSquares();
@@ -64,9 +64,12 @@ bool Board::handleSelect(int row, int col){
 	}else{
 		if(isObjectSelected()){
 			bool success_select = notifyObject(row,col);
+			std::cout << "success_select: " << success_select << std::endl;
 			if(success_select){
+				std::cout << "Successful move!" << std::endl;
+				g_debug("Successful move!");
 				switchTurns();
-				return_bool = true;
+				return_int = MOVED;
 			}
 			unselectObjects();
 			unlightSquares();
@@ -78,10 +81,13 @@ bool Board::handleSelect(int row, int col){
 		}
 		
 	}
-	
+	std::cout << "End of handleSelect! " << return_int << std::endl;
+	if(return_int){
+		if(checkEOG()) return GAME_OVER;
+	}
 	prev_row = temp_row;
 	prev_col = temp_col;
-	return return_bool;
+	return return_int;
 }
 
 //Uses the passed in Move object to move the pieces back
@@ -111,8 +117,23 @@ void Board::unlightSquares(){
 }
 
 //Checks Checkmate or stalemate
-void Board::checkEOG(){
-	
+bool Board::checkEOG(){
+	 Piece ** pieces;
+	 list<square> moves;
+	 bool game_over = true;
+	if(turn==PLAYER1){
+		pieces=pieces1;
+	}else{
+		pieces=pieces2;
+	}
+	for(int i=0;i<PIECES_PER_SIDE;++i){
+		pieces[i]->getMoves(moves);
+		if(moves.size()!=0){
+			game_over=false;
+		}
+		moves.clear();		
+	}
+	return game_over;
 }
 
 //Checks validity of move (Checkmate)
@@ -269,7 +290,10 @@ bool Board::isObjectSelected(){
 
 bool Board::notifyObject(int row,int col){
 	Piece* piece = getSelectedPiece();
-	return piece->selectCell(row,col);
+	bool temp_select = piece->selectCell(row,col);
+	std::cout << "returned from select cell" << std::endl;
+	std::cout << "temp_select: " << temp_select << std::endl;
+	return temp_select;
 }
 
 Piece* Board::getSelectedPiece(){
@@ -349,4 +373,23 @@ bool Board::isMyMove(int& row, int& col){
 */
 bool Board::isWhiteTurn(){
 	return !turn;
+}
+
+/**
+* Retrieves a random piece
+*/
+Piece* Board::getRandomPiece(){
+	srand ( time(NULL) );
+	Piece ** pieces;
+	Piece* piece;
+	if(turn==PLAYER1){
+		pieces=pieces1;
+	}else{
+		pieces=pieces2;
+	}
+	piece = pieces[rand() % PIECES_PER_SIDE];
+	while(!(piece->isActive())){
+		piece = pieces[rand() % PIECES_PER_SIDE];
+	}
+	return piece;
 }

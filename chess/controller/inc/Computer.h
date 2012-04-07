@@ -3,12 +3,11 @@
 
 #include "Player.h"
 
-class Board;
-
 /**
  * Interface for interacting with computer plaer
  */
 class Computer: public Player{
+	
 public: //methods
 
 	/**

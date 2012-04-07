@@ -6,6 +6,7 @@
 #include "ChessView.h"
 #include <list>
 #include <iostream>
+#include <time.h>
 using namespace std;
 #define WHITE 0
 #define BLACK 1
@@ -76,9 +77,26 @@ public:
 	 * Determines if move is possibly valid (without checking for check)
 	 */
 	bool isValidPossibleMove(int _row,int _col);
+	
+	/**
+	 * Retrieves all possible moves (checking for check)
+	 */
+	 virtual void getMoves(list<square>& moves)=0;	 
+	 
+	 /**
+	  * Get a random move and place in row and col
+	  */
+     virtual void getRandomMove(int& row,int& col);
+     
 	 
 protected:
-	 virtual void getMoves(list<square>& moves)=0;	 
+
+	   /**
+	  * Moves the piece and destroys the object in that square
+	  * if necessary
+	  */
+	 virtual bool movePiece(int _row, int _col);
+	 
 	 /**
 	  * Apends all of the valid moves in the up direction to moves list
 	  */
@@ -133,12 +151,7 @@ protected:
 	  *   2.)opponent's piece
 	  */	 
 	 virtual bool isPossibleMove(int _row, int _col);
-	 
-	 /**
-	  * Moves the piece and destroys the object in that square
-	  * if necessary
-	  */
-	 virtual bool movePiece(int _row, int _col);
+	
 	 
 	 /**
 	  * Determines if the row and column passed in is a possible move

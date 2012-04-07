@@ -108,7 +108,6 @@ void ChessGui_log_handler(const gchar *log_domain,
 
 int main(int argc,char ** argv)
 {
-	std::cout << "START OF PROGRAM" << std::endl;
 	IChessController* controller = 0;	
 	Board* board = 0;
 	
@@ -126,12 +125,10 @@ int main(int argc,char ** argv)
 	int logId = g_log_set_handler(0,G_LOG_LEVEL_MASK,ChessGui_log_handler,0);
 
 	#endif
-	std::cout << "BEFORE TRY STATEMENT" << std::endl;
 
 	try
 	{
 		#ifdef MEMCHECK
-		std::cout << "START OF MEMCHECK" << std::endl;
 		
 		ChessView game;
 		
@@ -140,7 +137,6 @@ int main(int argc,char ** argv)
 		game.run();
 
 		#else
-		std::cout << "START OF ELSE STATEMENT" << std::endl;
 		
 		Gtk::Main myapp(argc,argv);
 
@@ -157,7 +153,6 @@ int main(int argc,char ** argv)
 		
 		///run game
 		game.run(myapp);
-		std::cout << "AFTER GAME RUNS" << std::endl;
 		
 		#endif
 
@@ -180,7 +175,6 @@ int main(int argc,char ** argv)
 	
 	delete controller;
 	delete board;
-	std::cout << "END OF PROGRAM" << std::endl;
 
 	return 0;
 }

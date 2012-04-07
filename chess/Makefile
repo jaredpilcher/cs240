@@ -99,15 +99,15 @@ runhh: $(EXE)
 	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; $(EXE) "0";
 	
 runhc: $(EXE)
-	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; $(EXE) 1;
+	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; $(EXE) "1";
 
 # Run the executable for memory testing
 # Instructions: Edit the command below so that it runs the  
 # memory-check executable in Human-Human mode (i.e., add necessary command  
 # line arguments to the end of valgrind the command below).	
-memcheck: $(MEXE)
-	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; \
-	valgrind --tool=memcheck --leak-check=yes --max-stackframe=5000000 --show-reachable=yes --suppressions=string.supp $(MEXE) #command-line args go here
+#memcheck: $(MEXE)
+#	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; \
+#	valgrind --tool=memcheck --leak-check=yes --max-stackframe=5000000 --show-reachable=yes --suppressions=string.supp $(MEXE) #command-line args go here
 
 # Clean removes all of the .o files, libraries, and executables
 clean:
@@ -140,13 +140,13 @@ clean:
 $(EXE): $(MAIN_O) $(MY_OBJS) $(CHESS_LIB)
 	@# Re-link executable. Again, this should link the library file, not the .o's
 	@g++ $(INCLUDES) -o $(EXE) $(MAIN_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(LIBS)
-	export LD_LIBRARY_PATH=/users/home1/guest/j/jpilcher/cs240/chess/lib; $(EXE)
+	#export LD_LIBRARY_PATH=/users/home1/guest/j/jpilcher/cs240/chess/lib; $(EXE)
 
 # Executable for memory testing
 $(MEXE): $(MEMMAIN_O) $(MY_OBJS) $(CHESS_LIB)
 	@# Re-link executable. Again, this should link the library file, not the .o's
 	@g++ $(INCLUDES) -o $(MEXE) $(MEMMAIN_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(LIBS)
-	export LD_LIBRARY_PATH=/users/home1/guest/j/jpilcher/cs240/chess/lib; $(MEXE)
+	#export LD_LIBRARY_PATH=/users/home1/guest/j/jpilcher/cs240/chess/lib; $(MEXE)
 	
 
 # Main object file

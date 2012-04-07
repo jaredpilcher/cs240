@@ -3,8 +3,6 @@
 
 #include "Player.h"
 
-class Board;
-
 /**
  * Interface for interacting with human player
  */
