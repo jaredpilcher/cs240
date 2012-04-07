@@ -64,10 +64,10 @@ int Board::handleSelect(int row, int col){
 	}else{
 		if(isObjectSelected()){
 			bool success_select = notifyObject(row,col);
-			std::cout << "success_select: " << success_select << std::endl;
+			//std::cout << "success_select: " << success_select << std::endl;
 			if(success_select){
-				std::cout << "Successful move!" << std::endl;
-				g_debug("Successful move!");
+				//std::cout << "Successful move!" << std::endl;
+				//g_debug("Successful move!");
 				switchTurns();
 				return_int = MOVED;
 			}
@@ -81,7 +81,7 @@ int Board::handleSelect(int row, int col){
 		}
 		
 	}
-	std::cout << "End of handleSelect! " << return_int << std::endl;
+	//std::cout << "End of handleSelect! " << return_int << std::endl;
 	if(return_int){
 		if(checkEOG()) return GAME_OVER;
 	}
@@ -103,6 +103,7 @@ void Board::resetBoard(){
 
 //Highlights the given square
 void Board::lightSquare(int row, int col){
+	//std::cout << "lightSquare row: " << row << " col: " << col << std::endl;
 	 view->HighlightSquare(row, col, 65535);
 	 lit_squares.push_front((square){row,col});
 }
@@ -111,6 +112,7 @@ void Board::lightSquare(int row, int col){
 void Board::unlightSquares(){
 	list<square>::iterator it;
 	for(it = lit_squares.begin();it!=lit_squares.end();it++){
+		//std::cout << "UnlightSquare row: " << (*it).row << " col: " << (*it).col << std::endl;
 		view->UnHighlightSquare((*it).row,(*it).col);
 	}
 	lit_squares.clear();
@@ -127,11 +129,17 @@ bool Board::checkEOG(){
 		pieces=pieces2;
 	}
 	for(int i=0;i<PIECES_PER_SIDE;++i){
-		pieces[i]->getMoves(moves);
-		if(moves.size()!=0){
+		if(pieces[i]->isActive()){
+			pieces[i]->getMoves(moves);
+		}
+		if(moves.size()!=0){;
 			game_over=false;
+			break;
 		}
 		moves.clear();		
+	}
+	if(game_over){
+		std::cout << "GAME_OVER!!! In Check EOG()" << std::endl;
 	}
 	return game_over;
 }
@@ -291,8 +299,8 @@ bool Board::isObjectSelected(){
 bool Board::notifyObject(int row,int col){
 	Piece* piece = getSelectedPiece();
 	bool temp_select = piece->selectCell(row,col);
-	std::cout << "returned from select cell" << std::endl;
-	std::cout << "temp_select: " << temp_select << std::endl;
+	//std::cout << "returned from select cell" << std::endl;
+	//std::cout << "temp_select: " << temp_select << std::endl;
 	return temp_select;
 }
 
@@ -379,6 +387,7 @@ bool Board::isWhiteTurn(){
 * Retrieves a random piece
 */
 Piece* Board::getRandomPiece(){
+	
 	srand ( time(NULL) );
 	Piece ** pieces;
 	Piece* piece;
@@ -387,9 +396,10 @@ Piece* Board::getRandomPiece(){
 	}else{
 		pieces=pieces2;
 	}
-	piece = pieces[rand() % PIECES_PER_SIDE];
+	//~ std::cout << "randome_number: " << random_piece << std::endl;
+	piece = pieces[rand()%PIECES_PER_SIDE];
 	while(!(piece->isActive())){
-		piece = pieces[rand() % PIECES_PER_SIDE];
+		piece = pieces[rand()%PIECES_PER_SIDE];
 	}
 	return piece;
 }

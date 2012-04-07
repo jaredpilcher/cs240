@@ -15,6 +15,7 @@
 #include <sstream>
 #include <stdio.h>
 #include <cassert>
+#include <iostream>
 
 
 ChessGuiBoard::ChessGuiBoard(BaseObjectType* cobject,
@@ -346,8 +347,10 @@ void ChessGuiBoard::RefreshBoard()
 
 void ChessGuiBoard::HighlightSquare(signed int row,signed int col,guint32  color)
 {
+	
 	if( (row<0) || (row>=NUM_ROW) || (col<0) || (col >= NUM_COL))
 	{
+		std::cout << "GUI HIGHLIGHT SQUARE: row: " << row << " col: " << col << std::endl;
 		g_warning("ChessGuiBoard::HighlightSquare::Cell is out of range");
 		return;
 	}

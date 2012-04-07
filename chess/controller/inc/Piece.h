@@ -91,6 +91,11 @@ public:
 	 
 protected:
 
+	/**
+	 * Determines if the given row and column are on the board
+	 */
+	 bool inBoard(int _row, int _col);
+
 	   /**
 	  * Moves the piece and destroys the object in that square
 	  * if necessary

@@ -116,6 +116,7 @@ void Piece::getUpLeftSquares(list<square>& moves){
 	int temp_row=row-1;
 	int temp_col=col-1;
 	while(temp_row>=0 && temp_col>=0){
+		//std::cout << "getUpLeftSquares temp_row:" << temp_row << std::endl;
 		if(isPossibleMove(temp_row,temp_col) ){
 			moves.push_front((square){temp_row,temp_col});
 			if(board->canDestroy(temp_row,temp_col)){
@@ -201,7 +202,7 @@ bool Piece::isPossibleMove(int _row, int _col){
 bool Piece::movePiece(int _row, int _col){
 	Piece* destroyed_piece = board->getPiece(_row, _col);
 	if(destroyed_piece != NULL){
-		g_debug("Piece Destroyed!");
+		//g_debug("Piece Destroyed!");
 		destroyed_piece->destroyObject();
 	}
 	if(color == WHITE){
@@ -234,8 +235,8 @@ bool Piece::selectCell(int _row, int _col){
 	//change first_time
 	if(active && isValidMove(_row,_col)){
 		movePiece(_row,_col);
-		g_debug("moved piece!");
-		std::cout << "moved piece!" << std::endl;
+		//g_debug("moved piece!");
+		//std::cout << "moved piece!" << std::endl;
 		//first_move=0;
 		return true;
 	}
@@ -302,16 +303,17 @@ void Piece::getRandomMove(int& row,int& col){
 	srand ( time(NULL) );
 	list<square> moves;
 	getMoves(moves);
-	std::cout << "here4" << std::endl;
+	//std::cout << "here4" << std::endl;
 	int random_move;
 	if(moves.size()==0){
+		//std::cout << "no moves possible for this piece" << std::endl;
 		row = -1;
 		col = -1;
 		return;
 	}else{
-		random_move = (rand() % moves.size());
+		random_move = ((++random_move) % moves.size());
 	}
-	std::cout << "i: " << random_move << std::endl;
+	//std::cout << "i: " << random_move << std::endl;
 	list<square>::iterator it;
 	int i=0;
 	for(it = moves.begin();it!=moves.end();++it){
@@ -322,4 +324,11 @@ void Piece::getRandomMove(int& row,int& col){
 		}
 		++i;
 	}
+}
+
+/**
+* Determines if the given row and column are on the board
+*/
+bool Piece::inBoard(int _row, int _col){
+	return _row>=0 && _row<=7 && _col>=0 && _col<=7;
 }

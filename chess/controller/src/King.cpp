@@ -33,42 +33,42 @@ void King::getPossibleMoves(list<square>& moves){
 
 void King::getImmediateSquares(list<square>& moves){
 	//UP->LEFT
-	if(!board->correctPlayer(row-1,col-1)){
+	if(!board->correctPlayer(row-1,col-1) && inBoard(row-1,col-1)){
 			moves.push_front((square){row-1,col-1});
 	}
 	
 	//UP->RIGHT
-	if(!board->correctPlayer(row-1,col+1)){
+	if(!board->correctPlayer(row-1,col+1) && inBoard(row-1,col+1)){
 			moves.push_front((square){row-1,col+1});
 	}
 	
 	//DOWN->LEFT
-	if(!board->correctPlayer(row+1,col-1)){
+	if(!board->correctPlayer(row+1,col-1) && inBoard(row+1,col-1)){
 			moves.push_front((square){row+1,col-1});
 	}
 	
 	//DOWN->LEFT
-	if(!board->correctPlayer(row+1,col+1)){
+	if(!board->correctPlayer(row+1,col+1) && inBoard(row+1,col+1)){
 			moves.push_front((square){row+1,col+1});
 	}
 	
 	//UP
-	if(!board->correctPlayer(row-1,col)){
+	if(!board->correctPlayer(row-1,col) && inBoard(row-1,col)){
 			moves.push_front((square){row-1,col});
 	}
 	
 	//DOWN
-	if(!board->correctPlayer(row+1,col)){
+	if(!board->correctPlayer(row+1,col) && inBoard(row+1,col)){
 			moves.push_front((square){row+1,col});
 	}
 	
 	//LEFT
-	if(!board->correctPlayer(row,col-1)){
+	if(!board->correctPlayer(row,col-1) && inBoard(row,col-1)){
 			moves.push_front((square){row,col-1});
 	}
 	
 	//RIGHT
-	if(!board->correctPlayer(row,col+1)){
+	if(!board->correctPlayer(row,col+1) && inBoard(row,col+1)){
 			moves.push_front((square){row,col+1});
 	}
 }
