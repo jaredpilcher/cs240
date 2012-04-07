@@ -100,6 +100,12 @@ runhh: $(EXE)
 	
 runhc: $(EXE)
 	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; $(EXE) "1";
+	
+runch: $(EXE)
+	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; $(EXE) "2";
+	
+runcc: $(EXE)
+	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; $(EXE) "3";
 
 # Run the executable for memory testing
 # Instructions: Edit the command below so that it runs the  

@@ -53,27 +53,27 @@ void Pawn::getDiagonalSquares(list<square>& moves){
 void Pawn::getStraightSquares(list<square>& moves){
 	if(color==WHITE){
 		if(first_move){
-			if(!board->isObject(row-1,col)){
+			if(!board->isObject(row-1,col) && inBoard(row-1,col)){
 				moves.push_front((square){row-1,col});
 				if(!board->isObject(row-2,col)){
 					moves.push_front((square){row-2,col});
 				}
 			}
 		}else{
-			if(!board->isObject(row-1,col)){
+			if(!board->isObject(row-1,col) && inBoard(row-1,col)){
 				moves.push_front((square){row-1,col});
 			}
 		}
 	}else{
 		if(first_move){
-			if(!board->isObject(row+1,col)){
+			if(!board->isObject(row+1,col) && inBoard(row+1,col)){
 				moves.push_front((square){row+1,col});
 				if(!board->isObject(row+2,col)){
 					moves.push_front((square){row+2,col});
 				}
 			}
 		}else{
-			if(!board->isObject(row+1,col)){
+			if(!board->isObject(row+1,col) && inBoard(row+1,col)){
 				moves.push_front((square){row+1,col});
 			}
 		}

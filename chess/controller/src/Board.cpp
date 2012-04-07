@@ -403,3 +403,4 @@ Piece* Board::getRandomPiece(){
 	}
 	return piece;
 }
+

@@ -131,6 +131,7 @@ public:
 	 //Checks Checkmate or stalemate
 	bool checkEOG();
 
+
 private:
 	//Highlights the given square
 	void lightSquare(int row, int col);

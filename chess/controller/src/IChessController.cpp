@@ -22,6 +22,22 @@ IChessController::IChessController(char ** argv, int argc){
 		p1_type = HUMAN;
 		p2_type = COMPUTER;
 	}
+	
+	if(temp_type=="2"){
+		std::cout << "Computer vs Human" << std::endl;
+		player1 = new Computer();
+		player2 = new Human();
+		p1_type = COMPUTER;
+		p2_type = HUMAN;
+	}
+	
+	if(temp_type=="3"){
+		std::cout << "Computer vs Computer" << std::endl;
+		player1 = new Computer();
+		player2 = new Computer();
+		p1_type = COMPUTER;
+		p2_type = COMPUTER;
+	}
 }
 
 /**
@@ -85,6 +101,13 @@ void IChessController::on_NewGame(){
 	//g_debug("IChessController::on_NewGame");
 	
 	board->initializePieces();
+	player1->makeMove();
+	if(p1_type==COMPUTER && p2_type==COMPUTER){
+		//while(!(board->checkEOG())){
+			player2->makeMove();
+			player1->makeMove();
+		//}
+	}
 }
 
 /**
@@ -141,8 +164,11 @@ void IChessController::on_QuitGame(){
  */
 void IChessController::on_TimerEvent(){
 	//g_debug("IChessController::on_TimerEvent");
-	//player1->on_TimerEvent();
-	//player2->on_TimerEvent();
+	if(board->isWhiteTurn()){
+		player1->makeMove();
+	}else{
+		player2->makeMove();
+	}
 }
 
 /**
