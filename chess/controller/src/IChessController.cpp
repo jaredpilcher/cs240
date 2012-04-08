@@ -103,6 +103,9 @@ void IChessController::on_NewGame(){
 	board->initializePieces();
 	player1->makeMove();
 	if(p1_type==COMPUTER && p2_type==COMPUTER){
+		//START HERE NEXT TIME. CALL EOG HERE ONLY AND NOT IN BOARD OR COMPUTER
+		//OUTPUT INSTRUCTIONS TO USER IN GUI
+		//DOUBLE CHECK THAT ALL BOARD FUNCTIONALITY IS FINISHED (EXCEPT STALEMATE)
 		//while(!(board->checkEOG())){
 			player2->makeMove();
 			player1->makeMove();
