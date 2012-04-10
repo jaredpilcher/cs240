@@ -122,11 +122,6 @@ public:
 	* Determines if the given square is current player's move
 	*/
 	bool isMyMove(int& row, int& col);
-	
-	/**
-	 * Retrieves a random piece
-	 */
-	 Piece* getRandomPiece();
 	 
 	 //Checks Checkmate or stalemate
 	bool checkEOG();

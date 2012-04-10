@@ -52,6 +52,7 @@ CONT_OBJ = controller/obj/
 LIB_FOLDER = lib/
 EXE = bin/chess			# normal executable
 MEXE = bin/mchess			# executable for memory testing
+TEXE = bin/chesstest
 
 # Macros for compilation flags
 INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) $(CFLAGS)
@@ -65,6 +66,7 @@ LOG_FLAG = #'-DLOG_LEVEL_HIDE_MASK=(G_LOG_LEVEL_DEBUG|G_LOG_LEVEL_INFO)'
 # There are two different main.o files. One is for memory testing.
 MAIN_O = $(CONT_OBJ)main.o
 MEMMAIN_O = $(CONT_OBJ)memcheck_main.o
+TEST_O = $(CONT_OBJ)test.o
 
 # This macro should be used to store all of the object files created 
 # from *your* source files
@@ -94,6 +96,8 @@ CHESS_LIB = lib/libchess.so
 # Pseudo-targets
 
 bin: $(EXE)
+
+test: $(TEXE)
 
 runhh: $(EXE)
 	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; $(EXE) "0";
@@ -154,6 +158,11 @@ $(MEXE): $(MEMMAIN_O) $(MY_OBJS) $(CHESS_LIB)
 	@g++ $(INCLUDES) -o $(MEXE) $(MEMMAIN_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(LIBS)
 	#export LD_LIBRARY_PATH=/users/home1/guest/j/jpilcher/cs240/chess/lib; $(MEXE)
 	
+$(TEXE): $(TEST_O) $(MY_OBJS) $(CHESS_LIB)
+	@# Re-link executable. Again, this should link the library file, not the .o's
+	@g++ $(INCLUDES) -o $(TEXE) $(TEST_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(LIBS)
+	export LD_LIBRARY_PATH=/users/home1/guest/j/jpilcher/cs240/chess/lib; $(TEXE)
+	
 
 # Main object file
 $(MAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.h $(CONT_INC)IChessController.h
@@ -162,6 +171,11 @@ $(MAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.
 # Main .o for memory testing
 $(MEMMAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.h
 	g++ -DMEMCHECK $(DEBUG) $(INCLUDES) $(CFLAGS) -o $(MEMMAIN_O) -c $(LOG_FLAG) $(CONT_SRC)main.cpp
+	
+# Main object file
+$(TEST_O): $(CONT_SRC)test.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.h $(CONT_INC)IChessController.h \
+			$(CONT_INC)UnitTest.h
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) -o $(TEST_O) -c $(LOG_FLAG) $(CONT_SRC)test.cpp
 
 
 

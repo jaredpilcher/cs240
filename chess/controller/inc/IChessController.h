@@ -30,6 +30,8 @@ class IChessController
 	int p1_type;
 	int p2_type;
 	
+	bool game_over;
+	
 public:
 	/**
 	 * Constructor

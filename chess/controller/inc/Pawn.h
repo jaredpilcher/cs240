@@ -2,6 +2,7 @@
 #define PAWN_GUARD
 
 #include "Piece.h"
+#include <iostream>
 
 class Pawn: public Piece{
 	bool first_move;
@@ -22,7 +23,11 @@ public:
 	 * Retrieves all possible moves without checking for check
 	 */
 	void getPossibleMoves(list<square>& moves);
-
+	
+	/**
+	 * Test function for Pawn
+	 */
+	bool test(ostream& os);
 	 
 private:
 	 

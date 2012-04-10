@@ -4,7 +4,7 @@
 
 //Default Constructor
 Board::Board(IChessView* _view): turn(PLAYER1), view(_view), 
-		prev_row(-1), prev_col(-1), prev_piece(NULL){
+		prev_row(-1), prev_col(-1), prev_piece(0){
 }
 
 //Destructor
@@ -44,6 +44,7 @@ int Board::handleSelect(int row, int col){
 			unlightSquares();
 			unselectObjects();
 			list<square> temp_squares = temp_piece->selectPiece();
+			temp_squares.push_front((square){temp_piece->getRow(),temp_piece->getCol()});
 			highlightList(temp_squares);
 		}else{
 			if(isObjectSelected()){
@@ -82,9 +83,7 @@ int Board::handleSelect(int row, int col){
 		
 	}
 	//std::cout << "End of handleSelect! " << return_int << std::endl;
-	if(return_int){
-		if(checkEOG()) return GAME_OVER;
-	}
+
 	prev_row = temp_row;
 	prev_col = temp_col;
 	return return_int;
@@ -137,9 +136,6 @@ bool Board::checkEOG(){
 			break;
 		}
 		moves.clear();		
-	}
-	if(game_over){
-		std::cout << "GAME_OVER!!! In Check EOG()" << std::endl;
 	}
 	return game_over;
 }
@@ -245,8 +241,10 @@ bool Board::correctPlayer(int row, int col){
 		pieces=pieces2;
 	}
 	for(int i=0; i<PIECES_PER_SIDE;++i){
-		if(pieces[i]->getRow() == row && pieces[i]->getCol() == col){
-				return true;
+		if(pieces[i]!=NULL){
+			if(pieces[i]->getRow() == row && pieces[i]->getCol() == col){
+					return true;
+			}
 		}
 	}
 	return false;
@@ -260,8 +258,10 @@ bool Board::canDestroy(int row, int col){
 		pieces=pieces1;
 	}
 	for(int i=0; i<PIECES_PER_SIDE;++i){
-		if(pieces[i]->getRow() == row && pieces[i]->getCol() == col){
-				return true;
+		if(pieces[i]!=NULL){
+			if(pieces[i]->getRow() == row && pieces[i]->getCol() == col){
+					return true;
+			}
 		}
 	}
 	return false;
@@ -381,26 +381,5 @@ bool Board::isMyMove(int& row, int& col){
 */
 bool Board::isWhiteTurn(){
 	return !turn;
-}
-
-/**
-* Retrieves a random piece
-*/
-Piece* Board::getRandomPiece(){
-	
-	srand ( time(NULL) );
-	Piece ** pieces;
-	Piece* piece;
-	if(turn==PLAYER1){
-		pieces=pieces1;
-	}else{
-		pieces=pieces2;
-	}
-	//~ std::cout << "randome_number: " << random_piece << std::endl;
-	piece = pieces[rand()%PIECES_PER_SIDE];
-	while(!(piece->isActive())){
-		piece = pieces[rand()%PIECES_PER_SIDE];
-	}
-	return piece;
 }
 

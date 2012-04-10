@@ -4,9 +4,11 @@
 #include "IChessView.h"
 #include "ChessGuiDefines.h"
 #include "ChessView.h"
+#include "UnitTest.h"
 #include <list>
 #include <iostream>
 #include <time.h>
+
 using namespace std;
 #define WHITE 0
 #define BLACK 1
@@ -82,11 +84,6 @@ public:
 	 * Retrieves all possible moves (checking for check)
 	 */
 	 virtual void getMoves(list<square>& moves)=0;	 
-	 
-	 /**
-	  * Get a random move and place in row and col
-	  */
-     virtual void getRandomMove(int& row,int& col);
      
 	 
 protected:
@@ -174,6 +171,11 @@ protected:
 	 * Retrieves all possible moves without checking for check
 	 */
 	 virtual void getPossibleMoves(list<square>& moves)=0;
+	 
+	 /**
+	  * determines if all of the moves are on the board
+	  */
+	 bool checkMoves(list<square>& moves);
 };
 
 #endif

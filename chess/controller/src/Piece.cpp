@@ -24,16 +24,19 @@ bool Piece::isSelected(){
 
 bool Piece::setSelected(bool _selected){
 	selected = _selected;
+	return true;
 }
 
 bool Piece::setActive(bool _active){
 	active = _active;
+	return true;
 }
 
 bool Piece::destroyObject(){
 	active = false;
 	row = -1;
 	col = -1;
+	return true;
 }
 
 void Piece::getUpSquares(list<square>& moves){
@@ -213,6 +216,7 @@ bool Piece::movePiece(int _row, int _col){
 	view->ClearPiece(row,col);
 	row = _row;
 	col = _col;
+	return true;
 }
 
 bool Piece::isMove(list<square>& moves, int _row, int _col){
@@ -297,38 +301,20 @@ ImageName Piece::getType(){
 }
 
 /**
-* Get a random move and place in row and col
-*/
-void Piece::getRandomMove(int& row,int& col){
-	srand ( time(NULL) );
-	list<square> moves;
-	getMoves(moves);
-	//std::cout << "here4" << std::endl;
-	int random_move;
-	if(moves.size()==0){
-		//std::cout << "no moves possible for this piece" << std::endl;
-		row = -1;
-		col = -1;
-		return;
-	}else{
-		random_move = ((++random_move) % moves.size());
-	}
-	//std::cout << "i: " << random_move << std::endl;
-	list<square>::iterator it;
-	int i=0;
-	for(it = moves.begin();it!=moves.end();++it){
-		if(i==random_move){
-			row = (*it).row;
-			col = (*it).col;
-			return;
-		}
-		++i;
-	}
-}
-
-/**
 * Determines if the given row and column are on the board
 */
 bool Piece::inBoard(int _row, int _col){
 	return _row>=0 && _row<=7 && _col>=0 && _col<=7;
+}
+
+
+/**
+* determines if all of the moves are on the board
+*/
+bool Piece::checkMoves(list<square>& moves){
+	list<square>::iterator it;
+	for(it = moves.begin();it!=moves.end();++it){
+			if( ((*it).row>7) || ((*it).row<0) || ((*it).col>7) || ((*it).col<0) ) return false;
+	}
+	return true;
 }

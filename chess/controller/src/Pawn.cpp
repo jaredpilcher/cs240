@@ -6,10 +6,12 @@
 Pawn::Pawn(int _row, int _col, int _color, 
 		IChessView * _view, Board* _board, ImageName _type):
 		Piece(_row,_col,_color,_view,_board,_type), first_move(true){
-	if(color == WHITE){
-		view->PlacePiece(_row,_col,W_PAWN);
-	}else{
-		view->PlacePiece(_row,_col,B_PAWN);
+	if(_view!=NULL){
+		if(color == WHITE){
+			view->PlacePiece(_row,_col,W_PAWN);
+		}else{
+			view->PlacePiece(_row,_col,B_PAWN);
+		}
 	}
 }
 
@@ -95,6 +97,24 @@ bool Pawn::movePiece(int _row, int _col){
 	row = _row;
 	col = _col;
 	first_move=false;
+	return true;
 }
 
-
+/**
+* Test function for Pawn
+*/
+bool Pawn::test(ostream& os){
+	list<square> moves;
+	bool success = true;
+	for(int i=0;i<=7;++i){
+			for(int j=0;j<=7;++j){
+				row = i;
+				col = j;
+				getMoves(moves);
+				cout << "here2" << endl;
+				TEST(checkMoves(moves));
+				moves.clear();
+			}
+	}
+	return success;
+}

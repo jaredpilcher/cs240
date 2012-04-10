@@ -5,7 +5,7 @@
 /**
  * Constructor
  */
-IChessController::IChessController(char ** argv, int argc){
+IChessController::IChessController(char ** argv, int argc): game_over(false){
 	string temp_type = argv[1];
 	if(temp_type=="0"){
 		std::cout << "Human vs Human" << std::endl;
@@ -54,21 +54,27 @@ IChessController::~IChessController(){
  */
 void IChessController::on_CellSelected(int row, int col, int button){
 	int select_return;
-	if((board->isWhiteTurn()) && p1_type==HUMAN){
+	if((board->isWhiteTurn()) && p1_type==HUMAN && !game_over){
 		select_return = board->handleSelect(row, col);
-		if(select_return == GAME_OVER){
-			endOfGame();
-		}else if(select_return == MOVED){
-			std::cout << "made your move1!" << std::endl;
-			player2->makeMove();
+		if(select_return == MOVED){
+			//if(board->checkEOG()){
+				//endOfGame();
+				//view->SetBottomLabel("Checkmate! Player 1 Wins!");
+			//}else{
+				//view->SetBottomLabel("Player 2's Turn!");
+				player2->makeMove();
+			//}
 		}
-	}else if(!(board->isWhiteTurn()) && p2_type==HUMAN){
+	}else if(!(board->isWhiteTurn()) && p2_type==HUMAN && !game_over){
 		select_return = board->handleSelect(row, col);
-		if(select_return == GAME_OVER){
-			endOfGame();
-		}else if(select_return == MOVED){
-			std::cout << "made your move1!" << std::endl;
-			player1->makeMove();
+		if(select_return == MOVED){
+			//if(board->checkEOG()){
+				//endOfGame();
+				//view->SetBottomLabel("Checkmate! Player 2 Wins!");
+			//}else{
+				player1->makeMove();
+				//view->SetBottomLabel("Player 1's Turn!");
+			//}
 		}
 	}
 }
@@ -81,7 +87,7 @@ void IChessController::on_DragStart(int row,int col){
 }
 
 void IChessController::endOfGame(){
-	
+	game_over = true;
 }
 
 ///@param row where drag ended
@@ -101,16 +107,8 @@ void IChessController::on_NewGame(){
 	//g_debug("IChessController::on_NewGame");
 	
 	board->initializePieces();
+	view->SetBottomLabel("Player 1's Turn!");
 	player1->makeMove();
-	if(p1_type==COMPUTER && p2_type==COMPUTER){
-		//START HERE NEXT TIME. CALL EOG HERE ONLY AND NOT IN BOARD OR COMPUTER
-		//OUTPUT INSTRUCTIONS TO USER IN GUI
-		//DOUBLE CHECK THAT ALL BOARD FUNCTIONALITY IS FINISHED (EXCEPT STALEMATE)
-		//while(!(board->checkEOG())){
-			player2->makeMove();
-			player1->makeMove();
-		//}
-	}
 }
 
 /**
@@ -167,10 +165,18 @@ void IChessController::on_QuitGame(){
  */
 void IChessController::on_TimerEvent(){
 	//g_debug("IChessController::on_TimerEvent");
-	if(board->isWhiteTurn()){
+	if((board->isWhiteTurn()) && !game_over){
+		view->SetBottomLabel("Player 1's Turn!");
 		player1->makeMove();
-	}else{
+		if(board->checkEOG()) endOfGame();
+	}else if(!game_over){
+		view->SetBottomLabel("Player 2's Turn!");
 		player2->makeMove();
+		if(board->checkEOG()) endOfGame();
+	}else if(board->isWhiteTurn()){
+		view->SetBottomLabel("Checkmate! Player 2 Wins!");
+	}else{
+		view->SetBottomLabel("Checkmate! Player 1 Wins!");
 	}
 }
 
