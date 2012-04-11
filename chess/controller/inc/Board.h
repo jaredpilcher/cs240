@@ -70,11 +70,7 @@ public:
 	//Notifies controller if move is made (and which one)
 		//Creates a move object and passes it back
 		//includes pieces destroyed
-	int handleSelect(int row, int col);
-	
-	//Uses the passed in Move object to move the pieces back
-	//Activates pieces if necessary
-	void undoMove(Move move);
+	int handleSelect(int row, int col, Move& move);
 	
 	//Resets all pieces to original positions
 	void resetBoard();
@@ -125,14 +121,22 @@ public:
 	 
 	 //Checks Checkmate or stalemate
 	bool checkEOG();
+	
+	PieceStruct getPieceStruct(Piece* piece);
+	
+	void undoMove(Move move);
+	
+	void restorePiece(PieceStruct piece);
+	
+	//Unhighlight all squares
+	void unlightSquares();
 
 
 private:
 	//Highlights the given square
 	void lightSquare(int row, int col);
 	
-	//Unhighlight all squares
-	void unlightSquares();
+
 	
 	//Checks validity of move (Checkmate)
 	void checkMoveValid(Piece* piece, int from_row, int from_col,
@@ -187,6 +191,8 @@ private:
 		* Gets the King's coodinate of opponent
 		*/
 		void getKingSquare(int& row, int& col);
+		
+		Piece* findPiece(ImageName type);
 		
 };
 

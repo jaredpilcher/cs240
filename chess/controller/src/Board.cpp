@@ -28,10 +28,14 @@ Board::~Board(){
 //Notifies controller if move is made (and which one)
 	//Creates a move object and passes it back
 	//includes pieces destroyed
-int Board::handleSelect(int row, int col){
+int Board::handleSelect(int row, int col, Move& move){
 	int temp_row = row;
 	int temp_col = col;
 	bool return_int = NO_MOVE;
+	Piece* destroyed_piece = getPiece(row, col);
+	Piece* prev_piece = getSelectedPiece();
+	move.setPrevPiece(getPieceStruct(prev_piece));
+	move.setDestroyedPiece(getPieceStruct(destroyed_piece));
 	if(isObject(row, col)){
 		if(sameAsLast(row, col)){
 			unselectObjects();
@@ -51,7 +55,7 @@ int Board::handleSelect(int row, int col){
 				bool success_select = notifyObject(row,col);
 				if(success_select){
 					switchTurns();
-				return_int = MOVED;
+					return_int = MOVED;
 				}
 				unselectObjects();
 				unlightSquares();
@@ -83,16 +87,23 @@ int Board::handleSelect(int row, int col){
 		
 	}
 	//std::cout << "End of handleSelect! " << return_int << std::endl;
-
+	if(return_int==MOVED){
+		move.setAfterPiece(getPieceStruct(prev_piece));
+	}else{
+		move.clear();
+	}
 	prev_row = temp_row;
 	prev_col = temp_col;
 	return return_int;
 }
 
-//Uses the passed in Move object to move the pieces back
-//Activates pieces if necessary
-void Board::undoMove(Move move){
-	
+PieceStruct Board::getPieceStruct(Piece* piece){
+	if(piece==NULL){
+		return (PieceStruct){-1,-1,false,false,0,NO_IMAGE};
+	}
+	return (PieceStruct){piece->getRow(),piece->getCol(),
+						piece->isActive(),piece->isSelected(),
+						piece->getColor(),piece->getType()};
 }
 
 //Resets all pieces to original positions
@@ -383,3 +394,47 @@ bool Board::isWhiteTurn(){
 	return !turn;
 }
 
+void Board::undoMove(Move move){
+	PieceStruct after_piece = move.getAfterPiece();
+	PieceStruct prev_piece = move.getPrevPiece();
+	PieceStruct destroyed_piece = move.getDestroyedPiece();
+	
+	Piece* temp_piece = getPiece(after_piece.row,after_piece.col);
+	temp_piece->movePiece(prev_piece.row,prev_piece.col);
+	ImageName temp_type = temp_piece->getType();
+	if((temp_type==W_PAWN && temp_piece->getRow()==6) || (temp_type==B_PAWN && temp_piece->getRow()==1)){
+		temp_piece->setFirstMove();
+	}
+	restorePiece(destroyed_piece);
+	switchTurns();
+}
+
+void Board::restorePiece(PieceStruct piece){
+	Piece* temp_piece = findPiece(piece.type);
+	if(temp_piece!=NULL){
+		view->PlacePiece(piece.row,piece.col,piece.type);
+		temp_piece->setRow(piece.row);
+		temp_piece->setCol(piece.col);
+		temp_piece->setActive(true);
+		ImageName temp_type = temp_piece->getType();
+		if((temp_type==W_PAWN && temp_piece->getRow()==6) || (temp_type==B_PAWN && temp_piece->getRow()==1)){
+			temp_piece->setFirstMove();
+		}
+	}
+}
+
+Piece* Board::findPiece(ImageName type){
+	Piece ** pieces;
+	if(turn==PLAYER1){
+		pieces=pieces1;
+	}else{
+		pieces=pieces2;
+	}
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		if((pieces[i]->getType() == type) && !(pieces[i]->isActive())){
+				return pieces[i];
+		}
+	}
+	cout << "Didn't Find Piece!" << endl;
+	return NULL;
+}

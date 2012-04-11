@@ -5,7 +5,7 @@
 //Constructor
 Pawn::Pawn(int _row, int _col, int _color, 
 		IChessView * _view, Board* _board, ImageName _type):
-		Piece(_row,_col,_color,_view,_board,_type), first_move(true){
+		Piece(_row,_col,_color,_view,_board,_type){
 	if(_view!=NULL){
 		if(color == WHITE){
 			view->PlacePiece(_row,_col,W_PAWN);
@@ -82,23 +82,23 @@ void Pawn::getStraightSquares(list<square>& moves){
 	}
 }
 
-bool Pawn::movePiece(int _row, int _col){
-	Piece* destroyed_piece = board->getPiece(_row, _col);
-	if(destroyed_piece != NULL){
-		g_debug("Piece Destroyed!");
-		destroyed_piece->destroyObject();
-	}
-	if(color == WHITE){
-		view->PlacePiece(_row,_col,type);
-	}else{
-		view->PlacePiece(_row,_col,type);
-	}
-	view->ClearPiece(row,col);
-	row = _row;
-	col = _col;
-	first_move=false;
-	return true;
-}
+//bool Pawn::movePiece(int _row, int _col){
+	//Piece* destroyed_piece = board->getPiece(_row, _col);
+	//if(destroyed_piece != NULL){
+		//g_debug("Piece Destroyed!");
+		//destroyed_piece->destroyObject();
+	//}
+	//if(color == WHITE){
+		//view->PlacePiece(_row,_col,type);
+	//}else{
+		//view->PlacePiece(_row,_col,type);
+	//}
+	//view->ClearPiece(row,col);
+	//row = _row;
+	//col = _col;
+	//first_move=false;
+	//return true;
+//}
 
 /**
 * Test function for Pawn
@@ -111,10 +111,14 @@ bool Pawn::test(ostream& os){
 				row = i;
 				col = j;
 				getMoves(moves);
-				cout << "here2" << endl;
 				TEST(checkMoves(moves));
 				moves.clear();
 			}
 	}
 	return success;
 }
+
+//~ void Pawn::setFirstMove(){
+	//~ cout << "here" << endl;
+	//~ first_move=true;
+//~ }

@@ -54,27 +54,18 @@ IChessController::~IChessController(){
  */
 void IChessController::on_CellSelected(int row, int col, int button){
 	int select_return;
+	Move move;
 	if((board->isWhiteTurn()) && p1_type==HUMAN && !game_over){
-		select_return = board->handleSelect(row, col);
+		select_return = board->handleSelect(row, col, move);
 		if(select_return == MOVED){
-			//if(board->checkEOG()){
-				//endOfGame();
-				//view->SetBottomLabel("Checkmate! Player 1 Wins!");
-			//}else{
-				//view->SetBottomLabel("Player 2's Turn!");
-				player2->makeMove();
-			//}
+			model.pushMove(move);
+			player2->makeMove(move);
 		}
 	}else if(!(board->isWhiteTurn()) && p2_type==HUMAN && !game_over){
-		select_return = board->handleSelect(row, col);
+		select_return = board->handleSelect(row, col,move);
 		if(select_return == MOVED){
-			//if(board->checkEOG()){
-				//endOfGame();
-				//view->SetBottomLabel("Checkmate! Player 2 Wins!");
-			//}else{
-				player1->makeMove();
-				//view->SetBottomLabel("Player 1's Turn!");
-			//}
+			model.pushMove(move);
+			player1->makeMove(move);
 		}
 	}
 }
@@ -104,11 +95,12 @@ bool IChessController::on_DragEnd(int row,int col){
  * Calls to model to delete Current and History
  */
 void IChessController::on_NewGame(){
+	board->unlightSquares();
 	//g_debug("IChessController::on_NewGame");
-	
+	Move move;
 	board->initializePieces();
 	view->SetBottomLabel("Player 1's Turn!");
-	player1->makeMove();
+	player1->makeMove(move);
 }
 
 /**
@@ -117,6 +109,7 @@ void IChessController::on_NewGame(){
  * 		Current and History
  */
 void IChessController::on_SaveGame(){
+	board->unlightSquares();
 	g_debug("IChessController::on_SaveGame");
 
 }
@@ -127,6 +120,7 @@ void IChessController::on_SaveGame(){
  * Calls to the Model to save file with Current and History
  */
 void IChessController::on_SaveGameAs(){
+	board->unlightSquares();
 	view->SelectSaveFile();
 }
 
@@ -137,6 +131,7 @@ void IChessController::on_SaveGameAs(){
  * 		Current and History objects in Model
  */
 void IChessController::on_LoadGame(){
+	board->unlightSquares();
 	view->SelectLoadFile();
 }
 
@@ -146,8 +141,11 @@ void IChessController::on_LoadGame(){
  * 	undo those moves
  */
 void IChessController::on_UndoMove(){
-	g_debug("IChessController::on_UndoMove");
-
+	if(game_over) game_over=false;
+	board->unlightSquares();
+	if(!model.isHistoryEmpty()){
+		board->undoMove(model.popMove());
+	}
 }
 	
 /**
@@ -163,20 +161,24 @@ void IChessController::on_QuitGame(){
  * Handle when a timer event has been signaled.
  * Calls Player timer Events
  */
-void IChessController::on_TimerEvent(){
-	//g_debug("IChessController::on_TimerEvent");
+void IChessController::on_TimerEvent(){	
+	int select_return = NO_MOVE;
+	Move move;
 	if((board->isWhiteTurn()) && !game_over){
 		view->SetBottomLabel("Player 1's Turn!");
-		player1->makeMove();
+		select_return = player1->makeMove(move);
 		if(board->checkEOG()) endOfGame();
 	}else if(!game_over){
 		view->SetBottomLabel("Player 2's Turn!");
-		player2->makeMove();
+		select_return = player2->makeMove(move);
 		if(board->checkEOG()) endOfGame();
 	}else if(board->isWhiteTurn()){
 		view->SetBottomLabel("Checkmate! Player 2 Wins!");
 	}else{
 		view->SetBottomLabel("Checkmate! Player 1 Wins!");
+	}
+	if(select_return == MOVED){
+		model.pushMove(move);
 	}
 }
 

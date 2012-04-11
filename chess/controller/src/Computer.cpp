@@ -26,17 +26,19 @@ void Computer::on_CellSelected(int row, int col, int button){
 /**
 * Instructs player to make a move 
 */
-void Computer::makeMove(){
+int Computer::makeMove(Move& move){
   int row = 0;
   int col = 0;
-  while(!(board->handleSelect(row,col))){
+  int select_return = NO_MOVE;
+  while(select_return==NO_MOVE){
 	  row = (rand() % 8);
 	  col = (rand() % 8);
 	  if(board->checkEOG()){
 		break;
 	   }
-	}
-  
+	   select_return = board->handleSelect(row,col,move);
+  }
+  return select_return;
 }
 
 

@@ -34,6 +34,7 @@ protected:
 	Board * board;
 	IChessView * view;
 	ImageName type;
+	bool first_move;
 	
 public:
 	
@@ -43,7 +44,7 @@ public:
 	/**
 	 * Called when the piece is selected
 	 */
-	virtual list<square> selectPiece()=0;
+	virtual list<square> selectPiece();
 	
 		/**
 	 * Called after piece is selected
@@ -53,7 +54,11 @@ public:
 	
 	virtual int getRow();
 	 
-	 virtual int getCol();
+	 virtual int getCol();	
+	 
+	 virtual int setRow(int _row);
+	 
+	 virtual int setCol(int _col);
 	 
 	 virtual ImageName getType();
 	 
@@ -64,6 +69,8 @@ public:
 	 virtual bool setSelected(bool _selected);
 	 
 	 virtual bool setActive(bool _active);
+	 
+	 virtual int getColor();
 	 
 	 /**
 	  * Sets inactive and places off of board
@@ -83,21 +90,26 @@ public:
 	/**
 	 * Retrieves all possible moves (checking for check)
 	 */
-	 virtual void getMoves(list<square>& moves)=0;	 
+	 virtual void getMoves(list<square>& moves);	
+	 
+
+	 /**
+	  * Moves the piece and destroys the object in that square
+	  * if necessary
+	  */
+	 virtual bool movePiece(int _row, int _col); 
+	 
+     virtual void setFirstMove();
      
+     virtual bool isFirstMove();
 	 
 protected:
+
 
 	/**
 	 * Determines if the given row and column are on the board
 	 */
 	 bool inBoard(int _row, int _col);
-
-	   /**
-	  * Moves the piece and destroys the object in that square
-	  * if necessary
-	  */
-	 virtual bool movePiece(int _row, int _col);
 	 
 	 /**
 	  * Apends all of the valid moves in the up direction to moves list
@@ -170,7 +182,7 @@ protected:
 	 /**
 	 * Retrieves all possible moves without checking for check
 	 */
-	 virtual void getPossibleMoves(list<square>& moves)=0;
+	 virtual void getPossibleMoves(list<square>& moves);
 	 
 	 /**
 	  * determines if all of the moves are on the board

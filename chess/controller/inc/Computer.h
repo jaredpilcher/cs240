@@ -29,7 +29,7 @@ public: //methods
 	/**
 	 * Instructs player to make a move 
 	 */
-	virtual void makeMove();
+	virtual int makeMove(Move& move);
 
 	/**
 	 * Handle when the timeout duration has passed.

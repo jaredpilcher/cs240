@@ -4,7 +4,7 @@
 Piece::Piece(int _row, int _col, int _color, 
 			IChessView * _view, Board* _board, ImageName _type):
 		row(_row),col(_col),color(_color),view(_view),selected(false),
-		active(true), board(_board), type(_type){}
+		active(true), board(_board), type(_type), first_move(true){}
 
 int Piece::getRow(){
 	return row;
@@ -216,6 +216,7 @@ bool Piece::movePiece(int _row, int _col){
 	view->ClearPiece(row,col);
 	row = _row;
 	col = _col;
+	first_move=false;
 	return true;
 }
 
@@ -317,4 +318,40 @@ bool Piece::checkMoves(list<square>& moves){
 			if( ((*it).row>7) || ((*it).row<0) || ((*it).col>7) || ((*it).col<0) ) return false;
 	}
 	return true;
+}
+
+/**
+* Retrieves all possible moves without checking for check
+*/
+void Piece::getPossibleMoves(list<square>& moves){}
+
+/**
+* Called when the piece is selected
+*/
+list<square> Piece::selectPiece(){}
+
+/**
+* Retrieves all possible moves (checking for check)
+*/
+void Piece::getMoves(list<square>& moves){}
+
+	 
+int Piece::getColor(){
+	return color;
+}
+
+int Piece::setRow(int _row){
+	row = _row;
+}
+
+int Piece::setCol(int _col){
+	col = _col;
+}
+
+void Piece::setFirstMove(){
+	first_move=true;
+}
+
+bool Piece::isFirstMove(){
+	return first_move;
 }

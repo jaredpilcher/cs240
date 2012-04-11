@@ -5,7 +5,7 @@
 #include <iostream>
 
 class Pawn: public Piece{
-	bool first_move;
+	//bool first_move;
 public:
 	//Constructor
 	Pawn(int _row, int _col, int color, IChessView * _view, 
@@ -28,6 +28,8 @@ public:
 	 * Test function for Pawn
 	 */
 	bool test(ostream& os);
+	
+	//void setFirstMove();
 	 
 private:
 	 
@@ -46,7 +48,7 @@ private:
 	  */
 	 void getStraightSquares(list<square>& moves);
 	 
-	 bool movePiece(int _row, int _col);
+	 //~ bool movePiece(int _row, int _col);
 
 	 
 	

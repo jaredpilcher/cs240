@@ -1,6 +1,6 @@
 #ifndef PLAYER_GUARD
 #define PLAYER_GUARD
-
+#include "Move.h"
 class Board;
 
 /**
@@ -22,7 +22,7 @@ public: //methods
 	/**
 	 * Instructs player to make a move 
 	 */
-	virtual void makeMove() = 0;
+	virtual int makeMove(Move& move) = 0;
 
 	/**
 	 * Handle when the timeout duration has passed.

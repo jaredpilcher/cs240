@@ -26,8 +26,8 @@ void Human::on_CellSelected(int row, int col, int button){
 /**
 * Instructs player to make a move 
 */
-void Human::makeMove(){
-	
+int Human::makeMove(Move& move){
+	return NO_MOVE;
 }
 
 /**

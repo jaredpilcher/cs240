@@ -32,6 +32,8 @@ class IChessController
 	
 	bool game_over;
 	
+	Model model;
+	
 public:
 	/**
 	 * Constructor
