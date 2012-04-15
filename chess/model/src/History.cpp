@@ -21,3 +21,9 @@ Move History::popMove(){
 bool History::isEmpty(){
 	return moves.empty();
 }
+
+void History::clearMoves(){
+	while(!moves.empty()){
+		moves.pop();
+	}
+}

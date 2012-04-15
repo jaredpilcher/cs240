@@ -34,6 +34,7 @@ bool Piece::setActive(bool _active){
 
 bool Piece::destroyObject(){
 	active = false;
+	view->ClearPiece(row,col);
 	row = -1;
 	col = -1;
 	return true;

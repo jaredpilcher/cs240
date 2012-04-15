@@ -18,6 +18,8 @@ public:
 	Move popMove();
 	
 	bool isEmpty();
+	
+	void clearMoves();
 };
 
 #endif

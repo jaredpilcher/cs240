@@ -19,3 +19,33 @@ Move Model::popMove(){
 bool Model::isHistoryEmpty(){
 	return history.isEmpty();
 }
+
+void Model::clearHistory(){
+		history.clearMoves();
+}
+
+bool Model::saveFile(string filename){
+	ifstream opened_file;
+	try{
+		opened_file.open(filename);
+	}catch(...){
+		cout << "INVALID FILENAME" << endl;
+		return false;
+	}
+	opened_file << "Hello Jared" << endl;
+	opened_file.close();
+}
+
+//loads the file into board and history
+//Returnts a list of piece structs that is the current board setup
+stack<PieceStruct> Model::loadFile(string filename){
+	stack<PieceStruct> current_board;
+	current_board.push((PieceStruct){-1,-1,false,false,0,NO_IMAGE});
+	return current_board;
+}
+
+
+//Returns whether or not it is Player 1's turn when loading a file
+bool Model::isWhiteTurn(){
+	
+}

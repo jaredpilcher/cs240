@@ -6,6 +6,8 @@
 #include "Human.h"
 #include "Computer.h"
 #include <string.h>
+#include <stack>
+using namespace std;
 
 #define HUMAN 0
 #define COMPUTER 1
@@ -33,6 +35,9 @@ class IChessController
 	bool game_over;
 	
 	Model model;
+	
+	//current file that is opened
+	string current_file;
 	
 public:
 	/**
@@ -109,6 +114,9 @@ public:
 	 * Ends the game
 	 */
 	void endOfGame();
+	
+private:
+	void loadPieces(stack<PieceStruct> current_board);
 };
 
 #endif

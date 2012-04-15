@@ -130,6 +130,9 @@ public:
 	
 	//Unhighlight all squares
 	void unlightSquares();
+	
+	//Clears all of the pieces off of the board
+	void clearBoard();
 
 
 private:
@@ -193,6 +196,9 @@ private:
 		void getKingSquare(int& row, int& col);
 		
 		Piece* findPiece(ImageName type);
+		
+		//Destroys all pieces on the board
+		void deletePieces();
 		
 };
 

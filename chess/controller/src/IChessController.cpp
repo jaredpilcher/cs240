@@ -5,7 +5,7 @@
 /**
  * Constructor
  */
-IChessController::IChessController(char ** argv, int argc): game_over(false){
+IChessController::IChessController(char ** argv, int argc): game_over(false),current_file(""){
 	string temp_type = argv[1];
 	if(temp_type=="0"){
 		std::cout << "Human vs Human" << std::endl;
@@ -95,7 +95,8 @@ bool IChessController::on_DragEnd(int row,int col){
  * Calls to model to delete Current and History
  */
 void IChessController::on_NewGame(){
-	board->unlightSquares();
+	board->clearBoard();
+	model.clearHistory();
 	//g_debug("IChessController::on_NewGame");
 	Move move;
 	board->initializePieces();
@@ -110,7 +111,11 @@ void IChessController::on_NewGame(){
  */
 void IChessController::on_SaveGame(){
 	board->unlightSquares();
-	g_debug("IChessController::on_SaveGame");
+	if(current_file==""){
+		on_SaveGameAs();
+	}else{
+		model.saveFile(current_file);
+	}
 
 }
 
@@ -121,7 +126,8 @@ void IChessController::on_SaveGame(){
  */
 void IChessController::on_SaveGameAs(){
 	board->unlightSquares();
-	view->SelectSaveFile();
+	current_file = view->SelectSaveFile();
+	model.saveFile(current_file);
 }
 
 /**
@@ -132,7 +138,24 @@ void IChessController::on_SaveGameAs(){
  */
 void IChessController::on_LoadGame(){
 	board->unlightSquares();
-	view->SelectLoadFile();
+	Move move;
+	current_file = view->SelectLoadFile();
+	stack<PieceStruct> current_board = model.loadFile(current_file);
+	if(current_board.size()>0){
+		board->clearBoard();
+		loadPieces(current_board);
+		if(model.isWhiteTurn()){
+			view->SetBottomLabel("Player 1's Turn!");
+			player1->makeMove(move);
+		}else{
+			view->SetBottomLabel("Player 2's Turn!");
+			player2->makeMove(move);		
+		}
+	}
+}
+
+void IChessController::loadPieces(stack<PieceStruct> current_board){
+	
 }
 
 /**

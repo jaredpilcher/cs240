@@ -5,6 +5,10 @@
 //Default Constructor
 Board::Board(IChessView* _view): turn(PLAYER1), view(_view), 
 		prev_row(-1), prev_col(-1), prev_piece(0){
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		pieces1[i] = NULL;
+		pieces2[i] = NULL;
+	}
 }
 
 //Destructor
@@ -437,4 +441,17 @@ Piece* Board::findPiece(ImageName type){
 	}
 	cout << "Didn't Find Piece!" << endl;
 	return NULL;
+}
+
+//Clears all of the pieces off of the board
+void Board::clearBoard(){
+	deletePieces();
+	unlightSquares();
+}
+
+void Board::deletePieces(){
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		if(pieces1[i]!=NULL) pieces1[i]->destroyObject();
+		if(pieces2[i]!=NULL) pieces2[i]->destroyObject();
+	}
 }
