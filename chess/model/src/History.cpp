@@ -27,3 +27,7 @@ void History::clearMoves(){
 		moves.pop();
 	}
 }
+
+stack<Move> History::getMoves(){
+	return moves;
+}

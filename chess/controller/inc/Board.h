@@ -133,6 +133,9 @@ public:
 	
 	//Clears all of the pieces off of the board
 	void clearBoard();
+	
+	//returns a stack of all pieces on board
+	stack<PieceStruct> getPieces();
 
 
 private:
@@ -199,6 +202,8 @@ private:
 		
 		//Destroys all pieces on the board
 		void deletePieces();
+		
+
 		
 };
 

@@ -114,7 +114,7 @@ void IChessController::on_SaveGame(){
 	if(current_file==""){
 		on_SaveGameAs();
 	}else{
-		model.saveFile(current_file);
+		model.saveFile(current_file,board->getPieces());
 	}
 
 }
@@ -127,7 +127,7 @@ void IChessController::on_SaveGame(){
 void IChessController::on_SaveGameAs(){
 	board->unlightSquares();
 	current_file = view->SelectSaveFile();
-	model.saveFile(current_file);
+	model.saveFile(current_file,board->getPieces());
 }
 
 /**

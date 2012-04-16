@@ -1,4 +1,5 @@
 #include "Model.h"
+#include "Piece.h"
 
 Model::Model(){
 	
@@ -24,16 +25,8 @@ void Model::clearHistory(){
 		history.clearMoves();
 }
 
-bool Model::saveFile(string filename){
-	ifstream opened_file;
-	try{
-		opened_file.open(filename);
-	}catch(...){
-		cout << "INVALID FILENAME" << endl;
-		return false;
-	}
-	opened_file << "Hello Jared" << endl;
-	opened_file.close();
+bool Model::saveFile(string filename, stack<PieceStruct> pieces){
+	xml.saveChessGame(history.getMoves(),pieces,filename);
 }
 
 //loads the file into board and history

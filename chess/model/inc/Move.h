@@ -19,6 +19,7 @@ class Move{
 	PieceStruct after_piece;
 	PieceStruct destroyed_piece;
 	bool valid_move;
+	bool piece_destroyed;
 public:
 
 	Move();
@@ -50,6 +51,8 @@ public:
 	void clearPiece(PieceStruct& piece);
 	
 	void print();
+	
+	bool isPieceDestroyed();
 	
 };
 

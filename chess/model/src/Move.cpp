@@ -2,7 +2,7 @@
 #include "Piece.h"
 
 
-Move::Move():valid_move(true){}
+Move::Move():valid_move(true),piece_destroyed(false){}
 
 Move::~Move(){}
 
@@ -15,7 +15,10 @@ void Move::setAfterPiece(PieceStruct _after_piece){
 }
 
 void Move::setDestroyedPiece(PieceStruct _destroyed_piece){
-	destroyed_piece = _destroyed_piece;
+	if(_destroyed_piece.row!=-1 && _destroyed_piece.col!=-1){
+		piece_destroyed = true;
+		destroyed_piece = _destroyed_piece;
+	}
 }
 
 PieceStruct Move::getPrevPiece(){
@@ -73,4 +76,8 @@ void Move::print(){
 	cout << "Destroyed_Piece: row: " << destroyed_piece.row << " col: " << destroyed_piece.col
 		<< " active: " << destroyed_piece.active << " selected: " << destroyed_piece.selected	
 		<< " color: " << destroyed_piece.color << endl;
+}
+
+bool Move::isPieceDestroyed(){
+	return piece_destroyed;
 }

@@ -20,6 +20,8 @@ public:
 	bool isEmpty();
 	
 	void clearMoves();
+	
+	stack<Move> getMoves();
 };
 
 #endif

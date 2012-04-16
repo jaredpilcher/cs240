@@ -455,3 +455,24 @@ void Board::deletePieces(){
 		if(pieces2[i]!=NULL) pieces2[i]->destroyObject();
 	}
 }
+
+stack<PieceStruct> Board::getPieces(){
+	stack<PieceStruct> return_stack;
+	Piece* piece;
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		piece=pieces1[i];
+		if(piece->isActive()){
+			return_stack.push((PieceStruct){piece->getRow(),piece->getCol(),
+							piece->isActive(),piece->isSelected(),
+							piece->getColor(),piece->getType()});
+		}
+							
+		piece=pieces2[i];
+		if(piece->isActive()){
+			return_stack.push((PieceStruct){piece->getRow(),piece->getCol(),
+							piece->isActive(),piece->isSelected(),
+							piece->getColor(),piece->getType()});
+		}
+	}
+	return return_stack;
+}

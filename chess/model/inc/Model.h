@@ -9,8 +9,11 @@
 #include <fstream>
 using namespace std;
 
+class Piece;
+
 class Model{
 	History history;
+	XMLIO xml;
 public:
 
 	Model();
@@ -27,7 +30,7 @@ public:
 	
 	//saves the file to the current filename
 	//returns if successful or not
-	bool saveFile(string filename);
+	bool saveFile(string filename,stack<PieceStruct> pieces);
 	
 	//loads the file into board and history
 	//Returnts a list of piece structs that is the current board setup
