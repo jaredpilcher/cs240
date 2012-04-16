@@ -39,6 +39,8 @@ class IChessController
 	//current file that is opened
 	string current_file;
 	
+	bool game_paused;
+	
 public:
 	/**
 	 * Constructor

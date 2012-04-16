@@ -6,16 +6,17 @@
 bool XMLIO::saveChessGame(stack<Move> moves, 
 	stack<PieceStruct> board_pieces, string filename){
 	string file_string;
+	invertMoves(moves);
 	file_string = "<chessgame><board>";
-	cout << "here" << endl;
+	//cout << "here" << endl;
 	int i=0;
 	while(!board_pieces.empty()){
 		
-		cout << "here1" << i << endl;
+		//~ cout << "here1" << i << endl;
 
 		file_string += pieceToXML(board_pieces.top());
 		board_pieces.pop();
-		cout << "here2" << i++ << endl;
+		//~ cout << "here2" << i++ << endl;
 	}
 	file_string += "</board><history>";
 	while(!moves.empty()){
@@ -23,9 +24,18 @@ bool XMLIO::saveChessGame(stack<Move> moves,
 		moves.pop();
 	}
 	file_string += "</history></chessgame>";
-	cout << "File_string: " << file_string << endl;
+	//~ cout << "File_string: " << file_string << endl;
 	return saveFile(file_string, filename);	
 
+}
+
+void XMLIO::invertMoves(stack<Move>& moves){
+	stack<Move> temp_moves;
+	while(!moves.empty()){
+		temp_moves.push(moves.top());
+		moves.pop();
+	}
+	moves = temp_moves;
 }
 
 //performs the actual saving of the 
@@ -55,16 +65,16 @@ string XMLIO::pieceToXML(PieceStruct piece){
 	return_string += "<piece ";
 	return_string += "type=\"";
 	return_string += getType(piece);
-	cout << "here" << endl;
+	//~ cout << "here" << endl;
 	return_string += "\" color=\"";
 	return_string += getColor(piece);
-	cout << "here1" << endl;
+	//~ cout << "here1" << endl;
 	return_string += "\" column=\"";
 	return_string += toString(piece.col);
-	cout << "here2" << endl;
+	//~ cout << "here2" << endl;
 	return_string += "\" row=\"";
 	return_string += toString(piece.row);
-	cout << "here3" << endl;
+	//~ cout << "here3" << endl;
 	return_string += "\"/>";
 	return return_string;
 	
@@ -75,7 +85,7 @@ string XMLIO::moveToXML(Move move){
 	return_string = "<move>";
 	return_string += pieceToXML(move.getPrevPiece());
 	return_string += pieceToXML(move.getAfterPiece());
-	if(move.isPieceDestroyed()){
+	if(move.getDestroyedPiece().row!=-1){
 		cout << "PIECE DESTROYED!" << endl;
 		return_string += pieceToXML(move.getDestroyedPiece());
 	}
@@ -99,7 +109,7 @@ string XMLIO::getType(PieceStruct piece){
 	}if(type == W_QUEEN || type == B_QUEEN){
 		return "queen";
 	}
-	return "";
+	return " ";
 }
 
 //Determines which color piece is and returns a string describing it
@@ -113,6 +123,8 @@ string XMLIO::getColor(PieceStruct piece){
 
 string XMLIO::toString(int num){
 	switch(num){
+		case -1:
+			return "-1";
 		case 0:
 			return "0";
 		case 1:
@@ -146,5 +158,5 @@ string XMLIO::toString(int num){
 		case 15:
 			return "15";
 	}
-	return 0;
+	return " ";
 }

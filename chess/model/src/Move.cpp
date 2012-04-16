@@ -15,7 +15,7 @@ void Move::setAfterPiece(PieceStruct _after_piece){
 }
 
 void Move::setDestroyedPiece(PieceStruct _destroyed_piece){
-	if(_destroyed_piece.row!=-1 && _destroyed_piece.col!=-1){
+	if(_destroyed_piece.row!=-1){
 		piece_destroyed = true;
 		destroyed_piece = _destroyed_piece;
 	}

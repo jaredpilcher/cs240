@@ -35,6 +35,9 @@ private:
 	
 	//Convert an integer to string from 0-16
 	string toString(int num);
+	
+	//inverts the moves to get in chronological order
+	void invertMoves(stack<Move>& moves);
 };
 
 #endif

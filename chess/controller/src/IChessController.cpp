@@ -5,7 +5,7 @@
 /**
  * Constructor
  */
-IChessController::IChessController(char ** argv, int argc): game_over(false),current_file(""){
+IChessController::IChessController(char ** argv, int argc): game_over(false),current_file(""),game_paused(false){
 	string temp_type = argv[1];
 	if(temp_type=="0"){
 		std::cout << "Human vs Human" << std::endl;
@@ -95,6 +95,7 @@ bool IChessController::on_DragEnd(int row,int col){
  * Calls to model to delete Current and History
  */
 void IChessController::on_NewGame(){
+	game_paused = true;
 	board->clearBoard();
 	model.clearHistory();
 	//g_debug("IChessController::on_NewGame");
@@ -102,6 +103,7 @@ void IChessController::on_NewGame(){
 	board->initializePieces();
 	view->SetBottomLabel("Player 1's Turn!");
 	player1->makeMove(move);
+	game_paused = false;
 }
 
 /**
@@ -110,12 +112,14 @@ void IChessController::on_NewGame(){
  * 		Current and History
  */
 void IChessController::on_SaveGame(){
+	game_paused = true;
 	board->unlightSquares();
 	if(current_file==""){
 		on_SaveGameAs();
 	}else{
 		model.saveFile(current_file,board->getPieces());
 	}
+	game_paused = false;
 
 }
 
@@ -125,9 +129,11 @@ void IChessController::on_SaveGame(){
  * Calls to the Model to save file with Current and History
  */
 void IChessController::on_SaveGameAs(){
+	game_paused = true;
 	board->unlightSquares();
 	current_file = view->SelectSaveFile();
 	model.saveFile(current_file,board->getPieces());
+	game_paused = false;
 }
 
 /**
@@ -137,6 +143,7 @@ void IChessController::on_SaveGameAs(){
  * 		Current and History objects in Model
  */
 void IChessController::on_LoadGame(){
+	game_paused = true;
 	board->unlightSquares();
 	Move move;
 	current_file = view->SelectLoadFile();
@@ -152,6 +159,7 @@ void IChessController::on_LoadGame(){
 			player2->makeMove(move);		
 		}
 	}
+	game_paused = false;
 }
 
 void IChessController::loadPieces(stack<PieceStruct> current_board){
@@ -164,10 +172,12 @@ void IChessController::loadPieces(stack<PieceStruct> current_board){
  * 	undo those moves
  */
 void IChessController::on_UndoMove(){
+	game_paused = true;
 	if(game_over) game_over=false;
 	board->unlightSquares();
 	if(!model.isHistoryEmpty()){
 		board->undoMove(model.popMove());
+	game_paused = false;
 	}
 }
 	
@@ -176,6 +186,7 @@ void IChessController::on_UndoMove(){
  * quit button, the close X button, or the file menu.
  */
 void IChessController::on_QuitGame(){
+	game_paused = true;
 	//g_debug("IChessController::on_QuitGame");
 
 }
@@ -185,23 +196,25 @@ void IChessController::on_QuitGame(){
  * Calls Player timer Events
  */
 void IChessController::on_TimerEvent(){	
-	int select_return = NO_MOVE;
-	Move move;
-	if((board->isWhiteTurn()) && !game_over){
-		view->SetBottomLabel("Player 1's Turn!");
-		select_return = player1->makeMove(move);
-		if(board->checkEOG()) endOfGame();
-	}else if(!game_over){
-		view->SetBottomLabel("Player 2's Turn!");
-		select_return = player2->makeMove(move);
-		if(board->checkEOG()) endOfGame();
-	}else if(board->isWhiteTurn()){
-		view->SetBottomLabel("Checkmate! Player 2 Wins!");
-	}else{
-		view->SetBottomLabel("Checkmate! Player 1 Wins!");
-	}
-	if(select_return == MOVED){
-		model.pushMove(move);
+	if(!game_paused){
+		int select_return = NO_MOVE;
+		Move move;
+		if((board->isWhiteTurn()) && !game_over){
+			view->SetBottomLabel("Player 1's Turn!");
+			select_return = player1->makeMove(move);
+			if(board->checkEOG()) endOfGame();
+		}else if(!game_over){
+			view->SetBottomLabel("Player 2's Turn!");
+			select_return = player2->makeMove(move);
+			if(board->checkEOG()) endOfGame();
+		}else if(board->isWhiteTurn()){
+			view->SetBottomLabel("Checkmate! Player 2 Wins!");
+		}else{
+			view->SetBottomLabel("Checkmate! Player 1 Wins!");
+		}
+		if(select_return == MOVED){
+			model.pushMove(move);
+		}
 	}
 }
 
