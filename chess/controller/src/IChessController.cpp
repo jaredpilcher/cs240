@@ -146,11 +146,11 @@ void IChessController::on_LoadGame(){
 	game_paused = true;
 	board->unlightSquares();
 	Move move;
+	stack<PieceStruct> current_pieces;
 	current_file = view->SelectLoadFile();
-	stack<PieceStruct> current_board = model.loadFile(current_file);
-	if(current_board.size()>0){
+	if(model.loadFile(current_file, current_pieces)){
 		board->clearBoard();
-		loadPieces(current_board);
+		loadPieces(current_pieces);
 		if(model.isWhiteTurn()){
 			view->SetBottomLabel("Player 1's Turn!");
 			player1->makeMove(move);
@@ -162,8 +162,12 @@ void IChessController::on_LoadGame(){
 	game_paused = false;
 }
 
-void IChessController::loadPieces(stack<PieceStruct> current_board){
-	
+void IChessController::loadPieces(stack<PieceStruct> current_pieces){
+	board->clearBoard();
+	while(current_pieces.size()>0){
+		board->loadPiece(current_pieces.top());
+		current_pieces.pop();
+	}
 }
 
 /**

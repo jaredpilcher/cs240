@@ -49,6 +49,7 @@ int Board::handleSelect(int row, int col, Move& move){
 		}
 		else if(correctPlayer(row, col)){
 			Piece * temp_piece = getPiece(row, col);
+			cout << "temp_piece type: " << temp_piece->getType() << endl;
 			unlightSquares();
 			unselectObjects();
 			list<square> temp_squares = temp_piece->selectPiece();
@@ -313,6 +314,7 @@ bool Board::isObjectSelected(){
 
 bool Board::notifyObject(int row,int col){
 	Piece* piece = getSelectedPiece();
+	//cout << "type: " << piece->getType() << endl;
 	bool temp_select = piece->selectCell(row,col);
 	//std::cout << "returned from select cell" << std::endl;
 	//std::cout << "temp_select: " << temp_select << std::endl;
@@ -475,4 +477,22 @@ stack<PieceStruct> Board::getPieces(){
 		}
 	}
 	return return_stack;
+}
+
+void Board::loadPiece(PieceStruct load_piece){
+	Piece* piece = getAvailPiece(load_piece);
+	if(piece!=NULL) piece->activateObject(load_piece);
+}
+
+Piece* Board::getAvailPiece(PieceStruct load_piece){
+	Piece ** pieces;
+	if(load_piece.color==BLACK){
+		pieces = pieces2;
+	}else{
+		pieces = pieces1;
+	}
+	for(int i=0; i<PIECES_PER_SIDE;++i){
+		if(((pieces[i]->getType()) == load_piece.type) && !(pieces[i]->isActive())) return pieces[i];
+	}
+	return NULL;
 }

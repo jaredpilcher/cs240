@@ -33,8 +33,8 @@ public:
 	bool saveFile(string filename,stack<PieceStruct> pieces);
 	
 	//loads the file into board and history
-	//Returnts a list of piece structs that is the current board setup
-	stack<PieceStruct> loadFile(string filename);
+	//Returns whether or not it was loaded properly
+	bool loadFile(string filename, stack<PieceStruct>& current_board);
 	
 	//Returns whether or not it is Player 1's turn if loading a file
 	bool isWhiteTurn();

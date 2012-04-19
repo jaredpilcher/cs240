@@ -49,13 +49,16 @@ VIEW_OBJ = view/obj/
 CONT_SRC = controller/src/
 CONT_INC = controller/inc/
 CONT_OBJ = controller/obj/
+LIBRARY = lib/libcs240utils.a
+UTILS_INC = utils/inc
+UTILS_SRC = utils/src
 LIB_FOLDER = lib/
 EXE = bin/chess			# normal executable
 MEXE = bin/mchess			# executable for memory testing
 TEXE = bin/chesstest
 
 # Macros for compilation flags
-INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) $(CFLAGS)
+INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) -I$(UTILS_INC) $(CFLAGS)
 DEBUG = #-g # Uncomment this if you want to compile with debug info
 
 # Uncomment the flag on this next line to turn off the logging messages from the
@@ -89,6 +92,10 @@ LIB_OBJS = $(VIEW_OBJ)ChessView.o \
 #Chess shared library
 CHESS_LIB = lib/libchess.so
 
+LIBRARY_OBJ_FILES = utils/obj/StringUtil.o utils/obj/URLInputStream.o utils/obj/FileInputStream.o \
+utils/obj/HTTPInputStream.o utils/obj/CommandRunner.o utils/obj/FileSystem.o \
+utils/obj/HTMLToken.o utils/obj/HTMLTokenizer.o
+
 
 
 
@@ -111,6 +118,10 @@ runch: $(EXE)
 runcc: $(EXE)
 	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; $(EXE) "3";
 
+#Create CS240 library
+$(LIBRARY): $(LIBRARY_OBJ_FILES)
+	@ar r $(LIBRARY) $(LIBRARY_OBJ_FILES)
+
 # Run the executable for memory testing
 # Instructions: Edit the command below so that it runs the  
 # memory-check executable in Human-Human mode (i.e., add necessary command  
@@ -127,6 +138,7 @@ clean:
 	@rm -f $(EXE)
 	@rm -f $(MEXE)
 	@rm -f $(LIB_FOLDER)*.so
+	@rm -f utils/bin/*.o
 	
 
 
@@ -147,20 +159,20 @@ clean:
 # the executable should be dependent on, and link in the library file, not the 
 # .o files! That means, instead of linking in $(LIB_OBJS) below, you should link
 # in the actual library file.
-$(EXE): $(MAIN_O) $(MY_OBJS) $(CHESS_LIB)
+$(EXE): $(MAIN_O) $(MY_OBJS) $(CHESS_LIB) $(LIBRARY)
 	@# Re-link executable. Again, this should link the library file, not the .o's
-	@g++ $(INCLUDES) -o $(EXE) $(MAIN_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(LIBS)
+	@g++ $(INCLUDES) -o $(EXE) $(MAIN_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(LIBS) $(LIBRARY)
 	#export LD_LIBRARY_PATH=/users/home1/guest/j/jpilcher/cs240/chess/lib; $(EXE)
 
 # Executable for memory testing
 $(MEXE): $(MEMMAIN_O) $(MY_OBJS) $(CHESS_LIB)
 	@# Re-link executable. Again, this should link the library file, not the .o's
-	@g++ $(INCLUDES) -o $(MEXE) $(MEMMAIN_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(LIBS)
+	@g++ $(INCLUDES) -o $(MEXE) $(MEMMAIN_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(LIBS) $(LIBRARY)
 	#export LD_LIBRARY_PATH=/users/home1/guest/j/jpilcher/cs240/chess/lib; $(MEXE)
 	
 $(TEXE): $(TEST_O) $(MY_OBJS) $(CHESS_LIB)
 	@# Re-link executable. Again, this should link the library file, not the .o's
-	@g++ $(INCLUDES) -o $(TEXE) $(TEST_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(LIBS)
+	@g++ $(INCLUDES) -o $(TEXE) $(TEST_O) $(MY_OBJS) -L$(LIB_FOLDER) -lchess $(LIBS) $(LIBRARY)
 	export LD_LIBRARY_PATH=/users/home1/guest/j/jpilcher/cs240/chess/lib; $(TEXE)
 	
 
@@ -283,3 +295,31 @@ $(VIEW_OBJ)SelectDialog.o: $(VIEW_SRC)SelectDialog.cpp
 # Targets for GUI-related share library
 $(CHESS_LIB): $(LIB_OBJS)
 	g++ -shared -o $(LIB_FOLDER)libchess.so -fPIC $(LIB_OBJS)
+
+################################################
+#CS240 Utils Library Object Files
+
+utils/obj/StringUtil.o: utils/inc/StringUtil.h utils/src/StringUtil.cpp
+	@g++ -c -Wall -o utils/obj/StringUtil.o -I utils/inc/ utils/src/StringUtil.cpp
+
+
+utils/obj/URLInputStream.o: utils/inc/URLInputStream.h utils/src/URLInputStream.cpp
+	@g++ -c -Wall -o utils/obj/URLInputStream.o -I utils/inc/ utils/src/URLInputStream.cpp
+
+utils/obj/FileInputStream.o: utils/inc/FileInputStream.h utils/src/FileInputStream.cpp
+	@g++ -c -Wall -o utils/obj/FileInputStream.o -I utils/inc/ utils/src/FileInputStream.cpp	
+
+utils/obj/HTTPInputStream.o: utils/inc/HTTPInputStream.h utils/src/HTTPInputStream.cpp
+	@g++ -c -Wall -o utils/obj/HTTPInputStream.o -I utils/inc/ utils/src/HTTPInputStream.cpp
+
+utils/obj/CommandRunner.o: utils/inc/CommandRunner.h utils/src/CommandRunner.cpp
+	@g++ -c -Wall -o utils/obj/CommandRunner.o -I utils/inc/ utils/src/CommandRunner.cpp
+
+utils/obj/FileSystem.o: utils/inc/FileSystem.h utils/src/FileSystem.cpp
+	@g++ -c -Wall -o utils/obj/FileSystem.o -I utils/inc/ utils/src/FileSystem.cpp
+
+utils/obj/HTMLToken.o: utils/inc/HTMLToken.h utils/src/HTMLToken.cpp
+	@g++ -c -Wall -o utils/obj/HTMLToken.o -I utils/inc/ utils/src/HTMLToken.cpp
+
+utils/obj/HTMLTokenizer.o: utils/inc/HTMLTokenizer.h utils/src/HTMLTokenizer.cpp
+	@g++ -c -Wall -o utils/obj/HTMLTokenizer.o -I utils/inc/ utils/src/HTMLTokenizer.cpp

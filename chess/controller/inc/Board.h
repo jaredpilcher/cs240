@@ -137,11 +137,13 @@ public:
 	//returns a stack of all pieces on board
 	stack<PieceStruct> getPieces();
 
+	void loadPiece(PieceStruct load_piece);
 
 private:
 	//Highlights the given square
 	void lightSquare(int row, int col);
 	
+	Piece* getAvailPiece(PieceStruct load_piece);
 
 	
 	//Checks validity of move (Checkmate)

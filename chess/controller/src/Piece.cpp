@@ -40,6 +40,24 @@ bool Piece::destroyObject(){
 	return true;
 }
 
+void Piece::activateObject(PieceStruct load_piece){
+	active = true;
+	selected = false;
+	row = load_piece.row;
+	col = load_piece.col;
+	type = load_piece.type;
+	//cout << "type: " << type << endl;
+	//cout << "row: " << row << endl;
+	//cout << "col: " << col << endl;
+	if(row==7 && col==1){
+		cout << "FOUND THE ROOK!!!" << endl;
+	}
+	view->PlacePiece(row,col,type);
+	if((type==W_PAWN && row==6) || (type==B_PAWN && row==1)){
+		first_move = true;
+	}
+}
+
 void Piece::getUpSquares(list<square>& moves){
 	int temp_row=row-1;
 	while(temp_row>=0){

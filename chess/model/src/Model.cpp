@@ -30,15 +30,17 @@ bool Model::saveFile(string filename, stack<PieceStruct> pieces){
 }
 
 //loads the file into board and history
-//Returnts a list of piece structs that is the current board setup
-stack<PieceStruct> Model::loadFile(string filename){
-	stack<PieceStruct> current_board;
-	current_board.push((PieceStruct){-1,-1,false,false,0,NO_IMAGE});
-	return current_board;
+//Returns whether or not it was loaded properly
+bool Model::loadFile(string filename, stack<PieceStruct>& current_board){
+	stack<Move> moves;
+	if(!xml.loadChessGame(moves,current_board,filename)) return false;
+	return true;
 }
 
 
 //Returns whether or not it is Player 1's turn when loading a file
 bool Model::isWhiteTurn(){
-	
+	//FIX LATER!
+	return true;
+	//END FIX LATER!
 }

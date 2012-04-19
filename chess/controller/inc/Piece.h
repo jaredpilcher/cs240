@@ -102,6 +102,8 @@ public:
      virtual void setFirstMove();
      
      virtual bool isFirstMove();
+     
+     void activateObject(PieceStruct load_piece);
 	 
 protected:
 

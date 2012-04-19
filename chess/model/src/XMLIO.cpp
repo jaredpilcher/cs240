@@ -9,7 +9,6 @@ bool XMLIO::saveChessGame(stack<Move> moves,
 	invertMoves(moves);
 	file_string = "<chessgame><board>";
 	//cout << "here" << endl;
-	int i=0;
 	while(!board_pieces.empty()){
 		
 		//~ cout << "here1" << i << endl;
@@ -27,6 +26,111 @@ bool XMLIO::saveChessGame(stack<Move> moves,
 	//~ cout << "File_string: " << file_string << endl;
 	return saveFile(file_string, filename);	
 
+}
+
+//Loads the game from the file named filename
+//Places the moves, and board pieces in their respective arguments
+//Returns whether or not the file was loaded properly
+bool XMLIO::loadChessGame(stack<Move>& moves, stack<PieceStruct>& board_pieces, 
+						string filename){
+	string file_string = getFileString(filename);
+	if(file_string=="") return false;
+	getPieces(file_string,board_pieces);
+	getMoves(file_string, moves);
+	return true;
+}
+
+//Retrieves the pieces from the xml string
+void XMLIO::getPieces(string file_string,stack<PieceStruct>& board_pieces){
+	HTMLTokenizer tokenizer(file_string);
+	HTMLToken token = tokenizer.GetNextToken();
+	while(tokenizer.HasNextToken()){
+		if(startsWith(token.GetValue(),"piece")){
+			getPiece(token,board_pieces);
+		}
+		if(startsWith(token.GetValue(),"history")){
+			break;
+		}
+		token = tokenizer.GetNextToken();
+	}
+}
+
+void XMLIO::getPiece(HTMLToken token,stack<PieceStruct>& board_pieces){
+	PieceStruct piece;
+	piece.row = atoi(token.GetAttribute("row").data());
+	piece.col = atoi(token.GetAttribute("column").data());
+	piece.active = true;
+	piece.selected = false;
+	if(token.GetAttribute("color") == "black"){
+		piece.color = BLACK;
+		piece.type = readType(BLACK,token.GetAttribute("type"));
+	}else{
+		piece.color = WHITE;
+		piece.type = readType(WHITE,token.GetAttribute("type"));
+	}
+	board_pieces.push(piece);
+}
+
+ImageName XMLIO::readType(int color,string type){
+	if(color==BLACK){
+		if(type=="pawn") return B_PAWN;
+		if(type=="rook") return B_ROOK;
+		if(type=="knight") return B_KNIGHT;
+		if(type=="bishop") return B_BISHOP;
+		if(type=="king") return B_KING;
+		if(type=="queen") return B_QUEEN;
+	}else{
+		if(type=="pawn") return W_PAWN;
+		if(type=="rook") return W_ROOK;
+		if(type=="knight") return W_KNIGHT;
+		if(type=="bishop") return W_BISHOP;
+		if(type=="king") return W_KING;
+		if(type=="queen") return W_QUEEN;
+	}
+}
+
+bool XMLIO::startsWith(string line,string substring){
+	toCapital(line);
+	toCapital(substring);
+	unsigned int i=0;
+	for(;i<substring.size() && i<line.size();++i){
+		if(line[i]==substring[i]){
+			continue;
+		}
+		return false;
+	}
+	if(i<substring.size()) return false;
+	return true;
+}
+
+void XMLIO::toCapital(string & line){
+	for(unsigned int i=0; i<line.size();++i){
+		if(line[i] >= 'a' && line[i] <= 'z'){
+			line[i]=line[i]-' ';
+		}
+	}
+}
+
+//Retrieves the moves from the xml string
+void XMLIO::getMoves(string file_string,stack<Move>& moves){
+	
+}
+
+//Retrieves all characters from the file
+string XMLIO::getFileString(string filename){
+	string file_string;
+	char line_string[MAX_LINE_CHARS];
+	try{
+		ifstream filestream(filename.data());
+		while(!filestream.eof()){
+			filestream.getline(line_string,MAX_LINE_CHARS);
+			file_string += line_string;
+		}
+		return file_string;
+	}
+	catch(...){
+		return "";
+	}
 }
 
 void XMLIO::invertMoves(stack<Move>& moves){
