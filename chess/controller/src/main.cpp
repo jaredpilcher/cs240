@@ -149,7 +149,7 @@ int main(int argc,char ** argv)
 		
 		connectController(game, &controller, &board, argc, argv);		
 		
-		g_debug("Main::Before game start");
+		//g_debug("Main::Before game start");
 		///run game
 		game.run(myapp);
 		

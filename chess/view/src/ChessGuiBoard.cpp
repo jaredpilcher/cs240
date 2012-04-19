@@ -83,7 +83,7 @@ std::string ChessGuiBoard::GenStringName(int row,int col)
 
 void ChessGuiBoard::InitCell(const Glib::RefPtr<Gnome::Glade::Xml> & chessXml,int row,int col)
 {
-	g_debug("ChessGuiBoard::initCell row:%d col:%d",row,col);
+	//~ g_debug("ChessGuiBoard::initCell row:%d col:%d",row,col);
 	//cell is out of range
 	assert((row>-1) || (row<NUM_ROW) || (col>-1) || (col < NUM_COL));
 
@@ -142,8 +142,8 @@ void ChessGuiBoard::ConnectCellSignals(ChessGuiBoardCell * cell,
 									   int row,
 									   int col)
 {
-	g_debug("ChessGuiBoard::ConnectCellSignals::image=%s row=%d col=%d",
-			cell->get_name().c_str(), row, col);
+	//~ g_debug("ChessGuiBoard::ConnectCellSignals::image=%s row=%d col=%d",
+			//~ cell->get_name().c_str(), row, col);
 
 	///connect button pressed/released events
 	eb->signal_button_release_event().connect(
@@ -176,8 +176,8 @@ void ChessGuiBoard::ConnectCellSignals(ChessGuiBoardCell * cell,
 /*********************************************************************************signal handllers*/
 bool ChessGuiBoard::on_button_released(GdkEventButton* event,int row,int col)
 {
-	g_debug("ChessGuiBoard::on_button_released row=%d col=%d curRow=%d curCol=%d",
-			row, col, curCellRow, curCellCol);
+	//~ g_debug("ChessGuiBoard::on_button_released row=%d col=%d curRow=%d curCol=%d",
+			//~ row, col, curCellRow, curCellCol);
 
 	if(curCellRow==row && curCellCol==col && !dragStarted)
 	{
@@ -195,7 +195,7 @@ bool ChessGuiBoard::on_button_released(GdkEventButton* event,int row,int col)
 
 bool ChessGuiBoard::on_button_pressed(GdkEventButton* event,int row,int col)
 {
-	g_debug("ChessGuiBoard::button_pressed row=%d col=%d button=%d",row,col, event->button);
+	//~ g_debug("ChessGuiBoard::button_pressed row=%d col=%d button=%d",row,col, event->button);
 	///set curCellRow and curCellCol
 	curCellRow=row;
 	curCellCol=col;
@@ -207,7 +207,7 @@ void ChessGuiBoard::on_cell_drag_begin(const Glib::RefPtr<Gdk::DragContext>& con
 									   int row,
 									   int col)
 {
-	g_debug("ChessGuiBoard::drag_begin row=%d col=%d",row,col);
+	//~ g_debug("ChessGuiBoard::drag_begin row=%d col=%d",row,col);
 
 
 	///Set the Drag Icon
@@ -250,7 +250,7 @@ bool ChessGuiBoard::on_cell_drag_drop(const Glib::RefPtr<Gdk::DragContext>& cont
 									  int row,
 									  int col)
 {
-	g_debug("ChessGuiBoard::drag_drop row=%d col=%d",row,col);
+	//~ g_debug("ChessGuiBoard::drag_drop row=%d col=%d",row,col);
 	dragStarted=false;
 
 	///emits signal_drag_end
@@ -261,7 +261,7 @@ void ChessGuiBoard::on_cell_drag_leave(const Glib::RefPtr<Gdk::DragContext>& con
 									   int row,
 									   int col)
 {
-	g_debug("ChessGuiBoard::drag_leave row=%d col=%d",row,col);
+	//~ g_debug("ChessGuiBoard::drag_leave row=%d col=%d",row,col);
 	Glib::RefPtr<Gdk::Window> window = get_window();
 	curCellRow=-1;
 	curCellCol=-1;
@@ -274,7 +274,7 @@ bool ChessGuiBoard::on_cell_drag_motion(const Glib::RefPtr<Gdk::DragContext>& co
 										int row,
 										int col)
 {
-	g_debug("ChessGuiBoard::drag_motion row=%d col=%d",row,col);
+	//~ g_debug("ChessGuiBoard::drag_motion row=%d col=%d",row,col);
 	///updates curCellRow and curCellCol
 	curCellRow=row;
 	curCellCol=col;
@@ -285,7 +285,7 @@ bool ChessGuiBoard::on_cell_drag_motion(const Glib::RefPtr<Gdk::DragContext>& co
 void ChessGuiBoard::on_board_size_allocate(Gtk::Allocation& allocation)
 {
 
-	g_debug("ChessGui::on_Board_size_allocate");
+	//~ g_debug("ChessGui::on_Board_size_allocate");
 	ResizeBoard(allocation.get_width(),allocation.get_height());
 	return;
 }
@@ -309,7 +309,7 @@ sigc::signal<bool, int, int> ChessGuiBoard::signal_drag_end()
 
 void ChessGuiBoard::ResizeBoard(int w,int h)
 {
-	g_debug("width=%d height=%d",width,height);
+	//~ g_debug("width=%d height=%d",width,height);
 	///Does not resize if board is already same size
 	if(w!=width && h!=height)
 	{

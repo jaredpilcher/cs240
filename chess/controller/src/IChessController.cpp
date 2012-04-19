@@ -44,8 +44,8 @@ IChessController::IChessController(char ** argv, int argc): game_over(false),cur
  * Destructor
  */
 IChessController::~IChessController(){
-	//delete player1;
-	//delete player2;
+	delete player1;
+	delete player2;
 }
 
 /**
@@ -73,7 +73,7 @@ void IChessController::on_CellSelected(int row, int col, int button){
 ///@param row where drag began
 ///@param col where drag began
 void IChessController::on_DragStart(int row,int col){
-	g_debug("IChessController::on_DragStart");
+	//g_debug("IChessController::on_DragStart");
 
 }
 
@@ -85,7 +85,7 @@ void IChessController::endOfGame(){
 ///@param col where drag ended
 ///@return true if the drag resulted in a successful drop
 bool IChessController::on_DragEnd(int row,int col){
-	g_debug("IChessController::on_DragEnd");
+	//g_debug("IChessController::on_DragEnd");
 	return false;
 }
 
@@ -117,7 +117,11 @@ void IChessController::on_SaveGame(){
 	if(current_file==""){
 		on_SaveGameAs();
 	}else{
-		model.saveFile(current_file,board->getPieces());
+		if(!(model.saveFile(current_file,board->getPieces()))){
+			cout << "Unable to save file" << endl;
+		}else{
+			cout << "File Saved" << endl;
+		}
 	}
 	game_paused = false;
 
@@ -181,8 +185,8 @@ void IChessController::on_UndoMove(){
 	board->unlightSquares();
 	if(!model.isHistoryEmpty()){
 		board->undoMove(model.popMove());
-	game_paused = false;
 	}
+	game_paused = false;
 }
 	
 /**
@@ -226,16 +230,16 @@ void IChessController::on_TimerEvent(){
  * Set the IChessView that this IChessController will handle inputs for.
  */
 void IChessController::SetView(IChessView* view){
-	g_debug("IChessController::SetView");
+	//g_debug("IChessController::SetView");
 	this->view = view;
 }
 
 /**
  * Set the Board that this IChessController will handle inputs for.
  */
-void IChessController::SetBoard(Board* board){
-	g_debug("IChessController::SetBoard");
-	this->board = board;
+void IChessController::SetBoard(Board* _board){
+	//g_debug("IChessController::SetBoard");
+	board = _board;
 	player1->setBoard(board);
 	player2->setBoard(board);
 }

@@ -126,9 +126,9 @@ $(LIBRARY): $(LIBRARY_OBJ_FILES)
 # Instructions: Edit the command below so that it runs the  
 # memory-check executable in Human-Human mode (i.e., add necessary command  
 # line arguments to the end of valgrind the command below).	
-#memcheck: $(MEXE)
-#	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; \
-#	valgrind --tool=memcheck --leak-check=yes --max-stackframe=5000000 --show-reachable=yes --suppressions=string.supp $(MEXE) #command-line args go here
+memcheck: $(MEXE)
+	export LD_LIBRARY_PATH=$(LIB_FOLDER):$$LD_LIBRARY_PATH; \
+	valgrind --tool=memcheck --leak-check=yes --max-stackframe=5000000 --show-reachable=yes --track-origins=yes --suppressions=string.supp $(MEXE) $(EXE) "0"
 
 # Clean removes all of the .o files, libraries, and executables
 clean:

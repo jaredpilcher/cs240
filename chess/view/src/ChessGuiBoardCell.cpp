@@ -51,7 +51,7 @@ void ChessGuiBoardCell::UpdateImage()
 				scaled=(*layers[l])->scale_simple(width-CELL_PAD,height-CELL_PAD,Gdk::INTERP_NEAREST);
 			else
 			{
-        			g_debug("ChessGuiBoardCell::updateImage::Image Not Found");
+        			//~ g_debug("ChessGuiBoardCell::updateImage::Image Not Found");
 				scaled=
 				 ChessGuiImages::GetErrorImage()->scale_simple(width,height,INTERP_BILINEAR);
 				//set(Gtk::Stock::MISSING_IMAGE,Gtk::ICON_SIZE_DND );

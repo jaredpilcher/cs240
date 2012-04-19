@@ -154,7 +154,7 @@ void ChessGui::ConnectToolBarSignals()
 
 std::string ChessGui::SelectSaveFile()
 {
-	g_debug("ChessGui::SelectSaveFile");
+	//~ g_debug("ChessGui::SelectSaveFile");
 	
 	Gtk::FileChooserDialog dialog("Save Game",Gtk::FILE_CHOOSER_ACTION_SAVE);
 	dialog.set_transient_for(*dynamic_cast<Gtk::Window *>( this));
@@ -175,17 +175,17 @@ std::string ChessGui::SelectSaveFile()
 		case(Gtk::RESPONSE_OK):
 		{
 			filename = dialog.get_filename();
-			g_debug("Save Game::File selected: %s",filename.c_str());
+			//~ g_debug("Save Game::File selected: %s",filename.c_str());
 			break;
 		}
 		case(Gtk::RESPONSE_CANCEL):
 		{
-			g_debug( "Save Game::Cancel clicked");
+			//~ g_debug( "Save Game::Cancel clicked");
 			break;
 		}
 		default:
 		{
-			g_debug("Save Game::Unexpected button clicked.");
+			//~ g_debug("Save Game::Unexpected button clicked.");
 			break;
 		}
 	}
@@ -213,18 +213,18 @@ std::string ChessGui::SelectLoadFile()
 		case(Gtk::RESPONSE_OK):
 		{
 			filename = dialog.get_filename();
-			g_debug("Load Game::File selected: %s",filename.c_str());
+			//~ g_debug("Load Game::File selected: %s",filename.c_str());
 			break;
 			
 		}
 		case(Gtk::RESPONSE_CANCEL):
 		{
-			g_debug( "Load Game::Cancel clicked");
+			//~ g_debug( "Load Game::Cancel clicked");
 			break;
 		}
 		default:
 		{
-			g_debug("Load Game::Unexpected button clicked.");
+			//~ g_debug("Load Game::Unexpected button clicked.");
 			break;
 		}
 	}
@@ -324,14 +324,14 @@ sigc::signal<bool, int, int> ChessGui::signal_drag_end()
 //signal handlers ****************************************************************************
 void ChessGui::on_UndoMove()
 {
-	g_debug("ChessGui::on_UndoMove");
+	//~ g_debug("ChessGui::on_UndoMove");
 	actionUndoSignal.emit();
 	return;
 }
 
 void ChessGui::on_NewGame()
 {
-	g_debug("ChessGui::on_NewGame");
+	//~ g_debug("ChessGui::on_NewGame");
 	actionNewSignal.emit();
 	return;
 }
@@ -339,21 +339,21 @@ void ChessGui::on_NewGame()
 void ChessGui::on_LoadGame()
 {
 	
-	g_debug("ChessGui::on_LoadGame");
+	//~ g_debug("ChessGui::on_LoadGame");
 	actionLoadSignal.emit();
 	return;
 }
 
 void ChessGui::on_SaveGame()
 {
-	g_debug("ChessGui::on_SaveGame");
+	//~ g_debug("ChessGui::on_SaveGame");
 	actionSaveSignal.emit();
 	return;
 }
 
 void ChessGui::on_SaveGameAs()
 {
-	g_debug("ChessGui::on_SaveGameAs");
+	//~ g_debug("ChessGui::on_SaveGameAs");
 	actionSaveAsSignal.emit();
 	return;
 }
@@ -363,7 +363,7 @@ void ChessGui::on_LoadImages()
 	///Generates a Select Folder Dialog
 	///Folder selected should contain image files
 	///following the naming formated specified in ChessGuiImages::SetDefaultFileNames
-	g_debug("ChessGui::on_LoadImages");
+	//~ g_debug("ChessGui::on_LoadImages");
 	Gtk::FileChooserDialog dialog("Select Images Folder",Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	dialog.set_transient_for(*dynamic_cast<Gtk::Window *>( this));
 
@@ -381,18 +381,18 @@ void ChessGui::on_LoadImages()
 		case(Gtk::RESPONSE_OK):
 		{
 			path = dialog.get_filename();
-			g_debug("Load Images::File selected: %s",path.c_str());
+			//~ g_debug("Load Images::File selected: %s",path.c_str());
 			break;
 			
 		}
 		case(Gtk::RESPONSE_CANCEL):
 		{
-			g_debug( "Load Images::Cancel clicked");
+			//~ g_debug( "Load Images::Cancel clicked");
 			break;
 		}
 		default:
 		{
-			g_debug("Load Images::Unexpected button clicked.");
+			//~ g_debug("Load Images::Unexpected button clicked.");
 			break;
 		}
 	}
@@ -412,7 +412,7 @@ void ChessGui::on_LoadImages()
 void ChessGui::on_Quit()
 {
 	///activates the destroy process
-	g_debug("ChessGui::on_Quit");
+	//~ g_debug("ChessGui::on_Quit");
 	actionQuitSignal.emit();
 	Gtk::Main::quit();
 	return;
@@ -420,7 +420,7 @@ void ChessGui::on_Quit()
 
 bool ChessGui::on_main_delete_event(GdkEventAny* event)
 {
-	g_debug("ChessGui::on_main_delete_event");
+	//~ g_debug("ChessGui::on_main_delete_event");
 	///emits signal_quit to allow for gracefull exiting when the 'x' button is activated
 	actionQuitSignal.emit();
 	return false;
@@ -428,7 +428,7 @@ bool ChessGui::on_main_delete_event(GdkEventAny* event)
 
 void ChessGui::on_HideMessages()
 {
-	g_debug("ChessGui::on_HideMessages");
+	//~ g_debug("ChessGui::on_HideMessages");
 	
 	///retrieves the Hpaned widget from chessXml
 	HPaned * pane=0;
@@ -459,14 +459,14 @@ void ChessGui::on_HideMessages()
 }
 void ChessGui::on_ClearMessages()
 {
-	g_debug("ChessGui::on_ClearMessages");
+	//~ g_debug("ChessGui::on_ClearMessages");
 	ClearMessageArea();
 	return;
 }
 
 void ChessGui::on_About()
 {
-     g_debug("ChessGui::on_About");
+     //~ g_debug("ChessGui::on_About");
      Gtk::AboutDialog  about;
      about.set_transient_for(*dynamic_cast<Gtk::Window *>( this));
      
@@ -489,7 +489,7 @@ void ChessGui::on_About()
 
 void ChessGui::on_ToggleToolbarView()
 {
-	g_debug("ChessGui::on_ToggleToolbarView");
+	//~ g_debug("ChessGui::on_ToggleToolbarView");
         Gtk::Toolbar * toolBar=0;
         CheckMenuItem * checkItem=0;
         

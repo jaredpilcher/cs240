@@ -26,7 +26,7 @@ void Model::clearHistory(){
 }
 
 bool Model::saveFile(string filename, stack<PieceStruct> pieces){
-	xml.saveChessGame(history.getMoves(),pieces,filename);
+	return xml.saveChessGame(history.getMoves(),pieces,filename);
 }
 
 //loads the file into board and history
@@ -34,6 +34,9 @@ bool Model::saveFile(string filename, stack<PieceStruct> pieces){
 bool Model::loadFile(string filename, stack<PieceStruct>& current_board){
 	stack<Move> moves;
 	if(!xml.loadChessGame(moves,current_board,filename)) return false;
+	history.clearMoves();
+	cout << "history size: " << moves.size() << endl;
+	history.setMoves(moves);
 	return true;
 }
 

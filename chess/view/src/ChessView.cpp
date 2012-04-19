@@ -45,7 +45,7 @@ ChessView::~ChessView()
 void ChessView::on_CellSelected(int row, int col, int button)
 {
         if (!memTest)
-	  g_debug("ChessView::on_CellSelected (%d,%d)",row,col);
+	  //~ g_debug("ChessView::on_CellSelected (%d,%d)",row,col);
 	/*
 	  Each square of the chess board is reffered to in the GUI code as a cell.
 	This Function is called whenever the uses clicks and releases the mous button over
@@ -64,7 +64,7 @@ void ChessView::on_CellSelected(int row, int col, int button)
 void ChessView::on_DragStart(int row,int col)
 {
         if (!memTest)
-	  g_debug("ChessView::on_DragStart (%d,%d)",row,col);
+	  //~ g_debug("ChessView::on_DragStart (%d,%d)",row,col);
 	/*
 	  When a drag is initiated, this function will be called instead of on_CellSelected().
 	The paramaters row and col are the coordinates of the cell where the drag was initiated.
@@ -80,7 +80,7 @@ void ChessView::on_DragStart(int row,int col)
 bool ChessView::on_DragEnd(int row,int col)
 {
         if (!memTest)
-	  g_debug("ChessView::on_DragEnd (%d,%d)",row,col);
+	  //~ g_debug("ChessView::on_DragEnd (%d,%d)",row,col);
 	/*
 	  Same as on_DragStart() except the coordinates represent the ending cell of
 	the drag. If the drag terminates off the playing board, this will be called with
@@ -102,7 +102,7 @@ bool ChessView::on_DragEnd(int row,int col)
 void ChessView::on_NewGame()
 {
         if (!memTest)
-	  g_debug("ChessView::on_NewGame");
+	  //~ g_debug("ChessView::on_NewGame");
 	/*
 	Called when someone selects 'New' from the toolbar, 'Game' menu, or presses 'Ctrl-N'.
 	*/
@@ -117,7 +117,7 @@ void ChessView::on_NewGame()
 void ChessView::on_SaveGame()
 {
         if (!memTest)
-	  g_debug("ChessView::on_SaveGame");
+	  //~ g_debug("ChessView::on_SaveGame");
 	/*
 	Called when someone selects 'Save' from the toolbar, 'Game' menu, or presses 'Ctrl-S'.
 	*/
@@ -131,7 +131,7 @@ void ChessView::on_SaveGame()
 void ChessView::on_SaveGameAs()
 {
         if (!memTest)
-	  g_debug("ChessView::on_SaveGameAs");
+	  //~ g_debug("ChessView::on_SaveGameAs");
 	/*
 	Called when someone selects 'Save As' from the 'Game' menu, or presses 'Shift-Ctrl-S'.
 	*/
@@ -144,7 +144,7 @@ void ChessView::on_SaveGameAs()
 void ChessView::on_LoadGame()
 {
         if (!memTest)
-	  g_debug("ChessView::on_LoadGame");
+	  //~ g_debug("ChessView::on_LoadGame");
 	/*
 	Called when someone selects 'Open' from the toolbar, 'Game' menu, or presses 'Ctrl-O'.
 	*/
@@ -157,7 +157,7 @@ void ChessView::on_LoadGame()
 void ChessView::on_UndoMove()
 {
         if (!memTest)
-	  g_debug("ChessView::on_UndoMove");
+	  //~ g_debug("ChessView::on_UndoMove");
 	/*
 	Called when someone selects 'Undo' from the toolbar, 'Game' menu, or presses 'Ctrl-Z'.
 	*/
@@ -172,7 +172,7 @@ void ChessView::on_UndoMove()
 void ChessView::on_QuitGame()
 {
         if (!memTest)
-	  g_debug("ChessView::on_QuitGame");
+	  //~ g_debug("ChessView::on_QuitGame");
 	/*It is not required to implement this function*/
 
 	/*

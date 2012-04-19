@@ -31,3 +31,7 @@ void History::clearMoves(){
 stack<Move> History::getMoves(){
 	return moves;
 }
+
+void History::setMoves(stack<Move> _moves){
+		moves=_moves;
+}

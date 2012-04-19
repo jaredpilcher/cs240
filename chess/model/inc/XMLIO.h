@@ -54,7 +54,7 @@ private:
 	//Retrieves the pieces from the xml string
 	void getPieces(string file_string,stack<PieceStruct>& board_pieces);
 	
-	void getPiece(HTMLToken token,stack<PieceStruct>& board_pieces);
+	PieceStruct getPiece(HTMLToken token);
 	
 	bool startsWith(string line,string substring);
 	

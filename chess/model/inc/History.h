@@ -22,6 +22,8 @@ public:
 	void clearMoves();
 	
 	stack<Move> getMoves();
+	
+	void setMoves(stack<Move> _moves);
 };
 
 #endif

@@ -23,13 +23,13 @@ bool ChessGuiImages::loaded=false;
 void ChessGuiImages::LoadDefaultImages()
 {
 
-	g_debug("ChessGuiImages::LoadDefaultImages");
+	//~ g_debug("ChessGuiImages::LoadDefaultImages");
 	LoadImages("../images");
 	return;
 }
 void ChessGuiImages::LoadImages(const std::string & path)
 {
-	g_debug("ChessGuiImages::LoadImages");
+	//~ g_debug("ChessGuiImages::LoadImages");
         error=Gdk::Pixbuf::create_from_inline(-1,ImageError,false);
 	SetDefaultFileNames();
 	CombinePathAndFileName(path);
@@ -51,7 +51,7 @@ bool ChessGuiImages::isLoaded(ImageName image)
 
 void ChessGuiImages::LoadImage(const std::string & path, ImageName image)
 {
-	g_debug("ChessGuiImages::LoadImage");
+	//~ g_debug("ChessGuiImages::LoadImage");
 
 	std::string file;
 	if(image<(signed int)imagePaths.size() && image<NUM_IMAGE_NAMES)

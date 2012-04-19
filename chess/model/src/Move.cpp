@@ -2,7 +2,9 @@
 #include "Piece.h"
 
 
-Move::Move():valid_move(true),piece_destroyed(false){}
+Move::Move():valid_move(true),piece_destroyed(false){
+		clear();
+}
 
 Move::~Move(){}
 

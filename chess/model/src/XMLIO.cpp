@@ -46,7 +46,7 @@ void XMLIO::getPieces(string file_string,stack<PieceStruct>& board_pieces){
 	HTMLToken token = tokenizer.GetNextToken();
 	while(tokenizer.HasNextToken()){
 		if(startsWith(token.GetValue(),"piece")){
-			getPiece(token,board_pieces);
+			board_pieces.push(getPiece(token));
 		}
 		if(startsWith(token.GetValue(),"history")){
 			break;
@@ -55,7 +55,7 @@ void XMLIO::getPieces(string file_string,stack<PieceStruct>& board_pieces){
 	}
 }
 
-void XMLIO::getPiece(HTMLToken token,stack<PieceStruct>& board_pieces){
+PieceStruct XMLIO::getPiece(HTMLToken token){
 	PieceStruct piece;
 	piece.row = atoi(token.GetAttribute("row").data());
 	piece.col = atoi(token.GetAttribute("column").data());
@@ -68,7 +68,7 @@ void XMLIO::getPiece(HTMLToken token,stack<PieceStruct>& board_pieces){
 		piece.color = WHITE;
 		piece.type = readType(WHITE,token.GetAttribute("type"));
 	}
-	board_pieces.push(piece);
+	return piece;
 }
 
 ImageName XMLIO::readType(int color,string type){
@@ -113,7 +113,33 @@ void XMLIO::toCapital(string & line){
 
 //Retrieves the moves from the xml string
 void XMLIO::getMoves(string file_string,stack<Move>& moves){
-	
+	HTMLTokenizer tokenizer(file_string);
+	HTMLToken token = tokenizer.GetNextToken();
+	Move move;
+	while(tokenizer.HasNextToken()){
+		if(startsWith(token.GetValue(),"move")){
+			move.clear();
+			//cout << "token value: " << token.GetValue() << endl;
+			token = tokenizer.GetNextToken();
+			if(startsWith(token.GetValue(),"move")){
+				token = tokenizer.GetNextToken();
+			}
+			//cout << "token value2: " << token.GetValue() << endl;
+			move.setPrevPiece(getPiece(token));
+			token = tokenizer.GetNextToken();
+			//cout << "token value3: " << token.GetValue() << endl;
+			move.setAfterPiece(getPiece(token));
+			token = tokenizer.GetNextToken();
+			//cout << "token value4: " << token.GetValue() << endl;
+			if(startsWith(token.GetValue(),"piece")){
+				PieceStruct temp_piece = getPiece(token);
+				cout << "temp_piece row: " << temp_piece.row << " col: " << temp_piece.col << endl;
+				move.setDestroyedPiece(temp_piece);
+			}
+			moves.push(move);
+		}
+		token = tokenizer.GetNextToken();
+	}
 }
 
 //Retrieves all characters from the file

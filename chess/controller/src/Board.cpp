@@ -418,6 +418,7 @@ void Board::undoMove(Move move){
 void Board::restorePiece(PieceStruct piece){
 	Piece* temp_piece = findPiece(piece.type);
 	if(temp_piece!=NULL){
+		cout << "here" << endl;
 		view->PlacePiece(piece.row,piece.col,piece.type);
 		temp_piece->setRow(piece.row);
 		temp_piece->setCol(piece.col);
